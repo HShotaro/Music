@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct MusicApp: App {
+    init() {
+        if AuthManager.shared.isSignIn {
+            AuthManager.shared.refreshIfNeeded(completion: nil)
+        }
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()
