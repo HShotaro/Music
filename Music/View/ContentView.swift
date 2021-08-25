@@ -13,10 +13,7 @@ struct ContentView: View {
     var body: some View {
         if AuthManager.shared.isSignIn {
             TabView {
-                NavigationView {
-                    HomeView()
-                        .navigationTitle("Home")
-                }
+                HomeView()
                 .tabItem {
                     Label(
                         title: { Text(/*@START_MENU_TOKEN@*/"Home"/*@END_MENU_TOKEN@*/) },
@@ -25,11 +22,7 @@ struct ContentView: View {
                     )
                 }
                 .tag(0)
-                NavigationView {
-                    SearchView()
-                        .navigationTitle("Search")
-                }
-                
+                SearchView()
                 .tabItem {
                     Label(
                         title: { Text(/*@START_MENU_TOKEN@*/"Search"/*@END_MENU_TOKEN@*/) },
@@ -38,11 +31,7 @@ struct ContentView: View {
                     )
                 }
                 .tag(1)
-                NavigationView {
-                    LibraryView()
-                        .navigationTitle("Library")
-                }
-                
+                LibraryView()
                 .tabItem {
                     Label(
                         title: { Text(/*@START_MENU_TOKEN@*/"Library"/*@END_MENU_TOKEN@*/) },

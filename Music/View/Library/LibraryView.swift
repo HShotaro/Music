@@ -9,7 +9,10 @@ import SwiftUI
 
 struct LibraryView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Library"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            Text(/*@START_MENU_TOKEN@*/"Library"/*@END_MENU_TOKEN@*/)
+            .navigationTitle("Library")
+        }
     }
 }
 

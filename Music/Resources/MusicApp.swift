@@ -6,12 +6,17 @@
 //
 
 import SwiftUI
+import Combine
 
 @main
 struct MusicApp: App {
+    private var cancelables = Set<AnyCancellable>()
     init() {
         if AuthManager.shared.isSignIn {
-            AuthManager.shared.refreshIfNeeded(completion: nil)
+            AuthManager.shared.refreshIfNeeded()
+            .sink { _ in } receiveValue: { _ in }
+            .store(in: &cancelables)
+
         }
     }
     var body: some Scene {

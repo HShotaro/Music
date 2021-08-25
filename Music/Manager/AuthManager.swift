@@ -18,7 +18,6 @@ class AuthManager: ObservableObject {
     
     private init() {}
     
-    private var refreshingToken = false
     var signInURL: URL? {
         
         //            .addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -72,7 +71,6 @@ class AuthManager: ObservableObject {
         let basicToken = SPOTIFY_CLIENT_ID+":"+SPOTIFY_CLIENT_SECRET
         let data = basicToken.data(using: .utf8)
         guard let base64String = data?.base64EncodedString() else {
-            print("Failure to get base64")
             return
         }
         request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
@@ -87,87 +85,85 @@ class AuthManager: ObservableObject {
                 self?.cacheToken(result: result)
                 self?.isSignIn = true
             } catch {
-                print(error.localizedDescription)
+                
             }
         }
         
         task.resume()
     }
     
-    private var onRefreshBlocks = [((String) -> Void)]()
-    
-    public func withValidToken(completion: @escaping (String) -> Void) {
-        guard !refreshingToken else {
-            onRefreshBlocks.append(completion)
-            return
-        }
-        
+    public func withValidToken() -> AnyPublisher<String?, Never> {
         if shouldRefreshToken {
-            refreshIfNeeded { [weak self] success in
-                if let token = self?.accsssToken, success {
-                    completion(token)
+            return self.refreshIfNeeded()
+            .flatMap { success -> Future<String?, Never> in
+                return Future<String?, Never> { [weak self] promise in
+                    if success, let token = self?.accsssToken {
+                        promise(.success(token))
+                    } else {
+                        promise(.success(nil))
+                    }
                 }
-            }
+            }.eraseToAnyPublisher()
         } else if let token = accsssToken {
-            completion(token)
+            return Future<String?, Never> { promise in
+                promise(.success(token))
+            }
+            .eraseToAnyPublisher()
+        } else {
+            return Future<String?, Never> { promise in
+                promise(.success(nil))
+            }.eraseToAnyPublisher()
         }
     }
     
-    public func refreshIfNeeded(completion: ((Bool) -> Void)?) {
-        guard !refreshingToken else {
-            return
-        }
-        guard shouldRefreshToken else {
-            completion?(true)
-            return
-        }
-        guard let refreshToken = self.refreshToken else {
-            return
-        }
-        
-        guard let url = URL(string: Constants.tokenAPIURL) else { return }
-        
-        refreshingToken = true
-        
-        var components = URLComponents()
-        components.queryItems = [
-            URLQueryItem(name: "grant_type", value: "refresh_token"),
-            URLQueryItem(name: "refresh_token", value: refreshToken)
-        ]
-        
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded ", forHTTPHeaderField: "Content-Type")
-        let basicToken = SPOTIFY_CLIENT_ID+":"+SPOTIFY_CLIENT_SECRET
-        let data = basicToken.data(using: .utf8)
-        guard let base64String = data?.base64EncodedString() else {
-            print("Failure to get base64")
-            completion?(false)
-            return
-        }
-        request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
-        request.httpBody = components.query?.data(using: .utf8)
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
-            self?.refreshingToken = false
-            guard let data = data, error == nil else {
-                completion?(false)
+    public func refreshIfNeeded() -> AnyPublisher<Bool, Never> {
+        return Future<Bool, Never> { [weak self] promise in
+            guard self?.shouldRefreshToken == true else {
+                promise(.success(true))
+                return
+            }
+            guard let refreshToken = self?.refreshToken else {
                 return
             }
             
-            do {
-                let result = try JSONDecoder().decode(AuthResponse.self, from: data)
-                self?.onRefreshBlocks.forEach { $0(result.access_token)}
-                self?.onRefreshBlocks.removeAll()
-                self?.cacheToken(result: result)
-                completion?(true)
-            } catch {
-                print(error.localizedDescription)
-                completion?(false)
+            guard let url = URL(string: Constants.tokenAPIURL) else { return }
+            
+            var components = URLComponents()
+            components.queryItems = [
+                URLQueryItem(name: "grant_type", value: "refresh_token"),
+                URLQueryItem(name: "refresh_token", value: refreshToken)
+            ]
+            
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/x-www-form-urlencoded ", forHTTPHeaderField: "Content-Type")
+            let basicToken = SPOTIFY_CLIENT_ID+":"+SPOTIFY_CLIENT_SECRET
+            let data = basicToken.data(using: .utf8)
+            guard let base64String = data?.base64EncodedString() else {
+                promise(.success(false))
+                return
             }
-        }
-        
-        task.resume()
+            request.setValue("Basic \(base64String)", forHTTPHeaderField: "Authorization")
+            request.httpBody = components.query?.data(using: .utf8)
+            let task = URLSession.shared.dataTask(with: request) { [weak self] data, _, error in
+                guard let data = data, error == nil else {
+                    promise(.success(false))
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(AuthResponse.self, from: data)
+                    self?.cacheToken(result: result)
+                    promise(.success(true))
+                } catch {
+                    promise(.success(false))
+                }
+            }
+            
+            task.resume()
+            
+        }.eraseToAnyPublisher()
     }
     
     private func cacheToken(result: AuthResponse) {
