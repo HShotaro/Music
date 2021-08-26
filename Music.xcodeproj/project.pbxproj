@@ -32,7 +32,7 @@
 		96DB206A26D541410004FA9A /* Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB206926D541410004FA9A /* Playlist.swift */; };
 		96DB206C26D541620004FA9A /* APIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB206B26D541620004FA9A /* APIImage.swift */; };
 		96DB206E26D5416C0004FA9A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB206D26D5416C0004FA9A /* User.swift */; };
-		96DB207026D5FA9A0004FA9A /* HomePlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB206F26D5FA9A0004FA9A /* HomePlaylistView.swift */; };
+		96DB207026D5FA9A0004FA9A /* GridItemLayout1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB206F26D5FA9A0004FA9A /* GridItemLayout1.swift */; };
 		96DB207526D60F2D0004FA9A /* UIImage+load.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB207426D60F2D0004FA9A /* UIImage+load.swift */; };
 		96DB207926D6143A0004FA9A /* PlaylistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB207826D6143A0004FA9A /* PlaylistView.swift */; };
 		96DB207B26D61F6A0004FA9A /* HomeRepository+mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB207A26D61F6A0004FA9A /* HomeRepository+mock.swift */; };
@@ -92,7 +92,7 @@
 		96DB206926D541410004FA9A /* Playlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playlist.swift; sourceTree = "<group>"; };
 		96DB206B26D541620004FA9A /* APIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIImage.swift; sourceTree = "<group>"; };
 		96DB206D26D5416C0004FA9A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		96DB206F26D5FA9A0004FA9A /* HomePlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePlaylistView.swift; sourceTree = "<group>"; };
+		96DB206F26D5FA9A0004FA9A /* GridItemLayout1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridItemLayout1.swift; sourceTree = "<group>"; };
 		96DB207426D60F2D0004FA9A /* UIImage+load.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+load.swift"; sourceTree = "<group>"; };
 		96DB207826D6143A0004FA9A /* PlaylistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistView.swift; sourceTree = "<group>"; };
 		96DB207A26D61F6A0004FA9A /* HomeRepository+mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeRepository+mock.swift"; sourceTree = "<group>"; };
@@ -209,6 +209,22 @@
 			path = MusicUITests;
 			sourceTree = "<group>";
 		};
+		967F03E826D7F1B800297A0A /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				967F03E926D7F1C600297A0A /* GridItem */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
+		967F03E926D7F1C600297A0A /* GridItem */ = {
+			isa = PBXGroup;
+			children = (
+				96DB206F26D5FA9A0004FA9A /* GridItemLayout1.swift */,
+			);
+			path = GridItem;
+			sourceTree = "<group>";
+		};
 		96DB203E26D509AD0004FA9A /* Secret */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +245,7 @@
 		96DB204226D50A380004FA9A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				967F03E826D7F1B800297A0A /* Component */,
 				36B60F5F26B5B947001BC9B7 /* ContentView.swift */,
 				96DB205F26D53FDF0004FA9A /* Home */,
 				96DB206026D53FE70004FA9A /* Search */,
@@ -289,7 +306,6 @@
 		96DB205F26D53FDF0004FA9A /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				96DB206F26D5FA9A0004FA9A /* HomePlaylistView.swift */,
 				96DB204926D50D890004FA9A /* HomeView.swift */,
 				96DB206326D540410004FA9A /* HomeViewModel.swift */,
 				96DB206526D5405B0004FA9A /* HomeRepository.swift */,
@@ -564,7 +580,7 @@
 				96DB204826D50C2D0004FA9A /* Stateful.swift in Sources */,
 				96DB207526D60F2D0004FA9A /* UIImage+load.swift in Sources */,
 				96DB205426D51B910004FA9A /* AuthResponse.swift in Sources */,
-				96DB207026D5FA9A0004FA9A /* HomePlaylistView.swift in Sources */,
+				96DB207026D5FA9A0004FA9A /* GridItemLayout1.swift in Sources */,
 				96DB207B26D61F6A0004FA9A /* HomeRepository+mock.swift in Sources */,
 				96DB205626D51EF60004FA9A /* WelcomeView.swift in Sources */,
 				96DB206826D540FD0004FA9A /* FeaturedPlaylistsResponse.swift in Sources */,

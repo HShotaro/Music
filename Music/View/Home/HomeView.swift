@@ -53,12 +53,19 @@ struct HomeView: View {
                                     NavigationLink (
                                         destination: PlaylistView(playlist: playist),
                                         label: {
-                                            HomePlaylistView(playlist: playist).background(Color.pink)
+                                            GridItemLayout1(
+                                                titleName: playist.name,
+                                                subTitleName: playist.creatorName,
+                                                imageURL: playist.imageURL
+                                            )
+                                            
+                                            .background(Color.pink)
                                         }
                                         
                                     )
                                 }
                             }.font(.largeTitle)
+                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
                         }
                     }
                 }
