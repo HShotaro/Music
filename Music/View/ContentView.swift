@@ -10,36 +10,43 @@ import Combine
 
 struct ContentView: View {
     @StateObject private var authManager = AuthManager.shared
+    enum Tab {
+        case home
+        case search
+        case library
+    }
+
+    @State private var selection: Tab = .home
     var body: some View {
         if AuthManager.shared.isSignIn {
-            TabView {
+            TabView(selection: $selection) {
                 HomeView()
                 .tabItem {
                     Label(
                         title: { Text(/*@START_MENU_TOKEN@*/"Home"/*@END_MENU_TOKEN@*/) },
                         icon: { Image(systemName: "house")
                         }
-                    )
+                    ).accessibility(label: Text("Home_TabItem"))
                 }
-                .tag(0)
+                    .tag(Tab.home)
                 SearchView()
                 .tabItem {
                     Label(
                         title: { Text(/*@START_MENU_TOKEN@*/"Search"/*@END_MENU_TOKEN@*/) },
                         icon: { Image(systemName: "magnifyingglass")
                         }
-                    )
+                    ).accessibility(label: Text("Search_TabItem"))
                 }
-                .tag(1)
+                    .tag(Tab.search)
                 LibraryView()
                 .tabItem {
                     Label(
                         title: { Text(/*@START_MENU_TOKEN@*/"Library"/*@END_MENU_TOKEN@*/) },
                         icon: { Image(systemName: "music.note.list")
                         }
-                    )
+                    ).accessibility(label: Text("Library_TabItem"))
                 }
-                .tag(2)
+                    .tag(Tab.library)
             }.accentColor(/*@START_MENU_TOKEN@*/.yellow/*@END_MENU_TOKEN@*/)
         } else {
             NavigationView {
