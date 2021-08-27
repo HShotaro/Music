@@ -83,7 +83,9 @@ class AuthManager: ObservableObject {
             do {
                 let result = try JSONDecoder().decode(AuthResponse.self, from: data)
                 self?.cacheToken(result: result)
-                self?.isSignIn = true
+                DispatchQueue.main.async { [weak self] in
+                    self?.isSignIn = true
+                }
             } catch {
                 
             }
@@ -174,10 +176,10 @@ class AuthManager: ObservableObject {
         UserDefaults.standard.setValue(Date().addingTimeInterval(_:TimeInterval(result.expires_in)), forKey: "expirationDate")
     }
     
-    public func signOut(completion: @escaping (Bool) -> Void) {
+    public func signOut() {
         UserDefaults.standard.setValue(nil, forKey: "access_token")
         UserDefaults.standard.setValue(nil, forKey: "refresh_token")
         UserDefaults.standard.setValue(nil, forKey: "expirationDate")
-        completion(true)
+        isSignIn = false
     }
 }
