@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GridItemLayout1: View {
+struct GridItemLayout1View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     let titleName: String
     let subTitleName: String
@@ -34,9 +34,11 @@ struct GridItemLayout1: View {
         }
         .padding(.bottom, 10.0)
         .onAppear {
-            if let url = imageURL {
-                downloadImageAsync(url: url) { image in
-                    self.image = image ?? UIImage()
+            DispatchQueue.global().async { 
+                if let url = imageURL {
+                    downloadImageAsync(url: url) { image in
+                        self.image = image ?? UIImage()
+                    }
                 }
             }
         }
@@ -46,7 +48,7 @@ struct GridItemLayout1: View {
 struct HomePlaylistView_Previews: PreviewProvider {
     static var previews: some View {
         let playlist = PlayListModel.mock(1)
-        GridItemLayout1(
+        GridItemLayout1View(
             titleName: playlist.name,
             subTitleName: playlist.creatorName,
             imageURL: playlist.imageURL

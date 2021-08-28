@@ -9,5 +9,4 @@ import Foundation
 
 struct FeaturedPlaylistsResponse: Codable {
     let playlists: PlaylistResponse
-    
 }

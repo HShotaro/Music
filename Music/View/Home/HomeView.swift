@@ -19,7 +19,7 @@ struct HomeView: View {
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
         NavigationView {
-            Group{
+            VStack {
                 switch viewModel.model {
                 case .idle, .loading:
                     ProgressView("loading...")
@@ -51,9 +51,9 @@ struct HomeView: View {
                             LazyVGrid(columns: HomeView.columns, spacing: 10) {
                                 ForEach(model.playlists, id: \.self.id) { playist in
                                     NavigationLink (
-                                        destination: PlaylistView(playlist: playist),
+                                        destination: PlaylistDetailView(playlistID: playist.id),
                                         label: {
-                                            GridItemLayout1(
+                                            GridItemLayout1View(
                                                 titleName: playist.name,
                                                 subTitleName: playist.creatorName,
                                                 imageURL: playist.imageURL
