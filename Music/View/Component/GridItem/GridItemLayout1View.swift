@@ -13,24 +13,22 @@ struct GridItemLayout1View: View {
     let subTitleName: String
     let imageURL: URL?
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Image(uiImage: image)
                 .resizable()
                 .padding(.all, 0.0)
                 .aspectRatio(1, contentMode: .fit)
             Text(titleName)
-                .fontWeight(.regular)
-                .multilineTextAlignment(.leading)
                 .lineLimit(2)
                 .padding(.horizontal, 10.0)
                 .padding(.bottom, 1.0)
                 .font(.system(size: 14, weight: .regular, design: .default))
+                .foregroundColor(Color(.label))
                 
             Text(subTitleName)
-                .fontWeight(.light)
-                .multilineTextAlignment(.leading)
                 .font(.system(size: 11, weight: .light, design: .default))
                 .padding(.horizontal, 10.0)
+                .foregroundColor(Color(.label))
         }
         .padding(.bottom, 10.0)
         .onAppear {

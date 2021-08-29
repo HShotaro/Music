@@ -86,7 +86,7 @@ struct PlaylistDetailView: View {
                                 self.selectedButtonType = value ? .playButton(model.tracks) : nil
                             }
                         )
-                        LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL, titleName: model.name)
+                        LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL)
                         Divider()
                     }
                     List(model.tracks) { track in

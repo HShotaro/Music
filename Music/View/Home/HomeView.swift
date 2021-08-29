@@ -10,6 +10,9 @@ import Combine
 
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
+    @State var destinationView: AnyView? = nil
+    @State var isPushActive = false
+    
     
     init(viewModel: HomeViewModel = HomeViewModel()) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -47,20 +50,22 @@ struct HomeView: View {
                         Text("最新のプレイリストがありません。")
                             .fontWeight(.bold)
                     } else {
+                        NavigationLink(destination: destinationView, isActive: $isPushActive) {
+                            EmptyView()
+                        }.hidden()
                         ScrollView {
                             LazyVGrid(columns: HomeView.columns, spacing: 10) {
                                 ForEach(model.playlists, id: \.self.id) { playlist in
-                                    NavigationLink (
-                                        destination: PlaylistDetailView(playlistID: playlist.id),
-                                        label: {
-                                            GridItemLayout1View(
-                                                titleName: playlist.name,
-                                                subTitleName: playlist.creatorName,
-                                                imageURL: playlist.imageURL
-                                            )
-                                        }
-                                        
-                                    )
+                                    Button {
+                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
+                                        isPushActive = true
+                                    } label: {
+                                        GridItemLayout1View(
+                                            titleName: playlist.name,
+                                            subTitleName: playlist.creatorName,
+                                            imageURL: playlist.imageURL
+                                        )
+                                    }
                                 }
                             }.font(.largeTitle)
                             .padding(EdgeInsets(top: 15, leading: 15, bottom: 15, trailing: 15))
