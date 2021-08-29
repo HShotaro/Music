@@ -12,7 +12,6 @@ struct MusicPlayerView: View {
     let audioTracks: [AudioTrackModel]
     init(audioTracks: [AudioTrackModel]) {
         self.audioTracks = audioTracks.filter{ $0.previewURL != nil }
-        print("cd")
     }
     
     var body: some View {
