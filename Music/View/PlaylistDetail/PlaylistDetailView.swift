@@ -10,7 +10,7 @@ import Combine
 
 struct PlaylistDetailView: View {
     @StateObject private var viewModel: PlaylistDetailViewModel
-    @State var buttonType: ButtonType? = nil
+    @State var selectedButtonType: ButtonType? = nil
     enum ButtonType: Identifiable {
         case playButton([AudioTrackModel])
         case list(AudioTrackModel)
@@ -61,10 +61,10 @@ struct PlaylistDetailView: View {
                 } else {
                     Button(action: {}, label: {
                         EmptyView()
-                    }).sheet(item: $buttonType) {
-                        self.buttonType = nil
+                    }).sheet(item: $selectedButtonType) {
+                        self.selectedButtonType = nil
                     } content: { _ in
-                        switch self.buttonType {
+                        switch self.selectedButtonType {
                         case let .playButton(tracks):
                             MusicPlayerView(audioTracks: tracks)
                         case let .list(track):
@@ -81,13 +81,13 @@ struct PlaylistDetailView: View {
                             }, label: {
                                 let playButtonBinding = Binding<Bool>(
                                     get: {
-                                        switch self.buttonType {
+                                        switch self.selectedButtonType {
                                         case .playButton: return true
                                         default: return false
                                         }
                                     },
                                     set: { value in
-                                        self.buttonType = value ? .playButton(model.tracks) : nil
+                                        self.selectedButtonType = value ? .playButton(model.tracks) : nil
                                     }
                                 )
                                 LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL, titleName: model.name)
@@ -99,7 +99,7 @@ struct PlaylistDetailView: View {
                     }
                     List(model.tracks) { track in
                         Button(action: {
-                            self.buttonType = .list(track)
+                            self.selectedButtonType = .list(track)
                         }, label: {
                             ListItemLayout1View(
                                 titleName: track.name,
