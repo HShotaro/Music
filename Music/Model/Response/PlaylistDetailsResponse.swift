@@ -38,7 +38,7 @@ struct PlaylistDetailModel : Hashable, Equatable {
         imageURL = URL(string: rawModel.images.first?.url ?? "")
         description = rawModel.description
         shareURL = URL(string: rawModel.external_urls["spotify"] ?? "")
-        tracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0.track) }
+        tracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0.track) }.filter{ $0.previewURL != nil }
     }
     
     init(

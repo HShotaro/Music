@@ -16,7 +16,6 @@ struct MusicApp: App {
             AuthManager.shared.refreshIfNeeded()
             .sink { _ in } receiveValue: { _ in }
             .store(in: &cancelables)
-
         }
     }
     var body: some Scene {

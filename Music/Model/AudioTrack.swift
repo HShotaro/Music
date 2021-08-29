@@ -82,8 +82,8 @@ struct AudioTrackModel : Hashable, Identifiable {
 }
 
 
-extension Array where Element == AudioTrack {
-    func isSameOf(_ tracks: [AudioTrack]) -> Bool {
+extension Array where Element == AudioTrackModel {
+    func isSameOf(_ tracks: [AudioTrackModel]) -> Bool {
         let lhsIDs = self.compactMap { $0.id}.sorted { $0 < $1}
         let rhsIDs = tracks.map { $0.id }.sorted { $0 < $1}
         return lhsIDs == rhsIDs
