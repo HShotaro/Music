@@ -18,7 +18,7 @@ struct LargeImageLayout1View: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .padding(.all)
-                .frame(width: UIScreen.main.bounds.width / 2.5, height: UIScreen.main.bounds.width / 2.5, alignment: .center)
+                .frame(width: 80, height: 80, alignment: .center)
             VStack(alignment: .center) {
                 Text(titleName)
                 Spacer()
@@ -27,9 +27,9 @@ struct LargeImageLayout1View: View {
                     showPlayerView.toggle()
                 }, label: {
                     Image(systemName: "play.fill")
-                        .frame(width: 60, height: 60)
+                        .frame(width: 50, height: 50)
                         .background(Color.green)
-                        .cornerRadius(30)
+                        .cornerRadius(25)
                 })
             }
             .padding([.top, .bottom, .trailing])

@@ -75,26 +75,18 @@ struct PlaylistDetailView: View {
                     }
 
                     VStack {
-                        Button(
-                            action: {
-                                
-                            }, label: {
-                                let playButtonBinding = Binding<Bool>(
-                                    get: {
-                                        switch self.selectedButtonType {
-                                        case .playButton: return true
-                                        default: return false
-                                        }
-                                    },
-                                    set: { value in
-                                        self.selectedButtonType = value ? .playButton(model.tracks) : nil
-                                    }
-                                )
-                                LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL, titleName: model.name)
+                        let playButtonBinding = Binding<Bool>(
+                            get: {
+                                switch self.selectedButtonType {
+                                case .playButton: return true
+                                default: return false
+                                }
+                            },
+                            set: { value in
+                                self.selectedButtonType = value ? .playButton(model.tracks) : nil
                             }
                         )
-                        .buttonStyle(StaticBackgroundButtonStyle())
-                        
+                        LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL, titleName: model.name)
                         Divider()
                     }
                     List(model.tracks) { track in

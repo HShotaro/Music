@@ -49,17 +49,15 @@ struct HomeView: View {
                     } else {
                         ScrollView {
                             LazyVGrid(columns: HomeView.columns, spacing: 10) {
-                                ForEach(model.playlists, id: \.self.id) { playist in
+                                ForEach(model.playlists, id: \.self.id) { playlist in
                                     NavigationLink (
-                                        destination: PlaylistDetailView(playlistID: playist.id),
+                                        destination: PlaylistDetailView(playlistID: playlist.id),
                                         label: {
                                             GridItemLayout1View(
-                                                titleName: playist.name,
-                                                subTitleName: playist.creatorName,
-                                                imageURL: playist.imageURL
+                                                titleName: playlist.name,
+                                                subTitleName: playlist.creatorName,
+                                                imageURL: playlist.imageURL
                                             )
-                                            
-                                            .background(Color.pink)
                                         }
                                         
                                     )
