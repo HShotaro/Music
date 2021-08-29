@@ -29,7 +29,7 @@ class MusicPlayerManager: ObservableObject {
     
     
     @objc private func itemDidPlayToEnd() {
-        if playerQueue != nil, let currentTrack = currentTrack {
+        if queuePlayer != nil, let currentTrack = currentTrack {
             guard let index = (audioTracks.firstIndex { $0.id == currentTrack.id}),
                   index + 1 < audioTracks.count else {
                 startPlayback()
