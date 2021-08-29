@@ -35,7 +35,7 @@ class MusicPlayerManager: ObservableObject {
                 startPlayback()
                 return
             }
-            playerQueue?.advanceToNextItem()
+            queuePlayer?.advanceToNextItem()
             self.currentTrack = audioTracks[index+1]
         }
         
@@ -53,32 +53,32 @@ class MusicPlayerManager: ObservableObject {
         }
     }
     
-    private var playerQueue: AVQueuePlayer?
+    private var queuePlayer: AVQueuePlayer?
     private func startPlayback() {
         self.audioTracks = self.audioTracks.shuffled()
-        playerQueue = nil
+        queuePlayer = nil
         let items: [AVPlayerItem] = self.audioTracks.compactMap {
             guard let url = $0.previewURL else { return nil }
             return AVPlayerItem(url: url)
         }
-        self.playerQueue = AVQueuePlayer(items: items)
-        self.playerQueue?.play()
+        self.queuePlayer = AVQueuePlayer(items: items)
+        self.queuePlayer?.play()
         self.onPlaying = true
         self.currentTrack = self.audioTracks.first
     }
     
     func backButtonSelected() {
-        if let currentItem = playerQueue?.currentItem, let currentTrack = currentTrack {
+        if let currentItem = queuePlayer?.currentItem, let currentTrack = currentTrack {
             guard let url = currentTrack.previewURL
             else { return }
-            playerQueue?.insert(AVPlayerItem(url: url), after: currentItem)
+            queuePlayer?.insert(AVPlayerItem(url: url), after: currentItem)
             
-            playerQueue?.remove(currentItem)
+            queuePlayer?.remove(currentItem)
         }
     }
     
     func playButtonSelected() {
-        if let player = playerQueue {
+        if let player = queuePlayer {
             if player.timeControlStatus == .playing {
                 player.pause()
                 self.onPlaying = false
@@ -90,13 +90,13 @@ class MusicPlayerManager: ObservableObject {
     }
     
     func nextButtonSelected() {
-        if playerQueue != nil, let currentTrack = currentTrack {
+        if queuePlayer != nil, let currentTrack = currentTrack {
             guard let index = (audioTracks.firstIndex { $0.id == currentTrack.id}),
                   index + 1 < audioTracks.count else {
                 startPlayback()
                 return
             }
-            playerQueue?.advanceToNextItem()
+            queuePlayer?.advanceToNextItem()
             self.currentTrack = audioTracks[index+1]
         }
     }
