@@ -10,6 +10,20 @@ import Combine
 
 struct PlaylistDetailView: View {
     @StateObject private var viewModel: PlaylistDetailViewModel
+    @State var buttonType: ButtonType? = nil
+    enum ButtonType: Identifiable {
+        case playButton([AudioTrackModel])
+        case list(AudioTrackModel)
+        
+        var id: String {
+            switch self {
+            case .playButton:
+                return "playbutton"
+            case let .list(track):
+                return "list" + " " + track.id
+            }
+        }
+    }
     
     init(playlistID: String, viewModel: PlaylistDetailViewModel = PlaylistDetailViewModel()) {
         viewModel.playlistID = playlistID
@@ -45,30 +59,60 @@ struct PlaylistDetailView: View {
                     Text("このプレイリストには曲がありません。")
                         .fontWeight(.bold)
                 } else {
+                    Button(action: {}, label: {
+                        EmptyView()
+                    }).sheet(item: $buttonType) {
+                        self.buttonType = nil
+                    } content: { _ in
+                        switch self.buttonType {
+                        case let .playButton(tracks):
+                            MusicPlayerView(audioTracks: tracks)
+                        case let .list(track):
+                            MusicPlayerView(audioTracks: [track])
+                        case .none:
+                            EmptyView()
+                        }
+                    }
+
                     VStack {
-                        LargeImageLayout1View(
-                            imageURL: model.imageURL,
-                            titleName: model.name
+                        Button(
+                            action: {
+                                
+                            }, label: {
+                                let playButtonBinding = Binding<Bool>(
+                                    get: {
+                                        switch self.buttonType {
+                                        case .playButton: return true
+                                        default: return false
+                                        }
+                                    },
+                                    set: { value in
+                                        self.buttonType = value ? .playButton(model.tracks) : nil
+                                    }
+                                )
+                                LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL, titleName: model.name)
+                            }
                         )
+                        .buttonStyle(StaticBackgroundButtonStyle())
+                        
                         Divider()
                     }
                     List(model.tracks) { track in
-                        NavigationLink(
-                            destination:
-                                HomeView(),
-                            label: {
-                                ListItemLayout1View(
-                                    titleName: track.name,
-                                    subTitleName: track.artist.name
-                                )
-                            }
-                        )
+                        Button(action: {
+                            self.buttonType = .list(track)
+                        }, label: {
+                            ListItemLayout1View(
+                                titleName: track.name,
+                                subTitleName: track.artist.name
+                            )
+                        })
                     }
                 }
             }
         }.onAppear {
             viewModel.onAppear()
-        }.navigationTitle(viewModel.titleName)
+        }
+        .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LargeImageLayout1View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
+    @Binding var showPlayerView: Bool
     let imageURL: URL?
     let titleName: String
     var body: some View {
@@ -23,7 +24,7 @@ struct LargeImageLayout1View: View {
                 Spacer()
                     .frame(height: 5.0)
                 Button(action: {
-                    print("dd")
+                    showPlayerView.toggle()
                 }, label: {
                     Image(systemName: "play.fill")
                         .frame(width: 60, height: 60)
@@ -48,8 +49,11 @@ struct LargeImageLayout1View: View {
 struct LargeImageLayout1_Previews: PreviewProvider {
     static var previews: some View {
         let mock = PlaylistDetailModel.mock(1)
+        let showPlayerView = Binding<Bool>.init(get: {
+            return false
+        }, set: {_ in })
         LargeImageLayout1View(
-            imageURL: mock.imageURL,
+            showPlayerView: showPlayerView, imageURL: mock.imageURL,
             titleName: mock.name
         )
     }
