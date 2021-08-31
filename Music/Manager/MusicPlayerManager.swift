@@ -53,6 +53,10 @@ class MusicPlayerManager: ObservableObject {
         }
     }
     
+    var isFirstTrack: Bool {
+        return currentTrack == audioTracks.first
+    }
+    
     private var queuePlayer: AVQueuePlayer?
     private func startPlayback() {
         self.audioTracks = self.audioTracks.shuffled()
@@ -68,12 +72,19 @@ class MusicPlayerManager: ObservableObject {
     }
     
     func backButtonSelected() {
-        if let currentItem = queuePlayer?.currentItem, let currentTrack = currentTrack {
-            guard let url = currentTrack.previewURL
+        if let currentItem = queuePlayer?.currentItem, !isFirstTrack {
+            guard let index = (audioTracks.firstIndex { $0.id == currentTrack?.id}),
+                  index-1 >= 0 else {
+                return
+            }
+            guard let prevUrl = audioTracks[index-1].previewURL,
+                  let currentUrl = audioTracks[index].previewURL
             else { return }
-            queuePlayer?.insert(AVPlayerItem(url: url), after: currentItem)
-            
+            let prevItem = AVPlayerItem(url: prevUrl)
+            queuePlayer?.insert(prevItem, after: currentItem)
+            queuePlayer?.insert(AVPlayerItem(url: currentUrl), after: prevItem)
             queuePlayer?.remove(currentItem)
+            self.currentTrack = audioTracks[index-1]
         }
     }
     

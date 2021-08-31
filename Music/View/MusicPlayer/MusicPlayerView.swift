@@ -30,6 +30,7 @@ struct MusicPlayerView: View {
                     Image(systemName: "backward.fill")
                 })
                 .frame(width: 50, height: 50)
+                .disabled(playerManager.isFirstTrack)
                 Button(action: {
                     playerManager.playButtonSelected()
                 }, label: {
