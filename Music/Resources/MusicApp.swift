@@ -14,12 +14,11 @@ struct MusicApp: App {
         
     }
     @EnvironmentObject var authManager: AuthManager
-    @EnvironmentObject var playerManager: MusicPlayerManager
     
     private var cancelables = Set<AnyCancellable>()
     var body: some Scene {
         WindowGroup {
-            ContentView(authManager: _authManager, playerManager: _playerManager)
+            ContentView(authManager: _authManager)
                 .environmentObject(AuthManager.shared)
                 .environmentObject(MusicPlayerManager.shared)
         }

@@ -51,6 +51,7 @@ struct MusicPlayerView: View {
                 playerManager.audioTracks = audioTracks
             }
         }
+        .environmentObject(MusicPlayerManager.shared)
     }
 }
 

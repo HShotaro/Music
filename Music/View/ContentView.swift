@@ -10,7 +10,6 @@ import Combine
 
 struct ContentView: View {
     @EnvironmentObject var authManager: AuthManager
-    @EnvironmentObject var playerManager: MusicPlayerManager
     
     enum Tab {
         case home

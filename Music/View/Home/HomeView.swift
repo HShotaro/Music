@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct HomeView: View {
-    @EnvironmentObject var playerManager: MusicPlayerManager
     @StateObject private var viewModel = HomeViewModel()
     @State var destinationView: AnyView? = nil
     @State var isPushActive = false

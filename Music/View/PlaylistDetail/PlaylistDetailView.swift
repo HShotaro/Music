@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct PlaylistDetailView: View {
-    @EnvironmentObject var playerManager: MusicPlayerManager
     @StateObject private var viewModel = PlaylistDetailViewModel()
     @State var selectedButtonType: ButtonType? = nil
     let playlistID: String
