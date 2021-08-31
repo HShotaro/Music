@@ -105,6 +105,7 @@ struct PlaylistDetailView: View {
         }
         .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
+        .environmentObject(MusicPlayerManager.shared)
     }
 }
 
