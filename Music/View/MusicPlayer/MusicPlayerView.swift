@@ -10,9 +10,6 @@ import SwiftUI
 struct MusicPlayerView: View {
     @EnvironmentObject var playerManager: MusicPlayerManager
     let audioTracks: [AudioTrackModel]
-    init(audioTracks: [AudioTrackModel]) {
-        self.audioTracks = audioTracks.filter{ $0.previewURL != nil }
-    }
     
     var body: some View {
         VStack(alignment: .center) {
@@ -59,14 +56,16 @@ struct MusicPlayerView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             MusicPlayerView(audioTracks: [AudioTrackModel.mock(1), AudioTrackModel.mock(2), AudioTrackModel.mock(3)])
+                .environmentObject(MusicPlayerManager.shared)
             .environment(\.colorScheme, .light)
             .previewDisplayName("light")
             
             MusicPlayerView(audioTracks: [AudioTrackModel.mock(1), AudioTrackModel.mock(2), AudioTrackModel.mock(3)])
+                .environmentObject(MusicPlayerManager.shared)
                 .environment(\.colorScheme, .dark)
                 .previewDisplayName("dark")
             MusicPlayerView(audioTracks: [AudioTrackModel.mock(1), AudioTrackModel.mock(2), AudioTrackModel.mock(3)])
-                .environment(\.colorScheme, .dark)
+                .environmentObject(MusicPlayerManager.shared)
                 .environment(\.locale, Locale(identifier: "en"))
                 .previewDisplayName("English")
         }

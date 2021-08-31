@@ -10,6 +10,7 @@ import Combine
 
 class PlaylistDetailViewModel: ObservableObject {
     @Published private(set) var model: Stateful<PlaylistDetailModel> = .idle
+//    @Published private(set) var model: Stateful<PlaylistDetailModel> = .loaded(PlaylistDetailModel.mock(1))
     @Published var titleName = ""
     private var cancellable: AnyCancellable?
     private let repository: PlaylistDetailRepository
@@ -19,7 +20,6 @@ class PlaylistDetailViewModel: ObservableObject {
     }
     
     func onAppear(playlistID: String) {
-        guard model == .idle else { return }
         loadModel(playlistID: playlistID)
     }
     

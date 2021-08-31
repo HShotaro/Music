@@ -10,6 +10,7 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     @Published private(set) var model: Stateful<HomeModel> = .idle
+//    @Published private(set) var model: Stateful<HomeModel> = .loaded(HomeModel(playlists: [Int](1...50).map { PlayListModel.mock($0) }))
     private var cancellable: AnyCancellable?
     private let repository: HomeRepository
     
@@ -18,7 +19,6 @@ class HomeViewModel: ObservableObject {
     }
     
     func onAppear() {
-        guard model == .idle else { return }
         loadModel()
     }
     

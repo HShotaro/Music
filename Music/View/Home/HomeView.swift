@@ -85,7 +85,6 @@ struct HomeView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
                 .previewDisplayName("dark")
             HomeView()
-                .environment(\.colorScheme, .dark)
                 .environment(\.locale, Locale(identifier: "en"))
                 .previewDisplayName("English")
         }

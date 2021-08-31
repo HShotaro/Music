@@ -41,5 +41,6 @@ struct MusicPlayerImageView: View {
 struct MusicPlayerImageView_Previews: PreviewProvider {
     static var previews: some View {
         MusicPlayerImageView()
+            .environmentObject(MusicPlayerManager.shared)
     }
 }

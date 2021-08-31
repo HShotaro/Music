@@ -121,7 +121,6 @@ struct PlaylistView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
                 .previewDisplayName("dark")
             PlaylistDetailView(playlistID: "2")
-                .environment(\.colorScheme, .dark)
                 .environment(\.locale, Locale(identifier: "en"))
                 .previewDisplayName("English")
             
