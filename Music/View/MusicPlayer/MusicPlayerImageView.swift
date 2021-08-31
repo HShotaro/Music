@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MusicPlayerImageView: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
-    @Binding var imageURL: URL?
+    @EnvironmentObject var playerManager: MusicPlayerManager
     var body: some View {
         VStack {
             Image(uiImage: image)
@@ -17,9 +17,18 @@ struct MusicPlayerImageView: View {
                 .aspectRatio(contentMode: .fit)
                 .padding(.all, 0.0)
                 .frame(width: 300, height: 300, alignment: .center)
-        }.onChange(of: imageURL, perform: { _ in
+        }.onAppear {
             DispatchQueue.global().async {
-                if let url = imageURL {
+                if let url = playerManager.currentTrack?.album.imageURL {
+                    downloadImageAsync(url: url) { image in
+                        self.image = image ?? UIImage()
+                    }
+                }
+            }
+        }
+        .onChange(of: playerManager.currentTrack, perform: { _ in
+            DispatchQueue.global().async {
+                if let url = playerManager.currentTrack?.album.imageURL {
                     downloadImageAsync(url: url) { image in
                         self.image = image ?? UIImage()
                     }
@@ -31,9 +40,6 @@ struct MusicPlayerImageView: View {
 
 struct MusicPlayerImageView_Previews: PreviewProvider {
     static var previews: some View {
-        let binding = Binding<URL?>.init {
-            AudioTrackModel.mock(1).album.imageURL
-        } set: { _ in }
-        MusicPlayerImageView(imageURL: binding)
+        MusicPlayerImageView()
     }
 }

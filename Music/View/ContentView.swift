@@ -9,7 +9,9 @@ import SwiftUI
 import Combine
 
 struct ContentView: View {
-    @StateObject private var authManager = AuthManager.shared
+    @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var playerManager: MusicPlayerManager
+    
     enum Tab {
         case home
         case search
@@ -18,7 +20,7 @@ struct ContentView: View {
 
     @State private var selection: Tab = .home
     var body: some View {
-        if AuthManager.shared.isSignIn {
+        if authManager.isSignIn {
             TabView(selection: $selection) {
                 HomeView()
                 .tabItem {
@@ -59,6 +61,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView().environmentObject(AuthManager.shared)
     }
 }

@@ -13,22 +13,21 @@ class PlaylistDetailViewModel: ObservableObject {
     @Published var titleName = ""
     private var cancellable: AnyCancellable?
     private let repository: PlaylistDetailRepository
-    var playlistID: String = ""
     
     init(repository: PlaylistDetailRepository = PlaylistDetailDataRepository()) {
         self.repository = repository
     }
     
-    func onAppear() {
+    func onAppear(playlistID: String) {
         guard model == .idle else { return }
-        loadModel()
+        loadModel(playlistID: playlistID)
     }
     
-    func onRetryButtonTapped() {
-        loadModel()
+    func onRetryButtonTapped(playlistID: String) {
+        loadModel(playlistID: playlistID)
     }
     
-    private func loadModel() {
+    private func loadModel(playlistID: String) {
         cancellable = self.repository.fetchModel(for: playlistID)
             .handleEvents(receiveSubscription: { [weak self] _ in
                 self?.model = .loading

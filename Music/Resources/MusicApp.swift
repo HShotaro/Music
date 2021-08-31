@@ -10,17 +10,18 @@ import Combine
 
 @main
 struct MusicApp: App {
-    private var cancelables = Set<AnyCancellable>()
     init() {
-        if AuthManager.shared.isSignIn {
-            AuthManager.shared.refreshIfNeeded()
-            .sink { _ in } receiveValue: { _ in }
-            .store(in: &cancelables)
-        }
+        
     }
+    @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var playerManager: MusicPlayerManager
+    
+    private var cancelables = Set<AnyCancellable>()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(authManager: _authManager, playerManager: _playerManager)
+                .environmentObject(AuthManager.shared)
+                .environmentObject(MusicPlayerManager.shared)
         }
     }
 }

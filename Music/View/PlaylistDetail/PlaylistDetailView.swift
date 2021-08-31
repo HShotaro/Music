@@ -9,8 +9,10 @@ import SwiftUI
 import Combine
 
 struct PlaylistDetailView: View {
-    @StateObject private var viewModel: PlaylistDetailViewModel
+    @EnvironmentObject var playerManager: MusicPlayerManager
+    @StateObject private var viewModel = PlaylistDetailViewModel()
     @State var selectedButtonType: ButtonType? = nil
+    let playlistID: String
     enum ButtonType: Identifiable {
         case playButton([AudioTrackModel])
         case list(AudioTrackModel)
@@ -23,11 +25,6 @@ struct PlaylistDetailView: View {
                 return "list" + " " + track.id
             }
         }
-    }
-    
-    init(playlistID: String, viewModel: PlaylistDetailViewModel = PlaylistDetailViewModel()) {
-        viewModel.playlistID = playlistID
-        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -46,7 +43,7 @@ struct PlaylistDetailView: View {
                     .opacity(0.4)
                     Button(
                         action: {
-                            viewModel.onRetryButtonTapped()
+                            viewModel.onRetryButtonTapped(playlistID: playlistID)
                         }, label: {
                             Text("リトライ")
                                 .fontWeight(.bold)
@@ -102,7 +99,7 @@ struct PlaylistDetailView: View {
                 }
             }
         }.onAppear {
-            viewModel.onAppear()
+            viewModel.onAppear(playlistID: playlistID)
         }
         .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
@@ -113,35 +110,19 @@ struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PlaylistDetailView(
-                playlistID: "1", viewModel: PlaylistDetailViewModel(
-                    repository:
-                        PlaylistDetailMockRepository(
-                            playlistDetailModel: PlaylistDetailModel.mock(1)
-                        )
-                )
+                playlistID: "1"
             )
-            .previewDisplayName("Default")
+            .environment(\.colorScheme, .light)
+            .previewDisplayName("light")
             
-            PlaylistDetailView(
-                playlistID: "1", viewModel: PlaylistDetailViewModel(
-                    repository:
-                        PlaylistDetailMockRepository(
-                            playlistDetailModel: PlaylistDetailModel.mock(1, hasTrack: false)
-                        )
-                )
-            )
-            .previewDisplayName("Empty")
+            PlaylistDetailView(playlistID: "2")
+                .environment(\.colorScheme, .dark)
+                .previewDisplayName("dark")
+            PlaylistDetailView(playlistID: "2")
+                .environment(\.colorScheme, .dark)
+                .environment(\.locale, Locale(identifier: "en"))
+                .previewDisplayName("English")
             
-            PlaylistDetailView(
-                playlistID: "1", viewModel: PlaylistDetailViewModel(
-                    repository:
-                        PlaylistDetailMockRepository(
-                            playlistDetailModel: PlaylistDetailModel.mock(1, hasTrack: false),
-                            error: DummyError()
-                        )
-                )
-            )
-            .previewDisplayName("Error")
         }
     }
 }

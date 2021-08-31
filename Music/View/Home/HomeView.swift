@@ -9,15 +9,10 @@ import SwiftUI
 import Combine
 
 struct HomeView: View {
-    @StateObject private var viewModel: HomeViewModel
+    @EnvironmentObject var playerManager: MusicPlayerManager
+    @StateObject private var viewModel = HomeViewModel()
     @State var destinationView: AnyView? = nil
     @State var isPushActive = false
-    
-    
-    init(viewModel: HomeViewModel = HomeViewModel()) {
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
-    
     
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
@@ -83,42 +78,17 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            HomeView(
-                viewModel: HomeViewModel(
-                    repository:
-                        HomeMockRepository(
-                            playlists: [
-                                PlayListModel.mock(1),
-                                PlayListModel.mock(2),
-                                PlayListModel.mock(3),
-                                PlayListModel.mock(4),
-                                PlayListModel.mock(5)
-                            ]
-                        )
-                )
-            )
-            .previewDisplayName("Default")
+            HomeView()
+            .environment(\.colorScheme, .light)
+            .previewDisplayName("light")
             
-            HomeView(
-                viewModel: HomeViewModel(
-                    repository:
-                        HomeMockRepository(
-                            playlists: []
-                        )
-                )
-            )
-            .previewDisplayName("Empty")
-            
-            HomeView(
-                viewModel: HomeViewModel(
-                    repository:
-                        HomeMockRepository(
-                            playlists: [],
-                            error: DummyError()
-                        )
-                )
-            )
-            .previewDisplayName("Error")
+            HomeView()
+                .environment(\.colorScheme, .dark)
+                .previewDisplayName("dark")
+            HomeView()
+                .environment(\.colorScheme, .dark)
+                .environment(\.locale, Locale(identifier: "en"))
+                .previewDisplayName("English")
         }
     }
 }
