@@ -70,31 +70,34 @@ struct PlaylistDetailView: View {
                             EmptyView()
                         }
                     }
-
-                    VStack {
-                        let playButtonBinding = Binding<Bool>(
-                            get: {
-                                switch self.selectedButtonType {
-                                case .playButton: return true
-                                default: return false
-                                }
-                            },
-                            set: { value in
-                                self.selectedButtonType = value ? .playButton(model.tracks) : nil
+                    let playButtonBinding = Binding<Bool>(
+                        get: {
+                            switch self.selectedButtonType {
+                            case .playButton: return true
+                            default: return false
                             }
-                        )
-                        LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL)
-                        Divider()
-                    }
-                    List(model.tracks) { track in
-                        Button(action: {
-                            self.selectedButtonType = .list(track)
-                        }, label: {
-                            ListItemLayout1View(
-                                titleName: track.name,
-                                subTitleName: track.artist.name
-                            )
-                        })
+                        },
+                        set: { value in
+                            self.selectedButtonType = value ? .playButton(model.tracks) : nil
+                        }
+                    )
+                    List {
+                        ForEach(0..<model.tracks.count+1) {(row: Int) in
+                            if row > 0 {
+                                let track = model.tracks[row-1]
+                                Button(action: {
+                                    self.selectedButtonType = .list(track)
+                                }, label: {
+                                    ListItemLayout1View(
+                                        titleName: track.name,
+                                        subTitleName: track.artist.name
+                                    )
+                                })
+                            } else {
+                                LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL)
+                                    .buttonStyle(StaticBackgroundButtonStyle())
+                            }
+                        }
                     }
                 }
             }

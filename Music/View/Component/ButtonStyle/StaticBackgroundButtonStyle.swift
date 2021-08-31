@@ -19,7 +19,6 @@ struct StaticBackgroundButtonStyle: ButtonStyle {
                 configuration.label
                     .background(Color(UIColor.systemBackground))
                     .foregroundColor(Color(UIColor.systemBackground))
-                    .opacity(configuration.isPressed ? 0.2 : 1.0)
             }
         }
 }
