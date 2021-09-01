@@ -10,21 +10,8 @@ import Combine
 
 struct PlaylistDetailView: View {
     @StateObject private var viewModel = PlaylistDetailViewModel()
-    @State var selectedButtonType: ButtonType? = nil
+    @EnvironmentObject var playerManager: MusicPlayerManager
     let playlistID: String
-    enum ButtonType: Identifiable {
-        case playButton([AudioTrackModel])
-        case list(AudioTrackModel)
-        
-        var id: String {
-            switch self {
-            case .playButton:
-                return "playbutton"
-            case let .list(track):
-                return "list" + " " + track.id
-            }
-        }
-    }
 
     var body: some View {
         VStack {
@@ -55,38 +42,14 @@ struct PlaylistDetailView: View {
                     Text("このプレイリストには曲がありません。")
                         .fontWeight(.bold)
                 } else {
-                    Button(action: {}, label: {
-                        EmptyView()
-                    }).sheet(item: $selectedButtonType) {
-                        self.selectedButtonType = nil
-                    } content: { _ in
-                        switch self.selectedButtonType {
-                        case let .playButton(tracks):
-                            MusicPlayerView(audioTracks: tracks).environmentObject(MusicPlayerManager.shared)
-                                
-                        case let .list(track):
-                            MusicPlayerView(audioTracks: [track]).environmentObject(MusicPlayerManager.shared)
-                        case .none:
-                            EmptyView()
-                        }
-                    }
-                    let playButtonBinding = Binding<Bool>(
-                        get: {
-                            switch self.selectedButtonType {
-                            case .playButton: return true
-                            default: return false
-                            }
-                        },
-                        set: { value in
-                            self.selectedButtonType = value ? .playButton(model.tracks) : nil
-                        }
-                    )
                     List {
                         ForEach(0..<model.tracks.count+1) {(row: Int) in
                             if row > 0 {
                                 let track = model.tracks[row-1]
                                 Button(action: {
-                                    self.selectedButtonType = .list(track)
+                                    withAnimation {
+                                        playerManager.showMusicPlayer(tracks: [track])
+                                    }
                                 }, label: {
                                     ListItemLayout1View(
                                         titleName: track.name,
@@ -94,7 +57,7 @@ struct PlaylistDetailView: View {
                                     )
                                 })
                             } else {
-                                LargeImageLayout1View(showPlayerView: playButtonBinding, imageURL: model.imageURL)
+                                LargeImageLayout1View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }

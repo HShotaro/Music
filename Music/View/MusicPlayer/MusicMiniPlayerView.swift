@@ -12,7 +12,6 @@ struct MusicMiniPlayerView: View {
     @EnvironmentObject var playerManager: MusicPlayerManager
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     @State var offset: CGFloat = 0
-    @Binding var expand: Bool
     var animation: Namespace.ID
     
     var body: some View {
@@ -20,15 +19,15 @@ struct MusicMiniPlayerView: View {
             HStack(spacing: 15) {
                 Image(uiImage: image)
                     .resizable()
-                    .aspectRatio(contentMode: expand ? .fit : .fill)
-                    .frame(width: expand ? 300 : 55, height: expand ? 300 : 55)
+                    .aspectRatio(contentMode: playerManager.expanding ? .fit : .fill)
+                    .frame(width: playerManager.expanding ? 300 : 55, height: playerManager.expanding ? 300 : 55)
                     .cornerRadius(15)
-                if !expand {
+                if !playerManager.expanding {
                     VStack(alignment: .leading, spacing: 5) {
                         Text(playerManager.currentTrack?.name ?? "")
                             .font(.headline)
                             .fontWeight(.bold)
-                            .lineLimit(expand ? 2 : 1)
+                            .lineLimit(playerManager.expanding ? 2 : 1)
                             .matchedGeometryEffect(id: "current_track_name", in: animation)
                         Text(playerManager.currentTrack?.artist.name ?? "")
                             .font(.subheadline)
@@ -56,7 +55,7 @@ struct MusicMiniPlayerView: View {
                 }
             }
             .padding(.horizontal)
-            if expand {
+            if playerManager.expanding {
                 Text(playerManager.currentTrack?.name ?? "")
                     .font(.title3)
                     .multilineTextAlignment(.leading)
@@ -108,26 +107,26 @@ struct MusicMiniPlayerView: View {
                 }
             }
         })
-        .frame(maxWidth: .infinity, maxHeight: expand ? .infinity : MusicMiniPlayerView.height)
+        .frame(maxWidth: .infinity, maxHeight: playerManager.expanding ? .infinity : MusicMiniPlayerView.height)
         .background(
             VStack(spacing: 0) {
                 BlurView()
                 Divider()
             }.onTapGesture {
                 withAnimation(.spring()) {
-                    expand.toggle()
+                    playerManager.expanding.toggle()
                 }
             }
         )
-        .cornerRadius(expand ? 20 : 0)
-        .offset(y: expand ? 0 : -48)
+        .cornerRadius(playerManager.expanding ? 20 : 0)
+        .offset(y: playerManager.expanding ? 0 : -48)
         .offset(y: offset)
         .gesture(DragGesture().onEnded(didEnd(value:)).onChanged(didChange(value:)))
         .ignoresSafeArea()
     }
     
     private func didChange(value: DragGesture.Value) {
-        if value.translation.height > 0 && expand {
+        if value.translation.height > 0 && playerManager.expanding {
             offset = value.translation.height
         }
     }
@@ -135,7 +134,7 @@ struct MusicMiniPlayerView: View {
     private func didEnd(value: DragGesture.Value) {
         withAnimation(.interactiveSpring(response: 0.5, dampingFraction: 0.95, blendDuration: 0.95)) {
             if value.translation.height > 300 {
-                expand = false
+                playerManager.expanding = false
             }
             offset = 0
         }
@@ -144,9 +143,8 @@ struct MusicMiniPlayerView: View {
 
 struct MusicMiniPlayerView_Previews: PreviewProvider {
     @Namespace static var animation
-    @State static var state = false
     static var previews: some View {
-        MusicMiniPlayerView(expand: $state, animation: animation)
+        MusicMiniPlayerView(animation: animation)
             .environmentObject(MusicPlayerManager.shared)
     }
 }

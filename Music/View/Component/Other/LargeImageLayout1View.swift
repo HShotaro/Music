@@ -9,8 +9,10 @@ import SwiftUI
 
 struct LargeImageLayout1View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
-    @Binding var showPlayerView: Bool
+    @EnvironmentObject var playerManager: MusicPlayerManager
+    var tapPlayerViewHandler: (() -> Void)?
     let imageURL: URL?
+    let tracks: [AudioTrackModel]
     var body: some View {
         HStack {
             Image(uiImage: image)
@@ -20,7 +22,7 @@ struct LargeImageLayout1View: View {
                 .frame(width: 160, height: 160, alignment: .leading)
             Spacer()
             Button(action: {
-                showPlayerView.toggle()
+                playerManager.showMusicPlayer(tracks: tracks)
             }, label: {
                 Image(systemName: "play.fill")
                     .frame(width: 60, height: 60)
@@ -45,11 +47,8 @@ struct LargeImageLayout1View: View {
 struct LargeImageLayout1_Previews: PreviewProvider {
     static var previews: some View {
         let mock = PlaylistDetailModel.mock(1)
-        let showPlayerView = Binding<Bool>.init(get: {
-            return false
-        }, set: {_ in })
         LargeImageLayout1View(
-            showPlayerView: showPlayerView, imageURL: mock.imageURL
+            imageURL: mock.imageURL, tracks: mock.tracks
         )
     }
 }

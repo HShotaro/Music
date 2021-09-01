@@ -53,7 +53,7 @@ struct ContentView: View {
                     }
                         .tag(Tab.library)
                 }.accentColor(/*@START_MENU_TOKEN@*/.yellow/*@END_MENU_TOKEN@*/)
-                MusicMiniPlayerView(expand: $expand, animation: animation)
+                MusicMiniPlayerView(animation: animation)
                     .opacity(playerManager.currentTrack != nil ? 1.0 : 0.0)
             }
         } else {

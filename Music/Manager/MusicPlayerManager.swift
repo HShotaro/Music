@@ -43,6 +43,7 @@ class MusicPlayerManager: ObservableObject {
     
     @Published var currentTrack: AudioTrackModel?
     @Published var onPlaying = false
+    @Published var expanding = false
     
     var audioTracks = [AudioTrackModel]() {
         didSet {
@@ -58,6 +59,13 @@ class MusicPlayerManager: ObservableObject {
     }
     
     private var queuePlayer: AVQueuePlayer?
+    
+    func showMusicPlayer(tracks: [AudioTrackModel]) {
+        DispatchQueue.global().async { [weak self] in
+            self?.audioTracks = tracks
+        }
+        expanding = true
+    }
     private func startPlayback() {
         self.audioTracks = self.audioTracks.shuffled()
         queuePlayer = nil
@@ -67,8 +75,10 @@ class MusicPlayerManager: ObservableObject {
         }
         self.queuePlayer = AVQueuePlayer(items: items)
         self.queuePlayer?.play()
-        self.onPlaying = true
-        self.currentTrack = self.audioTracks.first
+        DispatchQueue.main.async { [weak self] in
+            self?.onPlaying = true
+            self?.currentTrack = self?.audioTracks.first
+        }
     }
     
     func backButtonSelected() {
