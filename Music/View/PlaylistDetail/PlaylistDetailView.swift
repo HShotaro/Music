@@ -9,7 +9,6 @@ import SwiftUI
 import Combine
 
 struct PlaylistDetailView: View {
-    @EnvironmentObject var playerManager: MusicPlayerManager
     @StateObject private var viewModel = PlaylistDetailViewModel()
     @State var selectedButtonType: ButtonType? = nil
     let playlistID: String
@@ -63,9 +62,10 @@ struct PlaylistDetailView: View {
                     } content: { _ in
                         switch self.selectedButtonType {
                         case let .playButton(tracks):
-                            MusicPlayerView(audioTracks: tracks)
+                            MusicPlayerView(audioTracks: tracks).environmentObject(MusicPlayerManager.shared)
+                                
                         case let .list(track):
-                            MusicPlayerView(audioTracks: [track])
+                            MusicPlayerView(audioTracks: [track]).environmentObject(MusicPlayerManager.shared)
                         case .none:
                             EmptyView()
                         }
@@ -106,7 +106,6 @@ struct PlaylistDetailView: View {
         }
         .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
-        .environmentObject(MusicPlayerManager.shared)
     }
 }
 

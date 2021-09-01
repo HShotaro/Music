@@ -20,7 +20,6 @@ struct MusicApp: App {
         WindowGroup {
             ContentView(authManager: _authManager)
                 .environmentObject(AuthManager.shared)
-                .environmentObject(MusicPlayerManager.shared)
         }
     }
 }
