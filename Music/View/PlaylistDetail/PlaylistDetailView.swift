@@ -98,7 +98,7 @@ struct PlaylistDetailView: View {
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }
-                    }
+                    }.padding(.bottom, MusicMiniPlayerView.height)
                 }
             }
         }.onAppear {

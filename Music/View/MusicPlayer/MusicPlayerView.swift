@@ -15,7 +15,7 @@ struct MusicPlayerView: View {
         VStack(alignment: .center) {
             MusicPlayerImageView(playerManager: _playerManager)
             Text(playerManager.currentTrack?.name ?? "")
-                .font(.headline)
+                .font(.title3)
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)
                 .padding([.leading, .bottom, .trailing])
@@ -28,6 +28,7 @@ struct MusicPlayerView: View {
                     playerManager.backButtonSelected()
                 }, label: {
                     Image(systemName: "backward.fill")
+                        .font(.title3)
                 })
                 .frame(width: 50, height: 50)
                 .disabled(playerManager.isFirstTrack)
@@ -35,12 +36,14 @@ struct MusicPlayerView: View {
                     playerManager.playButtonSelected()
                 }, label: {
                     Image(systemName: playerManager.onPlaying ? "pause" : "play.fill")
+                        .font(.title3)
                 })
                 .frame(width: 50, height: 50)
                 Button(action: {
                     playerManager.nextButtonSelected()
                 }, label: {
                     Image(systemName: "forward.fill")
+                        .font(.title3)
                 })
                 .frame(width: 50, height: 50)
             }
