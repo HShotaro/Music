@@ -62,7 +62,7 @@ struct HomeView: View {
                                     }
                                 }
                             }.font(.largeTitle)
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicMiniPlayerView.height, trailing: 15))
+                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
                         }
                     }
                 }
