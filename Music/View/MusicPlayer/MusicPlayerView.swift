@@ -39,7 +39,7 @@ struct MusicPlayerView: View {
                         playerManager.playButtonSelected()
                     } label: {
                         Image(systemName: playerManager.onPlaying ? "pause" : "play.fill")
-                            .font(.title2)
+                            .font(.title3)
                             .foregroundColor(.primary)
                             .matchedGeometryEffect(id: "play_track", in: animation)
                     }
@@ -48,7 +48,7 @@ struct MusicPlayerView: View {
                         playerManager.nextButtonSelected()
                     } label: {
                         Image(systemName: "forward.fill")
-                            .font(.title2)
+                            .font(.title3)
                             .foregroundColor(.primary)
                             .matchedGeometryEffect(id: "forward_track", in: animation)
                     }
@@ -57,7 +57,7 @@ struct MusicPlayerView: View {
             .padding(.horizontal)
             if playerManager.expanding {
                 Text(playerManager.currentTrack?.name ?? "")
-                    .font(.title3)
+                    .font(.headline)
                     .multilineTextAlignment(.leading)
                     .lineLimit(2)
                     .padding([.leading, .bottom, .trailing])
