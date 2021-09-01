@@ -347,8 +347,8 @@
 		96DB204226D50A380004FA9A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				967F03E826D7F1B800297A0A /* Component */,
 				36B60F5F26B5B947001BC9B7 /* ContentView.swift */,
+				967F03E826D7F1B800297A0A /* Component */,
 				96DB205F26D53FDF0004FA9A /* Home */,
 				96DB206026D53FE70004FA9A /* Search */,
 				96DB206126D53FF30004FA9A /* Library */,

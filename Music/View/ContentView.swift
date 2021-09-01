@@ -19,6 +19,8 @@ struct ContentView: View {
     }
 
     @State private var selection: Tab = .home
+    @State private var expand = false
+    @Namespace var animation
     var body: some View {
         if authManager.isSignIn {
             ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)){
@@ -51,7 +53,7 @@ struct ContentView: View {
                     }
                         .tag(Tab.library)
                 }.accentColor(/*@START_MENU_TOKEN@*/.yellow/*@END_MENU_TOKEN@*/)
-                MusicMiniPlayerView()
+                MusicMiniPlayerView(expand: $expand, animation: animation)
                     .opacity(playerManager.currentTrack != nil ? 1.0 : 0.0)
             }
         } else {
