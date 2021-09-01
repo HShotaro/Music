@@ -40,10 +40,10 @@ class PlaylistDetailViewModel: ObservableObject {
                 case .finished:
                     break
                 }
+                self?.cancellable = nil
             }, receiveValue: { [weak self] response in
                 self?.titleName = response.name
                 self?.model = .loaded(response)
-            }
-            )
+            })
     }
 }

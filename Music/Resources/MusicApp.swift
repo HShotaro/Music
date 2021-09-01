@@ -15,7 +15,6 @@ struct MusicApp: App {
     }
     @EnvironmentObject var authManager: AuthManager
     
-    private var cancelables = Set<AnyCancellable>()
     var body: some Scene {
         WindowGroup {
             ContentView(authManager: _authManager)

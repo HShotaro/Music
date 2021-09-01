@@ -39,10 +39,10 @@ class HomeViewModel: ObservableObject {
                 case .finished:
                     break
                 }
+                self?.cancellable = nil
             }, receiveValue: { [weak self] response in
                 self?.model = .loaded(response)
                 
-            }
-            )
+            })
     }
 }
