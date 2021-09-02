@@ -20,7 +20,7 @@ class HomeViewModelTests: XCTestCase {
         let expectedToBeloded = expectation(description: "期待通り雑誌一覧が読み込まれること")
         let viewModel = HomeViewModel(
             repository: HomeMockRepository(
-                playlists: [.mock(1), .mock(2)]
+                playlists: [.mock(1), .mock(2)], albums: [.mock(1), .mock(2), .mock(3)]
             )
         )
         
@@ -28,7 +28,10 @@ class HomeViewModelTests: XCTestCase {
             switch result {
             case .loading: expectedToBeloading.fulfill()
             case let .loaded(model):
-                if model.playlists.count == 2 && model.playlists.map ({ $0.id }) == [PlayListModel.mock(1).id, PlayListModel.mock(2).id] {
+                if model.playlists.count == 2 &&
+                    model.playlists.map ({ $0.id }) == [PlayListModel.mock(1).id, PlayListModel.mock(2).id],
+                   model.albums.count == 3 &&
+                       model.albums.map ({ $0.id }) == [AlbumModel.mock(1).id, AlbumModel.mock(2).id, AlbumModel.mock(3).id] {
                     expectedToBeloded.fulfill()
                 } else {
                     XCTFail("Unexpected: \(result)")

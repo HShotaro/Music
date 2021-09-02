@@ -38,7 +38,7 @@ class PlaylistDetailViewModelTests: XCTestCase {
             }
         }.store(in: &cancelables)
         
-        viewModel.onAppear()
+        viewModel.onAppear(playlistID: "1")
         
         wait(for: [expectedToBeloading, expectedToBeloded],
              timeout: 2.0,

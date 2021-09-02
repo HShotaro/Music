@@ -47,18 +47,33 @@ struct HomeView: View {
                         NavigationLink(destination: destinationView, isActive: $isPushActive) {
                             EmptyView()
                         }.hidden()
-                        ScrollView {
+                        ScrollView(.vertical) {
+                            LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground))
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 10) {
+                                    ForEach(model.albums, id: \.self.id) { album in
+                                        Button {
+                                            destinationView = AnyView(AlbumDetailView())
+                                            isPushActive = true
+                                        } label: {
+                                            GridItemLayout1View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
+                                        }.frame(width: 120, height: 180)
+                                    }
+                                }
+                            }.frame(width: UIScreen.main.bounds.width, height: 180)
                             LazyVGrid(columns: HomeView.columns, spacing: 10) {
-                                ForEach(model.playlists, id: \.self.id) { playlist in
-                                    Button {
-                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
-                                        isPushActive = true
-                                    } label: {
-                                        GridItemLayout1View(
-                                            titleName: playlist.name,
-                                            subTitleName: playlist.creatorName,
-                                            imageURL: playlist.imageURL
-                                        )
+                                Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
+                                    ForEach(model.playlists, id: \.self.id) { playlist in
+                                        Button {
+                                            destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
+                                            isPushActive = true
+                                        } label: {
+                                            GridItemLayout1View(
+                                                titleName: playlist.name,
+                                                subTitleName: playlist.creatorName,
+                                                imageURL: playlist.imageURL
+                                            )
+                                        }
                                     }
                                 }
                             }.font(.largeTitle)
@@ -68,6 +83,7 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.inline)
         }.onAppear {
             viewModel.onAppear()
         }

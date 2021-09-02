@@ -12,13 +12,13 @@ struct HomeMockRepository: HomeRepository {
     let error: Error?
     let model: HomeModel
     
-    init(playlists: [PlayListModel]) {
-        self.model = HomeModel(playlists: playlists)
+    init(playlists: [PlayListModel], albums: [AlbumModel]) {
+        self.model = HomeModel(playlists: playlists, albums: albums)
         self.error = nil
     }
     
-    init(playlists: [PlayListModel], error: Error) {
-        self.model = HomeModel(playlists: playlists)
+    init(playlists: [PlayListModel], albums: [AlbumModel], error: Error) {
+        self.model = HomeModel(playlists: playlists, albums: albums)
         self.error = error
     }
     
