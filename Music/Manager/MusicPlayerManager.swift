@@ -102,13 +102,19 @@ class MusicPlayerManager: ObservableObject {
     }
     
     func playButtonSelected() {
-        if let player = queuePlayer {
-            if player.timeControlStatus == .playing {
-                player.pause()
-                self.onPlaying = false
-            } else if player.timeControlStatus == .paused {
-                player.play()
-                self.onPlaying = true
+        DispatchQueue.global().async { [weak self] in
+            if let player = self?.queuePlayer {
+                if player.timeControlStatus == .playing {
+                    player.pause()
+                    DispatchQueue.main.async {
+                        self?.onPlaying = false
+                    }
+                } else if player.timeControlStatus == .paused {
+                    player.play()
+                    DispatchQueue.main.async {
+                        self?.onPlaying = true
+                    }
+                }
             }
         }
     }
