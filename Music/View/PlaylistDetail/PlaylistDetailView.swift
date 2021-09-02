@@ -57,7 +57,7 @@ struct PlaylistDetailView: View {
                                     )
                                 })
                             } else {
-                                LargeImageLayout1View(imageURL: model.imageURL, tracks: model.tracks)
+                                ShowPlayerLayout1View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }

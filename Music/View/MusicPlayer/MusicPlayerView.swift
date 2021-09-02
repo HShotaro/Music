@@ -119,8 +119,8 @@ struct MusicPlayerView: View {
             }
         )
         .cornerRadius(playerManager.expanding ? 20 : 0)
-        .offset(y: playerManager.expanding ? 0 : -48)
-        .offset(y: offset)
+        // -48はtabItemの高さ分
+        .offset(y: playerManager.expanding ? offset : -48)
         .gesture(DragGesture().onEnded(didEnd(value:)).onChanged(didChange(value:)))
         .ignoresSafeArea()
     }

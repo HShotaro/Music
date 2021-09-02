@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LargeImageLayout1View: View {
+struct ShowPlayerLayout1View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     @EnvironmentObject var playerManager: MusicPlayerManager
     var tapPlayerViewHandler: (() -> Void)?
@@ -21,14 +21,12 @@ struct LargeImageLayout1View: View {
                 .padding(.all)
                 .frame(width: 160, height: 160, alignment: .leading)
             Spacer()
-            Button(action: {
-                playerManager.showMusicPlayer(tracks: tracks)
-            }, label: {
+            Button.init(action: showMusicPlayer) {
                 Image(systemName: "play.fill")
                     .frame(width: 60, height: 60)
                     .background(Color.green)
                     .cornerRadius(30)
-            })
+            }
             .padding([.bottom, .trailing])
             .padding(.top, 90.0)
         }
@@ -42,12 +40,18 @@ struct LargeImageLayout1View: View {
             }
         }
     }
+    
+    func showMusicPlayer() {
+        withAnimation(.spring()) {
+            playerManager.showMusicPlayer(tracks: tracks)
+        }
+    }
 }
 
 struct LargeImageLayout1_Previews: PreviewProvider {
     static var previews: some View {
         let mock = PlaylistDetailModel.mock(1)
-        LargeImageLayout1View(
+        ShowPlayerLayout1View(
             imageURL: mock.imageURL, tracks: mock.tracks
         )
     }

@@ -68,16 +68,19 @@ class MusicPlayerManager: ObservableObject {
     }
     private func startPlayback() {
         self.audioTracks = self.audioTracks.shuffled()
-        queuePlayer = nil
-        let items: [AVPlayerItem] = self.audioTracks.compactMap {
-            guard let url = $0.previewURL else { return nil }
-            return AVPlayerItem(url: url)
-        }
-        self.queuePlayer = AVQueuePlayer(items: items)
-        self.queuePlayer?.play()
         DispatchQueue.main.async { [weak self] in
             self?.onPlaying = true
             self?.currentTrack = self?.audioTracks.first
+        }
+        
+        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.queuePlayer = nil
+            let items: [AVPlayerItem] = (self?.audioTracks ?? []).compactMap {
+                guard let url = $0.previewURL else { return nil }
+                return AVPlayerItem(url: url)
+            }
+            self?.queuePlayer = AVQueuePlayer(items: items)
+            self?.queuePlayer?.play()
         }
     }
     
