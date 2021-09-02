@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListItemLayout1View: View {
+struct ListItem_Title_SubTitle_View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     let titleName: String
     let subTitleName: String
@@ -27,7 +27,7 @@ struct ListItemLayout1View: View {
 struct ListItemLayout1_Previews: PreviewProvider {
     static var previews: some View {
         let mock = AudioTrackModel.mock(1)
-        ListItemLayout1View(
+        ListItem_Title_SubTitle_View(
             titleName: mock.name,
             subTitleName: mock.artist.name
         )

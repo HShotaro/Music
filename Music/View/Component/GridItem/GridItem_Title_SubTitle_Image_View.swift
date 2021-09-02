@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GridItemLayout1View: View {
+struct GridItem_Title_SubTitle_Image_View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     let titleName: String
     let subTitleName: String
@@ -46,7 +46,7 @@ struct GridItemLayout1View: View {
 struct HomePlaylistView_Previews: PreviewProvider {
     static var previews: some View {
         let playlist = PlayListModel.mock(1)
-        GridItemLayout1View(
+        GridItem_Title_SubTitle_Image_View(
             titleName: playlist.name,
             subTitleName: playlist.creatorName,
             imageURL: playlist.imageURL

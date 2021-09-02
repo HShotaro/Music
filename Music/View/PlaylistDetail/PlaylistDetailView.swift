@@ -51,13 +51,13 @@ struct PlaylistDetailView: View {
                                         playerManager.showMusicPlayer(tracks: [track])
                                     }
                                 }, label: {
-                                    ListItemLayout1View(
+                                    ListItem_Title_SubTitle_View(
                                         titleName: track.name,
                                         subTitleName: track.artist.name
                                     )
                                 })
                             } else {
-                                ShowPlayerLayout1View(imageURL: model.imageURL, tracks: model.tracks)
+                                Image_PlayerButton_View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }

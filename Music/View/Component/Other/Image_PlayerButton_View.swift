@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ShowPlayerLayout1View: View {
+struct Image_PlayerButton_View: View {
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     @EnvironmentObject var playerManager: MusicPlayerManager
     var tapPlayerViewHandler: (() -> Void)?
@@ -51,7 +51,7 @@ struct ShowPlayerLayout1View: View {
 struct LargeImageLayout1_Previews: PreviewProvider {
     static var previews: some View {
         let mock = PlaylistDetailModel.mock(1)
-        ShowPlayerLayout1View(
+        Image_PlayerButton_View(
             imageURL: mock.imageURL, tracks: mock.tracks
         )
     }

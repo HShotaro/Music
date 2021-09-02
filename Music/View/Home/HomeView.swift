@@ -53,7 +53,7 @@ struct HomeView: View {
                                         destinationView = AnyView(AlbumDetailView(album: album))
                                         isPushActive = true
                                     } label: {
-                                        GridItemLayout1View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
+                                        GridItem_Title_SubTitle_Image_View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
                                     }.frame(width: 120, height: 180)
                                 }
                             }
@@ -65,7 +65,7 @@ struct HomeView: View {
                                         destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
                                         isPushActive = true
                                     } label: {
-                                        GridItemLayout1View(
+                                        GridItem_Title_SubTitle_Image_View(
                                             titleName: playlist.name,
                                             subTitleName: playlist.creatorName,
                                             imageURL: playlist.imageURL
