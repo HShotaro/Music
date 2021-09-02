@@ -44,20 +44,20 @@ struct HomeView: View {
                         EmptyView()
                     }.hidden()
                     ScrollView(.vertical) {
-                        LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground))
-                            .padding(.top, 10)
-                        ScrollView(.horizontal) {
-                            HStack(spacing: 10) {
-                                ForEach(model.albums, id: \.self.id) { album in
-                                    Button {
-                                        destinationView = AnyView(AlbumDetailView(album: album))
-                                        isPushActive = true
-                                    } label: {
-                                        GridItem_Title_SubTitle_Image_View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
-                                    }.frame(width: 120, height: 180)
+                        Section(header: LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground))) {
+                            ScrollView(.horizontal) {
+                                HStack(spacing: 10) {
+                                    ForEach(model.albums, id: \.self.id) { album in
+                                        Button {
+                                            destinationView = AnyView(AlbumDetailView(album: album))
+                                            isPushActive = true
+                                        } label: {
+                                            GridItem_Title_SubTitle_Image_View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
+                                        }.frame(width: 120, height: 180)
+                                    }
                                 }
-                            }
-                        }.frame(width: UIScreen.main.bounds.width, height: 180)
+                            }.frame(width: UIScreen.main.bounds.width, height: 180)
+                        }
                         LazyVGrid(columns: HomeView.columns, spacing: 10) {
                             Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
                                 ForEach(model.playlists, id: \.self.id) { playlist in

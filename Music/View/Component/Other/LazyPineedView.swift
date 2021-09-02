@@ -17,17 +17,14 @@ struct LazyPinnedView: View {
     }
 
     var body: some View {
-
+        Divider()
         HStack {
-            Spacer()
             Text("\(title)")
                 .font(.headline)
                 .fontWeight(.bold)
-            Spacer()
         }.padding(.vertical, 5)
         .padding(.horizontal, 15)
         .background(color)
-        Divider()
     }
 }
 
