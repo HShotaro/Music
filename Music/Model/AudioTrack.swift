@@ -81,6 +81,17 @@ struct AudioTrackModel : Hashable, Identifiable {
     }
 }
 
+extension AudioTrackModel {
+    func exchangeAlbum(album: AlbumModel) -> AudioTrackModel {
+        return AudioTrackModel(
+            id: self.id,
+            name: self.name,
+            artist: self.artist,
+            album: album,
+            previewURL: self.previewURL
+        )
+    }
+}
 
 extension Array where Element == AudioTrackModel {
     func isSameOf(_ tracks: [AudioTrackModel]) -> Bool {

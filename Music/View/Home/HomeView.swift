@@ -40,45 +40,41 @@ struct HomeView: View {
                         .padding(.top, 8)
                     }
                 case let .loaded(model):
-                    if model.playlists.isEmpty {
-                        Text("最新のプレイリストがありません。")
-                            .fontWeight(.bold)
-                    } else {
-                        NavigationLink(destination: destinationView, isActive: $isPushActive) {
-                            EmptyView()
-                        }.hidden()
-                        ScrollView(.vertical) {
-                            LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground))
-                            ScrollView(.horizontal) {
-                                HStack(spacing: 10) {
-                                    ForEach(model.albums, id: \.self.id) { album in
-                                        Button {
-                                            destinationView = AnyView(AlbumDetailView())
-                                            isPushActive = true
-                                        } label: {
-                                            GridItemLayout1View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
-                                        }.frame(width: 120, height: 180)
+                    NavigationLink(destination: destinationView, isActive: $isPushActive) {
+                        EmptyView()
+                    }.hidden()
+                    ScrollView(.vertical) {
+                        LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground))
+                            .padding(.top, 10)
+                        ScrollView(.horizontal) {
+                            HStack(spacing: 10) {
+                                ForEach(model.albums, id: \.self.id) { album in
+                                    Button {
+                                        destinationView = AnyView(AlbumDetailView(album: album))
+                                        isPushActive = true
+                                    } label: {
+                                        GridItemLayout1View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
+                                    }.frame(width: 120, height: 180)
+                                }
+                            }
+                        }.frame(width: UIScreen.main.bounds.width, height: 180)
+                        LazyVGrid(columns: HomeView.columns, spacing: 10) {
+                            Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
+                                ForEach(model.playlists, id: \.self.id) { playlist in
+                                    Button {
+                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
+                                        isPushActive = true
+                                    } label: {
+                                        GridItemLayout1View(
+                                            titleName: playlist.name,
+                                            subTitleName: playlist.creatorName,
+                                            imageURL: playlist.imageURL
+                                        )
                                     }
                                 }
-                            }.frame(width: UIScreen.main.bounds.width, height: 180)
-                            LazyVGrid(columns: HomeView.columns, spacing: 10) {
-                                Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
-                                    ForEach(model.playlists, id: \.self.id) { playlist in
-                                        Button {
-                                            destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
-                                            isPushActive = true
-                                        } label: {
-                                            GridItemLayout1View(
-                                                titleName: playlist.name,
-                                                subTitleName: playlist.creatorName,
-                                                imageURL: playlist.imageURL
-                                            )
-                                        }
-                                    }
-                                }
-                            }.font(.largeTitle)
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
-                        }
+                            }
+                        }.font(.largeTitle)
+                        .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
                     }
                 }
             }
@@ -94,8 +90,8 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             HomeView()
-            .environment(\.colorScheme, .light)
-            .previewDisplayName("light")
+                .environment(\.colorScheme, .light)
+                .previewDisplayName("light")
             
             HomeView()
                 .environment(\.colorScheme, .dark)
