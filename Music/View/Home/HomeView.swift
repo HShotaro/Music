@@ -9,8 +9,13 @@ import SwiftUI
 import Combine
 
 struct HomeView: View {
+    // @StateObjectはbodyが最初に更新される直前に初期化され、onDisappear()のタイミングでdeinitされる。
+    // HomeViewのinit()の中で@StateObjectを初期化してしまうと@StateObjectのメリットを捨ててしまうことになるのでやめるべきである。
     @StateObject private var viewModel = HomeViewModel()
+    
+    //@Stateの二つの変数destinationViewとisPushActiveを連続で変えた場合、bodyは一回のみ呼ばれる。また、destinationViewをviewModelで持とうとすると、bodyが更新されずページ遷移に失敗する。
     @State var destinationView: AnyView? = nil
+    // プッシュ遷移後に、ポップするとfalseに戻る
     @State var isPushActive = false
     
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)

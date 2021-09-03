@@ -11,6 +11,8 @@ import Combine
 struct PlaylistDetailView: View {
     @StateObject private var viewModel = PlaylistDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
+    // Listの中の要素(AudioTrackModel)はButtonのアクション・onTapGesture・onLongPressGestureなどで取得できるが、alert modifier、sheet modifierの中で使用してしまうと上手く取得できない(Listの中のランダムな要素を取得してしまう)。
+    // そのため、alertやsheetでListの中の要素を使用する場合は、longPressedTrackのように一旦モデルを保持してから使用するようにした。
     @State var longPressedTrack: AudioTrackModel?
     @State var showAlertOnLongPress = false
     @State var showPlaylistModelView = false
