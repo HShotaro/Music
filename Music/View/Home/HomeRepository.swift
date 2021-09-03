@@ -17,11 +17,8 @@ struct HomeDataRepository: HomeRepository {
         return Publishers.CombineLatest(
             APIManager.shared.getFeaturedPlaylists(),
             APIManager.shared.getNewReleaseAlbums()
-        ).flatMap { tuple in
-            return Future<HomeModel, Error> { promise in
-                promise(.success(HomeModel(playlists: tuple.0, albums: tuple.1)))
-            }
-        }.eraseToAnyPublisher()
+        ).map{ HomeModel(playlists: $0.0, albums: $0.1) }
+        .eraseToAnyPublisher()
     }
 }
 

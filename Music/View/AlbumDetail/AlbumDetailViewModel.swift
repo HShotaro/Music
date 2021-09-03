@@ -20,6 +20,7 @@ class AlbumDetailViewModel: ObservableObject {
     }
     
     func onAppear(album: AlbumModel) {
+        guard model == .idle else { return }
         loadModel(album: album)
     }
     

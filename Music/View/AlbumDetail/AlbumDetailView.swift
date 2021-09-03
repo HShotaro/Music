@@ -15,7 +15,9 @@ struct AlbumDetailView: View {
     var body: some View {
         VStack {
             switch viewModel.model {
-            case .idle, .loading:
+            case .idle:
+                EmptyView()
+            case .loading:
                 ProgressView("loading...")
             case .failed(_):
                 VStack {

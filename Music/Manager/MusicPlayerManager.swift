@@ -130,4 +130,12 @@ class MusicPlayerManager: ObservableObject {
             self.currentTrack = audioTracks[index+1]
         }
     }
+    
+    func willSignOut() {
+        currentTrack = nil
+        onPlaying = false
+        expanding = false
+        queuePlayer = nil
+        audioTracks = []
+    }
 }

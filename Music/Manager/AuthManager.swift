@@ -180,6 +180,7 @@ class AuthManager: ObservableObject {
         UserDefaults.standard.setValue(nil, forKey: "access_token")
         UserDefaults.standard.setValue(nil, forKey: "refresh_token")
         UserDefaults.standard.setValue(nil, forKey: "expirationDate")
+        MusicPlayerManager.shared.willSignOut()
         isSignIn = false
     }
 }

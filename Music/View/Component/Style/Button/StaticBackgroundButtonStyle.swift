@@ -13,12 +13,12 @@ struct StaticBackgroundButtonStyle: ButtonStyle {
         }
     
     struct StaticBackgroundButton: View {
-            @Environment(\.isEnabled) var isEnabled
-            let configuration: StaticBackgroundButtonStyle.Configuration
-            var body: some View {
-                configuration.label
-                    .background(Color(UIColor.systemBackground))
-                    .foregroundColor(Color(UIColor.systemBackground))
-            }
+        @Environment(\.isEnabled) var isEnabled
+        let configuration: StaticBackgroundButtonStyle.Configuration
+        var body: some View {
+            configuration.label
+                .background(Color(UIColor.systemBackground))
+                .foregroundColor(Color(UIColor.systemBackground))
         }
+    }
 }

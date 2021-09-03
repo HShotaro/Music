@@ -11,7 +11,8 @@ import Combine
 @main
 struct MusicApp: App {
     init() {
-        
+        UINavigationBar.appearance().backgroundColor = Color.primaryUIColor
+        UINavigationBar.appearance().tintColor = UIColor.label
     }
     @EnvironmentObject var authManager: AuthManager
     

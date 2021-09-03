@@ -52,7 +52,7 @@ struct ContentView: View {
                         ).accessibility(label: Text("Library_TabItem"))
                     }
                         .tag(Tab.library)
-                }.accentColor(/*@START_MENU_TOKEN@*/.yellow/*@END_MENU_TOKEN@*/)
+                }.accentColor(Color.primaryColor)
                 MusicPlayerView(animation: animation)
                     .opacity(playerManager.currentTrack != nil ? 1.0 : 0.0)
             }

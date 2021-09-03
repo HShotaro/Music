@@ -18,7 +18,9 @@ struct HomeView: View {
         NavigationView {
             VStack {
                 switch viewModel.model {
-                case .idle, .loading:
+                case .idle:
+                    EmptyView()
+                case .loading:
                     ProgressView("loading...")
                 case .failed(_):
                     VStack {
@@ -78,8 +80,13 @@ struct HomeView: View {
                     }
                 }
             }
+            .navigationBarItems(trailing: Button(action: {
+                destinationView = AnyView(MypageView())
+                isPushActive = true
+            }, label: {
+                Image(systemName: "gear")
+            }))
             .navigationTitle("Home")
-            .navigationBarTitleDisplayMode(.inline)
         }.onAppear {
             viewModel.onAppear()
         }

@@ -20,6 +20,7 @@ class ArtistDetailViewModel: ObservableObject {
     }
     
     func onAppear(artistID: String) {
+        guard model == .idle else { return }
         loadModel(artistID: artistID)
     }
     

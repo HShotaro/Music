@@ -20,6 +20,7 @@ class PlaylistDetailViewModel: ObservableObject {
     }
     
     func onAppear(playlistID: String) {
+        guard model == .idle else { return }
         loadModel(playlistID: playlistID)
     }
     

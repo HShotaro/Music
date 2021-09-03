@@ -1,20 +1,20 @@
 //
-//  HomeViewModel.swift
+//  LibraryPlaylistViewModel.swift
 //  Music
 //
-//  Created by Shotaro Hirano on 2021/08/24.
+//  Created by Shotaro Hirano on 2021/09/03.
 //
 
 import Foundation
 import Combine
 
-class HomeViewModel: ObservableObject {
-    @Published private(set) var model: Stateful<HomeModel> = .idle
-//    @Published private(set) var model: Stateful<HomeModel> = .loaded(HomeModel(playlists: [Int](1...50).map { PlayListModel.mock($0) }))
+class LibraryPlaylistsViewModel: ObservableObject {
+    @Published private(set) var model: Stateful<LibraryPlaylistsModel> = .idle
+//    @Published private(set) var model: Stateful<LibraryPlaylistsModel> = .loaded(LibraryPlaylistsModel.mock(1))
     private var cancellable: AnyCancellable?
-    private let repository: HomeRepository
+    private let repository: LibraryPlaylistsRepository
     
-    init(repository: HomeRepository = HomeDataRepository()) {
+    init(repository: LibraryPlaylistsRepository = LibraryPlaylistsDataRepository()) {
         self.repository = repository
     }
     
@@ -43,7 +43,6 @@ class HomeViewModel: ObservableObject {
                 self?.cancellable = nil
             }, receiveValue: { [weak self] response in
                 self?.model = .loaded(response)
-                
             })
     }
 }
