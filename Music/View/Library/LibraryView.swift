@@ -32,16 +32,16 @@ struct LibraryView: View {
                             ForEach(Tab.allCases, id: \.self) { tab in
                                 switch tab {
                                 case .playlist:
-                                    LibraryPlaylistsView(destinationView: $destinationView, isPushActive: $isPushActive).frame(width: geometry.size.width, height: geometry.size.height)
+                                    LibraryPlaylistsView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive).frame(width: geometry.size.width, height: geometry.size.height)
                                 case .album:
-                                    LibraryAlbumListView(destinationView: $destinationView, isPushActive: $isPushActive).frame(width: geometry.size.width, height: geometry.size.height)
+                                    LibraryAlbumListView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive).frame(width: geometry.size.width, height: geometry.size.height)
                                 }
                             }
                         }
                     }
                     .content.offset(x: self.offset)
                     .frame(width: geometry.size.width, alignment: .leading)
-                    .gesture(DragGesture()
+                    .highPriorityGesture(DragGesture()
                                 .onChanged({ value in
                                     self.offset = value.translation.width - geometry.size.width * CGFloat(self.selectedIndex)
                                 })
@@ -60,6 +60,7 @@ struct LibraryView: View {
                     )
                 }
                 .navigationTitle("Library")
+                .navigationBarHidden(true)
                 Spacer(minLength: playerManager.currentTrack != nil ? MusicPlayerView.height : 0)
             }
         }

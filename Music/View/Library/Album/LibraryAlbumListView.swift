@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryAlbumListView: View {
     @StateObject private var viewModel = LibraryAlbumListViewModel()
+    @Binding var currentTabIndex: Int
     @Binding var destinationView: AnyView?
     @Binding var isPushActive: Bool
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
@@ -56,15 +57,18 @@ struct LibraryAlbumListView: View {
                     }.padding(.all, 15)
                 }
             }
-        }.onAppear {
-            viewModel.onAppear()
-        }
+        }.onChange(of: currentTabIndex, perform: { index in
+            if LibraryView.Tab.allCases[index] == .album {
+                viewModel.onAppear()
+            }
+        })
     }}
 
 struct LibraryAlbumView_Previews: PreviewProvider {
     @State static var anyView: AnyView? = nil
     @State static var isPushActive = false
+    @State static var currentTabIndex = 0
     static var previews: some View {
-        LibraryAlbumListView(destinationView: $anyView, isPushActive: $isPushActive)
+        LibraryAlbumListView(currentTabIndex: $currentTabIndex, destinationView: $anyView, isPushActive: $isPushActive)
     }
 }

@@ -59,6 +59,10 @@
 		96751E5A26E222B0006A1E02 /* LibraryAlbumListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E5926E222B0006A1E02 /* LibraryAlbumListRepository.swift */; };
 		96751E5C26E22337006A1E02 /* LibraryPlaylistsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E5B26E22337006A1E02 /* LibraryPlaylistsResponse.swift */; };
 		96751E5E26E22350006A1E02 /* LibraryAlbumResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E5D26E22350006A1E02 /* LibraryAlbumResponse.swift */; };
+		96751E6126E23615006A1E02 /* LibraryPlaylistsRepository+mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6026E23615006A1E02 /* LibraryPlaylistsRepository+mock.swift */; };
+		96751E6326E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6226E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift */; };
+		96751E6626E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6526E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift */; };
+		96751E6826E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6726E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift */; };
 		96758A6626DB34140007BE7D /* StaticBackgroundButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96758A6526DB34140007BE7D /* StaticBackgroundButtonStyle.swift */; };
 		96DB204026D509C00004FA9A /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB203F26D509C00004FA9A /* Secret.swift */; };
 		96DB204826D50C2D0004FA9A /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB204726D50C2D0004FA9A /* Stateful.swift */; };
@@ -163,6 +167,10 @@
 		96751E5926E222B0006A1E02 /* LibraryAlbumListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumListRepository.swift; sourceTree = "<group>"; };
 		96751E5B26E22337006A1E02 /* LibraryPlaylistsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlaylistsResponse.swift; sourceTree = "<group>"; };
 		96751E5D26E22350006A1E02 /* LibraryAlbumResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumResponse.swift; sourceTree = "<group>"; };
+		96751E6026E23615006A1E02 /* LibraryPlaylistsRepository+mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryPlaylistsRepository+mock.swift"; sourceTree = "<group>"; };
+		96751E6226E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryAlbumlistRepository+mock.swift"; sourceTree = "<group>"; };
+		96751E6526E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlayListsViewModelTests.swift; sourceTree = "<group>"; };
+		96751E6726E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumListViewModelTests.swift; sourceTree = "<group>"; };
 		96758A6526DB34140007BE7D /* StaticBackgroundButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticBackgroundButtonStyle.swift; sourceTree = "<group>"; };
 		96DB203F26D509C00004FA9A /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		96DB204726D50C2D0004FA9A /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
@@ -281,6 +289,7 @@
 		36B60F6E26B5B94C001BC9B7 /* MusicTests */ = {
 			isa = PBXGroup;
 			children = (
+				96751E6426E236CA006A1E02 /* Library */,
 				965FE20626E16176008FF5E6 /* ArtistDetail */,
 				960A94F326E1258400BCC683 /* AlbumDetail */,
 				9671872726DAADBD00EFFC2F /* PlaylistDetail */,
@@ -456,6 +465,24 @@
 			path = Album;
 			sourceTree = "<group>";
 		};
+		96751E5F26E235F8006A1E02 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				96751E6026E23615006A1E02 /* LibraryPlaylistsRepository+mock.swift */,
+				96751E6226E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		96751E6426E236CA006A1E02 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				96751E6526E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift */,
+				96751E6726E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
 		96758A5F26DB2A820007BE7D /* MusicPlayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -556,6 +583,7 @@
 		96DB204F26D512090004FA9A /* Mock */ = {
 			isa = PBXGroup;
 			children = (
+				96751E5F26E235F8006A1E02 /* Library */,
 				965FE20326E160E2008FF5E6 /* ArtistDetail */,
 				960A94F626E125A500BCC683 /* AlbumDetail */,
 				9671872326DAAD9400EFFC2F /* PlaylistDetail */,
@@ -885,6 +913,7 @@
 				965FE1F926E158A4008FF5E6 /* Listitem_Title_View.swift in Sources */,
 				96DB204026D509C00004FA9A /* Secret.swift in Sources */,
 				960A94EC26E10CB100BCC683 /* NewReleasesResponse.swift in Sources */,
+				96751E6326E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift in Sources */,
 				960A94E726E0F1F500BCC683 /* LazyPineedView.swift in Sources */,
 				9661E1B826DF831000929963 /* MusicPlayerView.swift in Sources */,
 				96751E5426E22269006A1E02 /* LibraryPlaylistsViewModel.swift in Sources */,
@@ -896,6 +925,7 @@
 				9671871726DA945800EFFC2F /* PlaylistDetailsResponse.swift in Sources */,
 				9671872226DA9DA200EFFC2F /* PlaylistDetailRepository.swift in Sources */,
 				96DB206A26D541410004FA9A /* Playlist.swift in Sources */,
+				96751E6126E23615006A1E02 /* LibraryPlaylistsRepository+mock.swift in Sources */,
 				96751E5626E22292006A1E02 /* LibraryPlaylistsRepository.swift in Sources */,
 				965FE1F526E14E26008FF5E6 /* SearchRepository.swift in Sources */,
 				965D140126DB9D3500117BD2 /* MusicPlayerManager.swift in Sources */,
@@ -929,7 +959,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96751E6626E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift in Sources */,
 				965FE20826E16193008FF5E6 /* ArtistDetailViewModelTests.swift in Sources */,
+				96751E6826E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift in Sources */,
 				960A94F526E1259B00BCC683 /* AlbumDetailViewModelTests.swift in Sources */,
 				962FF67526D6249A00031A88 /* HomeViewModelTests.swift in Sources */,
 				9671872926DAB19500EFFC2F /* PlaylistDetailViewModelTests.swift in Sources */,

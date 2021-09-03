@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryPlaylistsView: View {
     @StateObject private var viewModel = LibraryPlaylistsViewModel()
+    @Binding var currentTabIndex: Int
     @Binding var destinationView: AnyView?
     @Binding var isPushActive: Bool
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
@@ -56,7 +57,11 @@ struct LibraryPlaylistsView: View {
                     }.padding(.all, 15)
                 }
             }
-        }.onAppear {
+        }.onChange(of: currentTabIndex, perform: { index in
+            if LibraryView.Tab.allCases[index] == .playlist {
+                viewModel.onAppear()
+            }
+        }).onAppear {
             viewModel.onAppear()
         }
     }
@@ -65,7 +70,8 @@ struct LibraryPlaylistsView: View {
 struct LibraryPlaylistsView_Previews: PreviewProvider {
     @State static var anyView: AnyView? = nil
     @State static var isPushActive = false
+    @State static var currentTabIndex = 0
     static var previews: some View {
-        LibraryPlaylistsView(destinationView: $anyView, isPushActive: $isPushActive)
+        LibraryPlaylistsView(currentTabIndex: $currentTabIndex, destinationView: $anyView, isPushActive: $isPushActive)
     }
 }
