@@ -44,7 +44,7 @@ struct ArtistDetailView: View {
                         .fontWeight(.bold)
                 } else {
                     List {
-                        ForEach(0..<model.tracks.count+1) {(row: Int) in
+                        ForEach(0..<model.tracks.count+1, id: \.self) {(row: Int) in
                             if row > 0 {
                                 let track = model.tracks[row-1]
                                 Button(action: {

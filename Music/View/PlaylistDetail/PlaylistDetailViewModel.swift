@@ -47,4 +47,24 @@ class PlaylistDetailViewModel: ObservableObject {
                 self?.model = .loaded(response)
             })
     }
+    
+    func removeTrackFromPlaylist(playlistID: String, trackID: String)  {
+        guard case let .loaded(model) = model else { return }
+        cancellable = self.repository.removeTrackFromPlaylist(playlistID: playlistID, trackID: trackID)
+            .handleEvents(receiveSubscription: { [weak self] _ in
+                self?.model = .loading
+            })
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case let .failure(error):
+                    self?.model = .failed(error)
+                case .finished:
+                    break
+                }
+                self?.cancellable = nil
+            }, receiveValue: { [weak self] _ in
+                self?.model = .loaded(model.removeTrack(id: trackID))
+            })
+    }
 }

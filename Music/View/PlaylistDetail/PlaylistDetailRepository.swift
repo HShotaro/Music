@@ -10,11 +10,16 @@ import Combine
 
 protocol PlaylistDetailRepository {
     func fetchModel(for playlistID: String) -> AnyPublisher<PlaylistDetailModel, Error>
+    func removeTrackFromPlaylist(playlistID: String, trackID: String) -> AnyPublisher<Void, Error>
 }
 
 struct PlaylistDetailDataRepository: PlaylistDetailRepository {
     func fetchModel(for playlistID: String) -> AnyPublisher<PlaylistDetailModel, Error> {
         return APIManager.shared.getPlaylistDetailModel(for: playlistID)
+    }
+    
+    func removeTrackFromPlaylist(playlistID: String, trackID: String) -> AnyPublisher<Void, Error> {
+        return APIManager.shared.removeTrackFromPlaylist(playlistID: playlistID, trackID: trackID)
     }
 }
 

@@ -52,7 +52,7 @@ struct LibraryAlbumListView: View {
                                     destinationView = AnyView(AlbumDetailView(album: album))
                                     isPushActive = true
                                 }
-                                .onLongPressGesture(minimumDuration: 1.0, perform: {
+                                .onLongPressGesture(minimumDuration: 1.8, perform: {
                                     self.showAlert = true
                                 })
                                 .alert(isPresented: $showAlert) {

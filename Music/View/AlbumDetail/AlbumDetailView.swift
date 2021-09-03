@@ -45,19 +45,23 @@ struct AlbumDetailView: View {
                         .fontWeight(.bold)
                 } else {
                     List {
-                        ForEach(0..<model.tracks.count+1) {(row: Int) in
+                        ForEach(0..<model.tracks.count+1, id: \.self) {(row: Int) in
                             if row > 0 {
                                 let track = model.tracks[row-1]
-                                Button(action: {
+                                ListItem_Title_SubTitle_View(
+                                    titleName: track.name,
+                                    subTitleName: track.artist.name
+                                ).onTapGesture {
                                     withAnimation {
                                         playerManager.showMusicPlayer(tracks: [track])
+                                    } 
+                                }.background(
+                                    Color(.systemBackground).onTapGesture {
+                                        withAnimation {
+                                            playerManager.showMusicPlayer(tracks: [track])
+                                        }
                                     }
-                                }, label: {
-                                    ListItem_Title_SubTitle_View(
-                                        titleName: track.name,
-                                        subTitleName: track.artist.name
-                                    )
-                                })
+                                )
                             } else {
                                 Image_PlayerButton_View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())

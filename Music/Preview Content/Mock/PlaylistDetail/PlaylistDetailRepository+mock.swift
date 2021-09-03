@@ -32,6 +32,17 @@ struct PlaylistDetailMockRepository: PlaylistDetailRepository {
                 .eraseToAnyPublisher()
         }
     }
+    
+    func removeTrackFromPlaylist(playlistID: String, trackID: String) -> AnyPublisher<Void, Error> {
+        if let error = error {
+            return Fail(error: error)
+                .eraseToAnyPublisher()
+        } else {
+            return Just(())
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        }
+    }
 }
 
 

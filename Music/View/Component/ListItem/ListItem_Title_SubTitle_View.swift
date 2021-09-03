@@ -12,14 +12,19 @@ struct ListItem_Title_SubTitle_View: View {
     let titleName: String
     let subTitleName: String
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(titleName)
-                .font(.system(size: 13, weight: .regular, design: .default))
-                .lineLimit(2)
-                
-            Text(subTitleName)
-                .font(.system(size: 11, weight: .thin, design: .default))
-                .lineLimit(1)
+        HStack {
+            VStack(alignment: .leading) {
+                Text(titleName)
+                    .font(.system(size: 13, weight: .regular, design: .default))
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                    
+                Text(subTitleName)
+                    .font(.system(size: 11, weight: .thin, design: .default))
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
+            }
+            Spacer()
         }
     }
 }

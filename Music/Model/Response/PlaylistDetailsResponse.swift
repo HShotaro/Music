@@ -69,10 +69,17 @@ struct PlaylistDetailModel : Hashable, Equatable {
     }
     
     static func == (lhs: PlaylistDetailModel, rhs: PlaylistDetailModel) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.tracks == lhs.tracks
     }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+extension PlaylistDetailModel {
+    func removeTrack(id trackID: String) -> PlaylistDetailModel {
+        let tracks = self.tracks.filter { $0.id != trackID }
+        return PlaylistDetailModel(id: self.id, name: self.name, imageURL: self.imageURL, description: self.description, shareURL: self.shareURL, tracks: tracks)
     }
 }

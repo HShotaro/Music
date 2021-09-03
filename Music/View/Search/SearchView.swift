@@ -97,7 +97,7 @@ struct SearchView: View {
                             Section(header: Listitem_Title_View(title: "Playlist", font: .headline, fontWight: .bold)) {
                                 ForEach(model.playlists, id: \.self.id) { playlist in
                                     Button {
-                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
+                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id, isOwner: false))
                                         isPushActive = true
                                     } label: {
                                         Listitem_Title_View(title: playlist.name, font: .subheadline, fontWight: .regular)

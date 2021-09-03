@@ -11,7 +11,10 @@ import Combine
 struct PlaylistDetailView: View {
     @StateObject private var viewModel = PlaylistDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
+    @State var showAlertOnLongPress = false
+    @State var showPlaylistModelView = false
     let playlistID: String
+    let isOwner: Bool
 
     var body: some View {
         VStack {
@@ -45,19 +48,19 @@ struct PlaylistDetailView: View {
                         .fontWeight(.bold)
                 } else {
                     List {
-                        ForEach(0..<model.tracks.count+1) {(row: Int) in
+                        ForEach(0..<model.tracks.count+1, id: \.self) {(row: Int) in
                             if row > 0 {
                                 let track = model.tracks[row-1]
-                                Button(action: {
+                                Button {
                                     withAnimation {
                                         playerManager.showMusicPlayer(tracks: [track])
                                     }
-                                }, label: {
+                                } label: {
                                     ListItem_Title_SubTitle_View(
                                         titleName: track.name,
                                         subTitleName: track.artist.name
                                     )
-                                })
+                                }
                             } else {
                                 Image_PlayerButton_View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
@@ -75,21 +78,39 @@ struct PlaylistDetailView: View {
         .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
     }
+    
+//    private func alertOnLongPress(track: AudioTrackModel) -> Alert {
+//        if isOwner {
+//            return Alert(title: Text("この曲をプレイリストから削除しますか？"),
+//                  primaryButton: Alert.Button.destructive(Text("はい"), action: {
+//                    viewModel.removeTrackFromPlaylist(playlistID: playlistID, trackID: track.id)
+//            }),
+//                  secondaryButton: Alert.Button.cancel(Text("いいえ"))
+//            )
+//        } else {
+//            return Alert(title: Text("この曲をプレイリストに追加しますか？"),
+//                  primaryButton: Alert.Button.default(Text("はい"), action: {
+//                    self.showPlaylistModelView = true
+//            }),
+//                  secondaryButton: Alert.Button.cancel(Text("いいえ"))
+//            )
+//        }
+//    }
 }
 
 struct PlaylistView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             PlaylistDetailView(
-                playlistID: "1"
+                playlistID: "1", isOwner: false
             )
             .environment(\.colorScheme, .light)
             .previewDisplayName("light")
             
-            PlaylistDetailView(playlistID: "2")
+            PlaylistDetailView(playlistID: "2", isOwner: false)
                 .environment(\.colorScheme, .dark)
                 .previewDisplayName("dark")
-            PlaylistDetailView(playlistID: "2")
+            PlaylistDetailView(playlistID: "2", isOwner: false)
                 .environment(\.locale, Locale(identifier: "en"))
                 .previewDisplayName("English")
             

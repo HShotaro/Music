@@ -48,7 +48,7 @@ struct LibraryPlaylistsView: View {
                                     subTitleName: playlist.creatorName,
                                     imageURL: playlist.imageURL
                                 ).onTapGesture {
-                                    destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
+                                    destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id, isOwner: true))
                                     isPushActive = true
                                 }
                                 

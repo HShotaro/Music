@@ -64,7 +64,7 @@ struct HomeView: View {
                             Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
                                 ForEach(model.playlists, id: \.self.id) { playlist in
                                     Button {
-                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
+                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id, isOwner: false))
                                         isPushActive = true
                                     } label: {
                                         GridItem_Title_SubTitle_Image_View(

@@ -63,6 +63,7 @@
 		96751E6326E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6226E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift */; };
 		96751E6626E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6526E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift */; };
 		96751E6826E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6726E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift */; };
+		96751E6A26E27AA3006A1E02 /* PlaylistModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96751E6926E27AA3006A1E02 /* PlaylistModelView.swift */; };
 		96758A6626DB34140007BE7D /* StaticBackgroundButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96758A6526DB34140007BE7D /* StaticBackgroundButtonStyle.swift */; };
 		96DB204026D509C00004FA9A /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB203F26D509C00004FA9A /* Secret.swift */; };
 		96DB204826D50C2D0004FA9A /* Stateful.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB204726D50C2D0004FA9A /* Stateful.swift */; };
@@ -171,6 +172,7 @@
 		96751E6226E23624006A1E02 /* LibraryAlbumlistRepository+mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryAlbumlistRepository+mock.swift"; sourceTree = "<group>"; };
 		96751E6526E236E8006A1E02 /* LibraryPlayListsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPlayListsViewModelTests.swift; sourceTree = "<group>"; };
 		96751E6726E236F9006A1E02 /* LibraryAlbumListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryAlbumListViewModelTests.swift; sourceTree = "<group>"; };
+		96751E6926E27AA3006A1E02 /* PlaylistModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistModelView.swift; sourceTree = "<group>"; };
 		96758A6526DB34140007BE7D /* StaticBackgroundButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticBackgroundButtonStyle.swift; sourceTree = "<group>"; };
 		96DB203F26D509C00004FA9A /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		96DB204726D50C2D0004FA9A /* Stateful.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stateful.swift; sourceTree = "<group>"; };
@@ -670,6 +672,7 @@
 				96DB207826D6143A0004FA9A /* PlaylistDetailView.swift */,
 				9671871F26DA9D9700EFFC2F /* PlaylistDetailViewModel.swift */,
 				9671872126DA9DA200EFFC2F /* PlaylistDetailRepository.swift */,
+				96751E6926E27AA3006A1E02 /* PlaylistModelView.swift */,
 			);
 			path = PlaylistDetail;
 			sourceTree = "<group>";
@@ -933,6 +936,7 @@
 				96DB204A26D50D890004FA9A /* HomeView.swift in Sources */,
 				965FE20226E15C3B008FF5E6 /* ArtistTopTracksDataResponse.swift in Sources */,
 				960A94F226E11BD700BCC683 /* AlbumDetailsResponse.swift in Sources */,
+				96751E6A26E27AA3006A1E02 /* PlaylistModelView.swift in Sources */,
 				96751E5A26E222B0006A1E02 /* LibraryAlbumListRepository.swift in Sources */,
 				96751E4226E1D40B006A1E02 /* ToggleView.swift in Sources */,
 				96DB207926D6143A0004FA9A /* PlaylistDetailView.swift in Sources */,
