@@ -32,4 +32,15 @@ struct LibraryAlbumListMockRepository: LibraryAlbumListRepository {
                 .eraseToAnyPublisher()
         }
     }
+    
+    func deleteAlbumFromLibrary(albumID: String) -> AnyPublisher<Void, Error> {
+        if let error = error {
+            return Fail(error: error)
+                .eraseToAnyPublisher()
+        } else {
+            return Just(())
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        }
+    }
 }

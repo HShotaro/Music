@@ -10,8 +10,9 @@ import SwiftUI
 struct AlbumDetailView: View {
     @StateObject private var viewModel = AlbumDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
+    @State var showAlert = false
     let album: AlbumModel
-
+    
     var body: some View {
         VStack {
             switch viewModel.model {
@@ -71,6 +72,20 @@ struct AlbumDetailView: View {
         }.onAppear {
             viewModel.onAppear(album: album)
         }
+        .navigationBarItems(trailing:
+                                Button(action: {
+                                    self.showAlert = true
+                                }, label: {
+                                    Image(systemName: "square.and.arrow.up")
+                                }).alert(isPresented: $showAlert) {
+                                    Alert(title: Text("このアルバムをライブラリに追加しますか？"),
+                                          primaryButton: Alert.Button.default(Text("はい"), action: {
+                                            viewModel.addAlbumToLibrary(album: album)
+                                          }),
+                                          secondaryButton: Alert.Button.cancel(Text("いいえ"))
+                                    )
+                                }
+        )
         .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
     }

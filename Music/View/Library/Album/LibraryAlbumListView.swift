@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryAlbumListView: View {
     @StateObject private var viewModel = LibraryAlbumListViewModel()
+    @State var showAlert = false
     @Binding var currentTabIndex: Int
     @Binding var destinationView: AnyView?
     @Binding var isPushActive: Bool
@@ -43,14 +44,23 @@ struct LibraryAlbumListView: View {
                 ScrollView(.vertical) {
                     LazyVGrid(columns: LibraryAlbumListView.columns, spacing: 10) {
                             ForEach(model.albumList, id: \.self.id) { album in
-                                Button {
+                                GridItem_Title_SubTitle_Image_View(
+                                    titleName: album.name,
+                                    subTitleName: album.artist.name,
+                                    imageURL: album.imageURL
+                                ).onTapGesture {
                                     destinationView = AnyView(AlbumDetailView(album: album))
                                     isPushActive = true
-                                } label: {
-                                    GridItem_Title_SubTitle_Image_View(
-                                        titleName: album.name,
-                                        subTitleName: album.artist.name,
-                                        imageURL: album.imageURL
+                                }
+                                .onLongPressGesture(minimumDuration: 1.0, perform: {
+                                    self.showAlert = true
+                                })
+                                .alert(isPresented: $showAlert) {
+                                    Alert(title: Text("このアルバムをライブラリから削除しますか？"),
+                                          primaryButton: Alert.Button.destructive(Text("はい"), action: {
+                                        viewModel.deleteAlbumFromLibrary(album: album)
+                                    }),
+                                          secondaryButton: Alert.Button.cancel(Text("いいえ"))
                                     )
                                 }
                             }

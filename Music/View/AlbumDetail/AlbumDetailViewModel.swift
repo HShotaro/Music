@@ -47,4 +47,24 @@ class AlbumDetailViewModel: ObservableObject {
                 self?.model = .loaded(response.exchangeAlbum(album: album))
             })
     }
+    
+    func addAlbumToLibrary(album: AlbumModel) {
+        guard case .loaded(let model) = model else { return }
+        cancellable = self.repository.addAlbumToLibrary(albumID: album.id)
+            .handleEvents(receiveSubscription: { [weak self] _ in
+                self?.model = .loading
+            })
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case let .failure(error):
+                    self?.model = .failed(error)
+                case .finished:
+                    break
+                }
+                self?.cancellable = nil
+            }, receiveValue: { [weak self] response in
+                self?.model = .loaded(model)
+            })
+    }
 }

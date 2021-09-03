@@ -43,16 +43,15 @@ struct LibraryPlaylistsView: View {
                 ScrollView(.vertical) {
                     LazyVGrid(columns: LibraryPlaylistsView.columns, spacing: 10) {
                             ForEach(model.playlists, id: \.self.id) { playlist in
-                                Button {
+                                GridItem_Title_SubTitle_Image_View(
+                                    titleName: playlist.name,
+                                    subTitleName: playlist.creatorName,
+                                    imageURL: playlist.imageURL
+                                ).onTapGesture {
                                     destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id))
                                     isPushActive = true
-                                } label: {
-                                    GridItem_Title_SubTitle_Image_View(
-                                        titleName: playlist.name,
-                                        subTitleName: playlist.creatorName,
-                                        imageURL: playlist.imageURL
-                                    )
                                 }
+                                
                             }
                     }.padding(.all, 15)
                 }
@@ -61,9 +60,7 @@ struct LibraryPlaylistsView: View {
             if LibraryView.Tab.allCases[index] == .playlist {
                 viewModel.onAppear()
             }
-        }).onAppear {
-            viewModel.onAppear()
-        }
+        })
     }
 }
 

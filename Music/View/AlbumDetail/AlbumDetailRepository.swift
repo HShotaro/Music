@@ -10,11 +10,15 @@ import Combine
 
 protocol AlbumDetailRepository {
     func fetchModel(for albumID: String) -> AnyPublisher<AlbumDetailModel, Error>
+    func addAlbumToLibrary(albumID: String) -> AnyPublisher<Void, Error>
 }
 
 struct AlbumDetailDataRepository: AlbumDetailRepository {
     func fetchModel(for albumID: String) -> AnyPublisher<AlbumDetailModel, Error> {
         return APIManager.shared.getAlbumDetailModel(for: albumID)
+    }
+    func addAlbumToLibrary(albumID: String) -> AnyPublisher<Void, Error> {
+        return APIManager.shared.addAlbumToLibrary(albumID: albumID)
     }
 }
 
@@ -43,6 +47,27 @@ fileprivate extension APIManager {
                     catch {
                         throw error
                     }
+                }
+        }.eraseToAnyPublisher()
+    }
+    
+    func addAlbumToLibrary(albumID: String) -> AnyPublisher<Void, Error> {
+        return APIManager.createRequest(path: "/me/albums?ids=\(albumID)", type: .PUT, headerInfo: ["Content-Type":"application/json"])
+            .flatMap { request in
+                URLSession.shared.dataTaskPublisher(for: request)
+                .tryMap() { element -> Void in
+                    guard let response = element.response as? HTTPURLResponse else {
+                        throw APIError.failedToGetData
+                    }
+                    guard response.statusCode < 500 else {
+                        print("Status Code\(response.statusCode)")
+                        throw APIError.serverError
+                    }
+                    guard response.statusCode < 400 else {
+                        print("Status Code\(response.statusCode)")
+                        throw APIError.clientError
+                    }
+                    return
                 }
         }.eraseToAnyPublisher()
     }

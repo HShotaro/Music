@@ -16,6 +16,7 @@ class LibraryPlaylistsViewModel: ObservableObject {
     
     init(repository: LibraryPlaylistsRepository = LibraryPlaylistsDataRepository()) {
         self.repository = repository
+        self.onAppear()
     }
     
     func onAppear() {

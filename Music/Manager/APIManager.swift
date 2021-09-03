@@ -27,7 +27,8 @@ final class APIManager {
         }
     static func createRequest(
             path: String,
-            type: HTTPMethod
+            type: HTTPMethod,
+            headerInfo: [String: String]? = nil
     ) -> AnyPublisher<URLRequest, Never>  {
         AuthManager.shared.withValidToken()
             .flatMap { token in
@@ -38,6 +39,11 @@ final class APIManager {
                     }
                     var request = URLRequest(url: apiURL)
                     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                    if let headerInfo = headerInfo {
+                        headerInfo.forEach { (k,v) in
+                            request.setValue(v, forHTTPHeaderField: k)
+                        }
+                    }
                     request.httpMethod = type.rawValue
                     request.timeoutInterval = 15
                     promise(.success(request))
