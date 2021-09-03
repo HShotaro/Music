@@ -8,9 +8,34 @@
 import SwiftUI
 
 struct AlbumDetailView: View {
+    enum Stateful: Equatable {
+        case idle
+        case loading
+        case failed(Error)
+        case loaded(AlbumDetailModel)
+        case addedAlbumToLibrary(AlbumDetailModel)
+        
+        static func == (lhs: Stateful, rhs: Stateful) -> Bool {
+            switch (lhs, rhs) {
+            case (idle, idle):
+                return true
+            case (loading, loading):
+                return true
+            case (let .failed(el), let .failed(er)):
+                return el.localizedDescription == er.localizedDescription
+            case (let .loaded(vl), let .loaded(vr)):
+                return vl == vr
+            case (.addedAlbumToLibrary, .addedAlbumToLibrary):
+                return true
+            default:
+                return false
+            }
+        }
+    }
     @StateObject private var viewModel = AlbumDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
-    @State var showAlert = false
+    @State var showConfirmToAddAlbumAlert = false
+    @State var showSucceedToAddAlbumAlert = false
     let album: AlbumModel
     
     var body: some View {
@@ -39,7 +64,11 @@ struct AlbumDetailView: View {
                     )
                     .padding(.top, 8)
                 }
-            case let .loaded(model):
+            case let .loaded(model), let .addedAlbumToLibrary(model):
+                Text("").hidden()
+                    .alert(isPresented: $showSucceedToAddAlbumAlert, content: {
+                        Alert(title: Text("ライブラリに\(album.name)を追加しました"), dismissButton: Alert.Button.default(Text("閉じる")))
+                    })
                 if model.tracks.isEmpty {
                     Text("このアルバムには曲がありません。")
                         .fontWeight(.bold)
@@ -71,13 +100,16 @@ struct AlbumDetailView: View {
             }
         }.onAppear {
             viewModel.onAppear(album: album)
-        }
+        }.onChange(of: viewModel.model, perform: { model in
+            guard case .addedAlbumToLibrary = model else { return }
+            self.showSucceedToAddAlbumAlert = true
+        })
         .navigationBarItems(trailing:
                                 Button(action: {
-                                    self.showAlert = true
+                                    self.showConfirmToAddAlbumAlert = true
                                 }, label: {
                                     Image(systemName: "square.and.arrow.up")
-                                }).alert(isPresented: $showAlert) {
+                                }).alert(isPresented: $showConfirmToAddAlbumAlert) {
                                     Alert(title: Text("\(album.name)をライブラリに追加しますか？"),
                                           primaryButton: Alert.Button.default(Text("はい"), action: {
                                             viewModel.addAlbumToLibrary(album: album)

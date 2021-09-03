@@ -9,8 +9,8 @@ import Foundation
 import Combine
 
 class AlbumDetailViewModel: ObservableObject {
-    @Published private(set) var model: Stateful<AlbumDetailModel> = .idle
-//    @Published private(set) var model: Stateful<AlbumDetailModel> = .loaded(AlbumDetailModel.mock(1))
+    @Published private(set) var model: AlbumDetailView.Stateful = .idle
+//    @Published private(set) var model: AlbumDetailView.Stateful = .loaded(AlbumDetailModel.mock(1))
     @Published var titleName = ""
     private var cancellable: AnyCancellable?
     private let repository: AlbumDetailRepository
@@ -64,7 +64,7 @@ class AlbumDetailViewModel: ObservableObject {
                 }
                 self?.cancellable = nil
             }, receiveValue: { [weak self] response in
-                self?.model = .loaded(model)
+                self?.model = .addedAlbumToLibrary(model)
             })
     }
 }
