@@ -34,10 +34,12 @@ struct SearchView: View {
                     }
                 case .failed(_):
                     VStack(alignment: .center) {
-                        Group {
+                        HStack {
+                            Spacer(minLength: 0)
                             Image("default_icon")
                             Text("検索に失敗しました。")
                                 .padding(.top, 4)
+                            Spacer(minLength: 0)
                         }
                         .foregroundColor(.black)
                         .opacity(0.4)
@@ -69,7 +71,9 @@ struct SearchView: View {
                         Section(header: Listitem_Title_View(title: "Track", font: .headline, fontWight: .bold)) {
                             ForEach(model.tracks, id: \.self.id) { track in
                                 Button {
-                                    playerManager.showMusicPlayer(tracks: [track])
+                                    withAnimation(.spring()) {
+                                        playerManager.showMusicPlayer(tracks: [track])
+                                    }
                                 } label: {
                                     Listitem_Title_View(title: track.name, font: .caption, fontWight: .regular)
                                 }.frame(width: UIScreen.main.bounds.width, height: 30)
@@ -97,7 +101,7 @@ struct SearchView: View {
                         }.multilineTextAlignment(.leading)
                     }.padding(.vertical, 20)
                 }
-                Spacer(minLength: 0)
+                Spacer(minLength: playerManager.currentTrack != nil ? MusicPlayerView.height : 0)
             }
             .navigationTitle("Search")
         }
