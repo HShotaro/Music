@@ -38,7 +38,7 @@ class LibraryPlayListsViewModelTests: XCTestCase {
             }
         }.store(in: &cancelables)
         
-        viewModel.onAppear()
+        viewModel.onTabChanged()
         
         wait(for: [expectedToBeloading, expectedToBeloded],
              timeout: 2.0,

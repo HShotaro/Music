@@ -22,7 +22,7 @@ struct LibraryPlayListsMockRepository: LibraryPlaylistsRepository {
         self.error = error
     }
     
-    func fetchModel() -> AnyPublisher<LibraryPlaylistsModel, Error> {
+    func fetchCurrentUserPlaylistsModel() -> AnyPublisher<LibraryPlaylistsModel, Error> {
         if let error = error {
             return Fail(error: error)
                 .eraseToAnyPublisher()

@@ -48,20 +48,16 @@ struct AlbumDetailView: View {
                         ForEach(0..<model.tracks.count+1, id: \.self) {(row: Int) in
                             if row > 0 {
                                 let track = model.tracks[row-1]
-                                ListItem_Title_SubTitle_View(
-                                    titleName: track.name,
-                                    subTitleName: track.artist.name
-                                ).onTapGesture {
+                                Button {
                                     withAnimation {
                                         playerManager.showMusicPlayer(tracks: [track])
-                                    } 
-                                }.background(
-                                    Color(.systemBackground).onTapGesture {
-                                        withAnimation {
-                                            playerManager.showMusicPlayer(tracks: [track])
-                                        }
                                     }
-                                )
+                                } label: {
+                                    ListItem_Title_SubTitle_View(
+                                        titleName: track.name,
+                                        subTitleName: track.artist.name
+                                    )
+                                }
                             } else {
                                 Image_PlayerButton_View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
@@ -82,7 +78,7 @@ struct AlbumDetailView: View {
                                 }, label: {
                                     Image(systemName: "square.and.arrow.up")
                                 }).alert(isPresented: $showAlert) {
-                                    Alert(title: Text("このアルバムをライブラリに追加しますか？"),
+                                    Alert(title: Text("\(album.name)をライブラリに追加しますか？"),
                                           primaryButton: Alert.Button.default(Text("はい"), action: {
                                             viewModel.addAlbumToLibrary(album: album)
                                           }),

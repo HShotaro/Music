@@ -16,11 +16,10 @@ class LibraryPlaylistsViewModel: ObservableObject {
     
     init(repository: LibraryPlaylistsRepository = LibraryPlaylistsDataRepository()) {
         self.repository = repository
-        self.onAppear()
+        self.onTabChanged()
     }
     
-    func onAppear() {
-        guard model == .idle else { return }
+    func onTabChanged() {
         loadModel()
     }
     
@@ -29,7 +28,7 @@ class LibraryPlaylistsViewModel: ObservableObject {
     }
     
     private func loadModel() {
-        cancellable = self.repository.fetchModel()
+        cancellable = self.repository.fetchCurrentUserPlaylistsModel()
             .handleEvents(receiveSubscription: { [weak self] _ in
                 self?.model = .loading
             })

@@ -59,7 +59,7 @@ struct ContentView: View {
         } else {
             NavigationView {
                 WelcomeView()
-                    .navigationTitle("Welcome Music")
+                    .navigationBarHidden(true)
             }
         }
     }

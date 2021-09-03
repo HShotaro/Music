@@ -11,11 +11,12 @@ import Combine
 struct PlaylistDetailView: View {
     @StateObject private var viewModel = PlaylistDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
+    @State var longPressedTrack: AudioTrackModel?
     @State var showAlertOnLongPress = false
     @State var showPlaylistModelView = false
     let playlistID: String
     let isOwner: Bool
-
+    
     var body: some View {
         VStack {
             switch viewModel.model {
@@ -51,15 +52,33 @@ struct PlaylistDetailView: View {
                         ForEach(0..<model.tracks.count+1, id: \.self) {(row: Int) in
                             if row > 0 {
                                 let track = model.tracks[row-1]
-                                Button {
+                                ListItem_Title_SubTitle_View(
+                                    titleName: track.name,
+                                    subTitleName: track.artist.name
+                                )
+                                .onTapGesture {
                                     withAnimation {
                                         playerManager.showMusicPlayer(tracks: [track])
                                     }
-                                } label: {
-                                    ListItem_Title_SubTitle_View(
-                                        titleName: track.name,
-                                        subTitleName: track.artist.name
-                                    )
+                                }
+                                .onLongPressGesture(minimumDuration: 1.8, perform: {
+                                    self.longPressedTrack = track
+                                    self.showAlertOnLongPress = true
+                                })
+                                .background(Color(UIColor.systemBackground))
+                                .onTapGesture {
+                                    withAnimation {
+                                        playerManager.showMusicPlayer(tracks: [track])
+                                    }
+                                }
+                                .onLongPressGesture(minimumDuration: 1.8, perform: {
+                                    self.longPressedTrack = track
+                                    self.showAlertOnLongPress = true
+                                })
+                                .alert(isPresented: $showAlertOnLongPress) {
+                                    alertOnLongPress()
+                                }.sheet(isPresented: $showPlaylistModelView) {
+                                    PlaylistModalView(showModalView: $showPlaylistModelView, trackID: longPressedTrack!.id)
                                 }
                             } else {
                                 Image_PlayerButton_View(imageURL: model.imageURL, tracks: model.tracks)
@@ -79,23 +98,23 @@ struct PlaylistDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
     
-//    private func alertOnLongPress(track: AudioTrackModel) -> Alert {
-//        if isOwner {
-//            return Alert(title: Text("この曲をプレイリストから削除しますか？"),
-//                  primaryButton: Alert.Button.destructive(Text("はい"), action: {
-//                    viewModel.removeTrackFromPlaylist(playlistID: playlistID, trackID: track.id)
-//            }),
-//                  secondaryButton: Alert.Button.cancel(Text("いいえ"))
-//            )
-//        } else {
-//            return Alert(title: Text("この曲をプレイリストに追加しますか？"),
-//                  primaryButton: Alert.Button.default(Text("はい"), action: {
-//                    self.showPlaylistModelView = true
-//            }),
-//                  secondaryButton: Alert.Button.cancel(Text("いいえ"))
-//            )
-//        }
-//    }
+    private func alertOnLongPress() -> Alert {
+        if isOwner {
+            return Alert(title: Text("\(longPressedTrack!.name)をプレイリストから削除しますか？"),
+                         primaryButton: Alert.Button.destructive(Text("はい"), action: {
+                            viewModel.removeTrackFromPlaylist(playlistID: playlistID, trackID: longPressedTrack!.id)
+                         }),
+                         secondaryButton: Alert.Button.cancel(Text("いいえ"))
+            )
+        } else {
+            return Alert(title: Text("\(longPressedTrack!.name)をプレイリストに追加しますか？"),
+                         primaryButton: Alert.Button.default(Text("はい"), action: {
+                            self.showPlaylistModelView = true
+                         }),
+                         secondaryButton: Alert.Button.cancel(Text("いいえ"))
+            )
+        }
+    }
 }
 
 struct PlaylistView_Previews: PreviewProvider {

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LibraryAlbumListView: View {
     @StateObject private var viewModel = LibraryAlbumListViewModel()
+    @State var longPressedAlbum: AlbumModel?
     @State var showAlert = false
     @Binding var currentTabIndex: Int
     @Binding var destinationView: AnyView?
@@ -53,12 +54,13 @@ struct LibraryAlbumListView: View {
                                     isPushActive = true
                                 }
                                 .onLongPressGesture(minimumDuration: 1.8, perform: {
+                                    self.longPressedAlbum = album
                                     self.showAlert = true
                                 })
                                 .alert(isPresented: $showAlert) {
-                                    Alert(title: Text("このアルバムをライブラリから削除しますか？"),
+                                    Alert(title: Text("\(longPressedAlbum!.name)をライブラリから削除しますか？"),
                                           primaryButton: Alert.Button.destructive(Text("はい"), action: {
-                                        viewModel.deleteAlbumFromLibrary(album: album)
+                                        viewModel.deleteAlbumFromLibrary(album: longPressedAlbum!)
                                     }),
                                           secondaryButton: Alert.Button.cancel(Text("いいえ"))
                                     )
@@ -69,7 +71,7 @@ struct LibraryAlbumListView: View {
             }
         }.onChange(of: currentTabIndex, perform: { index in
             if LibraryView.Tab.allCases[index] == .album {
-                viewModel.onAppear()
+                viewModel.onTabChanged()
             }
         })
     }}

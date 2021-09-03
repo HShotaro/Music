@@ -1,24 +1,20 @@
 //
-//  LibraryAlbumViewModel.swift
+//  PlaylistModelViewModel.swift
 //  Music
 //
-//  Created by Shotaro Hirano on 2021/09/03.
+//  Created by Shotaro Hirano on 2021/09/04.
 //
 
 import Foundation
 import Combine
 
-class LibraryAlbumListViewModel: ObservableObject {
-    @Published private(set) var model: Stateful<LibraryAlbumlistModel> = .idle
-//    @Published private(set) var model: Stateful<LibraryAlbumlistModel> = .loaded(LibraryAlbumlistModel.mock(1))
+class PlaylistModalViewModel: ObservableObject {
+    @Published private(set) var model: PlaylistModalView.Stateful = .idle
     private var cancellable: AnyCancellable?
-    private let repository: LibraryAlbumListRepository
+    private let repository: PlaylistModalRepository
     
-    init(repository: LibraryAlbumListRepository = LibraryAlbumListDataRepository()) {
+    init(repository: PlaylistModalRepository = PlaylistModalDataRepository()) {
         self.repository = repository
-    }
-    
-    func onTabChanged() {
         loadModel()
     }
     
@@ -27,7 +23,7 @@ class LibraryAlbumListViewModel: ObservableObject {
     }
     
     private func loadModel() {
-        cancellable = self.repository.fetchModel()
+        cancellable = self.repository.fetchCurrentUserPlaylist()
             .handleEvents(receiveSubscription: { [weak self] _ in
                 self?.model = .loading
             })
@@ -41,13 +37,12 @@ class LibraryAlbumListViewModel: ObservableObject {
                 }
                 self?.cancellable = nil
             }, receiveValue: { [weak self] response in
-                self?.model = .loaded(response)
+                self?.model = .loaded(response.playlists)
             })
     }
     
-    func deleteAlbumFromLibrary(album: AlbumModel) {
-        guard case .loaded(let rawModel) = model else { return }
-        cancellable = self.repository.deleteAlbumFromLibrary(albumID: album.id)
+    func addTrackToPlaylist(playlistID: String, trackID: String) {
+        cancellable = self.repository.addTrackToPlaylist(playlistID: playlistID, trackID: trackID)
             .handleEvents(receiveSubscription: { [weak self] _ in
                 self?.model = .loading
             })
@@ -61,8 +56,7 @@ class LibraryAlbumListViewModel: ObservableObject {
                 }
                 self?.cancellable = nil
             }, receiveValue: { [weak self] response in
-                let albums = rawModel.albumList.filter { album != $0 }
-                self?.model = .loaded(LibraryAlbumlistModel(albumList: albums))
+                self?.model = .addedTrackToPlaylist
             })
     }
 }

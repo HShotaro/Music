@@ -58,7 +58,7 @@ struct LibraryPlaylistsView: View {
             }
         }.onChange(of: currentTabIndex, perform: { index in
             if LibraryView.Tab.allCases[index] == .playlist {
-                viewModel.onAppear()
+                viewModel.onTabChanged()
             }
         })
     }

@@ -56,13 +56,11 @@ final class APIManager {
             .compactMap{ $0 }.eraseToAnyPublisher()
     }
     
-    func removeTrackFromPlaylist(playlistID: String, trackID: String) -> AnyPublisher<Void, Error> {
-        return APIManager.createRequest(path: "/playlists/\(playlistID)/tracks", type: .DELETE, headerInfo: ["Content-Type":"application/json"],
-            bodyInfo: ["tracks":[["uri": "spotify:track:\(trackID)"]]]
-        )
+    static func getCurrentUserPlaylistsModel() -> AnyPublisher<LibraryPlaylistsModel, Error> {
+        return APIManager.createRequest(path: "/me/playlists", type: .GET)
             .flatMap { request in
                 URLSession.shared.dataTaskPublisher(for: request)
-                .tryMap() { element -> Void in
+                .tryMap() { element -> LibraryPlaylistsModel in
                     guard let response = element.response as? HTTPURLResponse else {
                         throw APIError.failedToGetData
                     }
@@ -75,13 +73,11 @@ final class APIManager {
                         throw APIError.clientError
                     }
                     do {
-                        let result = try JSONSerialization.jsonObject(with: element.data, options: .allowFragments)
-                        if let response = result as? [String: Any], response["snapshot_id"] as? String != nil {
-                            return
-                        } else {
-                            throw APIError.failedToDeleteData
-                        }
-                    } catch {
+                        let result = try JSONDecoder().decode(LibraryPlaylistsResponse.self, from: element.data)
+                        let model = LibraryPlaylistsModel(rawModel: result)
+                        return model
+                    }
+                    catch {
                         throw error
                     }
                 }

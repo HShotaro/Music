@@ -51,4 +51,36 @@ fileprivate extension APIManager {
                 }
         }.eraseToAnyPublisher()
     }
+    
+    func removeTrackFromPlaylist(playlistID: String, trackID: String) -> AnyPublisher<Void, Error> {
+        return APIManager.createRequest(path: "/playlists/\(playlistID)/tracks", type: .DELETE, headerInfo: ["Content-Type":"application/json"],
+            bodyInfo: ["tracks":[["uri": "spotify:track:\(trackID)"]]]
+        )
+            .flatMap { request in
+                URLSession.shared.dataTaskPublisher(for: request)
+                .tryMap() { element -> Void in
+                    guard let response = element.response as? HTTPURLResponse else {
+                        throw APIError.failedToGetData
+                    }
+                    guard response.statusCode < 500 else {
+                        print("Status Code\(response.statusCode)")
+                        throw APIError.serverError
+                    }
+                    guard response.statusCode < 400 else {
+                        print("Status Code\(response.statusCode)")
+                        throw APIError.clientError
+                    }
+                    do {
+                        let result = try JSONSerialization.jsonObject(with: element.data, options: .allowFragments)
+                        if let response = result as? [String: Any], response["snapshot_id"] as? String != nil {
+                            return
+                        } else {
+                            throw APIError.failedToDeleteData
+                        }
+                    } catch {
+                        throw error
+                    }
+                }
+        }.eraseToAnyPublisher()
+    }
 }

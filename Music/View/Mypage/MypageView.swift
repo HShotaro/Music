@@ -9,12 +9,19 @@ import SwiftUI
 
 struct MypageView: View {
     @EnvironmentObject var authManager: AuthManager
+    @State var presentAlert = false
     var body: some View {
         Button {
-            authManager.signOut()
+            presentAlert = true
         } label: {
-            Text("Sing Out")
-        }
+            Text("サインアウト")
+        }.alert(isPresented: $presentAlert, content: {
+            Alert(title: Text("サインアウトしてもよろしいですか？"), primaryButton: Alert.Button.destructive(Text("はい"), action: {
+                authManager.signOut()
+            }), secondaryButton: Alert.Button.cancel(Text("キャンセル"))
+            )
+        })
+        .navigationBarTitleDisplayMode(.inline)
 
     }
 }
