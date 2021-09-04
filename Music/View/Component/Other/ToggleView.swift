@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct ToggleView: View {
-    static let height: CGFloat = 30 + statusBarHeight()
+    static let height: CGFloat = textHeight + indicatorHeight
+    static let textHeight: CGFloat = 44
     static let indicatorHeight: CGFloat = 3
     @Binding var selectedIndex: Int
     @Binding var offset: CGFloat
@@ -21,7 +22,7 @@ struct ToggleView: View {
                         .foregroundColor(Color(.label))
                         .fontWeight(selectedIndex == items.firstIndex(of: item) ? .bold : .regular)
                         .multilineTextAlignment(.center)
-                        .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.height - ToggleView.indicatorHeight)
+                        .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.textHeight)
                         .background(
                             Color.primaryColor
                                 .onTapGesture {
@@ -32,7 +33,6 @@ struct ToggleView: View {
                                 }
                         )
                 }
-                Spacer()
             }
             Color(.label)
                 .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.indicatorHeight)
