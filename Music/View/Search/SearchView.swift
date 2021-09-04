@@ -13,6 +13,7 @@ struct SearchView: View {
     @State var destinationView: AnyView? = nil
     @State var isPushActive = false
     @State var searchText = ""
+    let topID: Namespace.ID
     var body: some View {
         NavigationView {
             VStack(alignment: .leading, spacing: 0) {
@@ -29,6 +30,7 @@ struct SearchView: View {
                         .textFieldStyle(SearchTextFieldStyle())
                         .padding(.horizontal, 17)
                         .padding(.vertical, 10)
+                        .id(topID)
                     }.background(Color.primaryColor)
                     
                     switch viewModel.model {
@@ -114,7 +116,8 @@ struct SearchView: View {
 }
 
 struct SearchView_Previews: PreviewProvider {
+    @Namespace static var topID
     static var previews: some View {
-        SearchView()
+        SearchView(topID: topID)
     }
 }

@@ -13,6 +13,7 @@ struct LibraryView: View {
     @State var isPushActive = false
     @State private var selectedIndex: Int = 0
     @State private var offset: CGFloat = 0
+    @Binding var scrollTopTop: Bool
     
     enum Tab: String, CaseIterable {
         case playlist = "Playlist"
@@ -32,9 +33,9 @@ struct LibraryView: View {
                             ForEach(Tab.allCases, id: \.self) { tab in
                                 switch tab {
                                 case .playlist:
-                                    LibraryPlaylistsView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive).frame(width: geometry.size.width, height: geometry.size.height)
+                                    LibraryPlaylistsView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive, scrollTopTop: $scrollTopTop).frame(width: geometry.size.width, height: geometry.size.height)
                                 case .album:
-                                    LibraryAlbumListView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive).frame(width: geometry.size.width, height: geometry.size.height)
+                                    LibraryAlbumListView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive, scrollTopTop: $scrollTopTop).frame(width: geometry.size.width, height: geometry.size.height)
                                 }
                             }
                         }
@@ -68,7 +69,8 @@ struct LibraryView: View {
 }
 
 struct LibraryView_Previews: PreviewProvider {
+    @State static var scrollTopTop = false
     static var previews: some View {
-        LibraryView()
+        LibraryView(scrollTopTop: $scrollTopTop)
     }
 }

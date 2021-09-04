@@ -18,6 +18,8 @@ struct HomeView: View {
     // プッシュ遷移後に、ポップするとfalseに戻る
     @State var isPushActive = false
     
+    let topID: Namespace.ID
+    
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
         NavigationView {
@@ -51,7 +53,7 @@ struct HomeView: View {
                         EmptyView()
                     }.hidden()
                     ScrollView(.vertical) {
-                        Section(header: LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground))) {
+                        Section(header: LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground)).id(topID)) {
                             ScrollView(.horizontal) {
                                 HStack(spacing: 10) {
                                     ForEach(model.albums, id: \.self.id) { album in
@@ -99,16 +101,17 @@ struct HomeView: View {
 }
 
 struct HomeView_Previews: PreviewProvider {
+    @Namespace static var topID
     static var previews: some View {
         Group {
-            HomeView()
+            HomeView(topID: topID)
                 .environment(\.colorScheme, .light)
                 .previewDisplayName("light")
             
-            HomeView()
+            HomeView(topID: topID)
                 .environment(\.colorScheme, .dark)
                 .previewDisplayName("dark")
-            HomeView()
+            HomeView(topID: topID)
                 .environment(\.locale, Locale(identifier: "en"))
                 .previewDisplayName("English")
         }
