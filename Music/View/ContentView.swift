@@ -20,9 +20,9 @@ struct ContentView: View {
 
     @State private var selection: Tab = .home
     @State private var tappedTwice: Bool = false
-    @Namespace var homeTopID
-    @Namespace var searchTopID
-    @State private var libraryScrollToTop = false
+    @State private var didSelectHomeTabTwice = false
+    @State private var didSelectSearchTabTwice = false
+    @State private var didSelectLibraryTabTwice = false
     
     @State private var expand = false
     @Namespace var animation
@@ -41,61 +41,53 @@ struct ContentView: View {
             
             
             ZStack(alignment: Alignment(horizontal: .center, vertical: .bottom)){
-                ScrollViewReader { proxy in
-                    TabView(selection: tabViewBinding) {
-                        HomeView(topID: homeTopID)
-                        .tabItem {
-                            Label(
-                                title: { Text("Home") },
-                                icon: { Image(systemName: "house")
-                                }
-                            ).accessibility(label: Text("Home_TabItem"))
-                        }.tag(Tab.home)
-                            .onChange(of: tappedTwice, perform: { isTwice in
-                                if isTwice {
-                                    withAnimation {
-                                        proxy.scrollTo(homeTopID)
-                                    }
-                                    tappedTwice = false
-                                }
-                            })
-                        
-                        SearchView(topID: searchTopID)
-                        .tabItem {
-                            Label(
-                                title: { Text("Search") },
-                                icon: { Image(systemName: "magnifyingglass")
-                                }
-                            ).accessibility(label: Text("Search_TabItem"))
-                        }.tag(Tab.search)
-                            .onChange(of: tappedTwice, perform: { isTwice in
-                                if isTwice {
-                                    withAnimation {
-                                        proxy.scrollTo(searchTopID)
-                                    }
-                                    tappedTwice = false
-                                }
-                            })
-                        
-                        LibraryView(scrollTopTop: $libraryScrollToTop)
-                        .tabItem {
-                            Label(
-                                title: { Text("Library") },
-                                icon: { Image(systemName: "music.note.list")
-                                }
-                            ).accessibility(label: Text("Library_TabItem"))
-                        }.tag(Tab.library)
-                            .onChange(of: tappedTwice, perform: { isTwice in
-                                if isTwice {
-                                    withAnimation {
-                                        self.libraryScrollToTop = true
-                                    }
-                                    tappedTwice = false
-                                }
-                            })
-                        
-                    }.accentColor(Color.primaryColor)
-                }
+                TabView(selection: tabViewBinding) {
+                    HomeView(didSelectHomeTabTwice: $didSelectHomeTabTwice)
+                    .tabItem {
+                        Label(
+                            title: { Text("Home") },
+                            icon: { Image(systemName: "house")
+                            }
+                        ).accessibility(label: Text("Home_TabItem"))
+                    }.tag(Tab.home)
+                        .onChange(of: tappedTwice, perform: { isTwice in
+                            if isTwice {
+                                didSelectHomeTabTwice = true
+                                tappedTwice = false
+                            }
+                        })
+                    
+                    SearchView(didSelectSearchTabTwice: $didSelectSearchTabTwice)
+                    .tabItem {
+                        Label(
+                            title: { Text("Search") },
+                            icon: { Image(systemName: "magnifyingglass")
+                            }
+                        ).accessibility(label: Text("Search_TabItem"))
+                    }.tag(Tab.search)
+                        .onChange(of: tappedTwice, perform: { isTwice in
+                            if isTwice {
+                                self.didSelectSearchTabTwice = true
+                                tappedTwice = false
+                            }
+                        })
+                    
+                    LibraryView(didSelectLibraryTabTwice: $didSelectLibraryTabTwice)
+                    .tabItem {
+                        Label(
+                            title: { Text("Library") },
+                            icon: { Image(systemName: "music.note.list")
+                            }
+                        ).accessibility(label: Text("Library_TabItem"))
+                    }.tag(Tab.library)
+                        .onChange(of: tappedTwice, perform: { isTwice in
+                            if isTwice {
+                                self.didSelectLibraryTabTwice = true
+                                tappedTwice = false
+                            }
+                        })
+                    
+                }.accentColor(Color.primaryColor)
                 MusicPlayerView(animation: animation)
                     .opacity(playerManager.currentTrack != nil ? 1.0 : 0.0)
             }

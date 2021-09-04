@@ -12,7 +12,7 @@ struct LibraryPlaylistsView: View {
     @Binding var currentTabIndex: Int
     @Binding var destinationView: AnyView?
     @Binding var isPushActive: Bool
-    @Binding var scrollTopTop: Bool
+    @Binding var didSelectLibraryTabTwice: Bool
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
         VStack {
@@ -56,12 +56,12 @@ struct LibraryPlaylistsView: View {
                                     
                                 }
                         }.padding(.all, 15)
-                    }.onChange(of: scrollTopTop, perform: { scrollTopTop in
+                    }.onChange(of: didSelectLibraryTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
                             withAnimation {
                                 proxy.scrollTo(model.playlists.first?.id)
                             }
-                            self.scrollTopTop = false
+                            self.didSelectLibraryTabTwice = false
                         }
                     })
                 }
@@ -81,6 +81,6 @@ struct LibraryPlaylistsView_Previews: PreviewProvider {
     @State static var currentTabIndex = 0
     @State static var scrollTopTop = false
     static var previews: some View {
-        LibraryPlaylistsView(currentTabIndex: $currentTabIndex, destinationView: $anyView, isPushActive: $isPushActive, scrollTopTop: $scrollTopTop)
+        LibraryPlaylistsView(currentTabIndex: $currentTabIndex, destinationView: $anyView, isPushActive: $isPushActive, didSelectLibraryTabTwice: $scrollTopTop)
     }
 }
