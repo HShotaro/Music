@@ -38,9 +38,11 @@ struct ToggleView: View {
                 .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.indicatorHeight)
                 .cornerRadius(ToggleView.indicatorHeight/2)
                 .offset(x: -offset / CGFloat(items.count))
-        }.frame(width: UIScreen.main.bounds.width, height: ToggleView.height)
+        }
         .padding(.top, ToggleView.statusBarHeight())
         .background(Color.primaryColor)
+        .edgesIgnoringSafeArea(.top)
+        .frame(width: UIScreen.main.bounds.width, height: ToggleView.height)
     }
     
     static func statusBarHeight() -> CGFloat{
