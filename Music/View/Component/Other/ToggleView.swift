@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ToggleView: View {
+    static let height: CGFloat = 30 + statusBarHeight()
+    static let indicatorHeight: CGFloat = 3
     @Binding var selectedIndex: Int
     @Binding var offset: CGFloat
     let items: [String]
@@ -15,26 +17,41 @@ struct ToggleView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 0) {
                 ForEach(items, id: \.self) { item in
-                    Button(action: {
-                        withAnimation {
-                            selectedIndex = items.firstIndex(of: item) ?? 0
-                            offset = -UIScreen.main.bounds.width * CGFloat(selectedIndex)
-                        }
-                    }, label: {
-                        Text(item)
-                            .foregroundColor(Color(.label))
-                            .fontWeight(selectedIndex == items.firstIndex(of: item) ? .bold : .regular)
-                            .multilineTextAlignment(.center)
-                    }).frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: 44)
+                    Text(item)
+                        .foregroundColor(Color(.label))
+                        .fontWeight(selectedIndex == items.firstIndex(of: item) ? .bold : .regular)
+                        .multilineTextAlignment(.center)
+                        .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.height - ToggleView.indicatorHeight)
+                        .background(
+                            Color.primaryColor
+                                .onTapGesture {
+                                    withAnimation {
+                                        selectedIndex = items.firstIndex(of: item) ?? 0
+                                        offset = -UIScreen.main.bounds.width * CGFloat(selectedIndex)
+                                    }
+                                }
+                        )
                 }
                 Spacer()
             }
             Color(.label)
-                .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: 3)
-                .cornerRadius(1.5)
+                .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.indicatorHeight)
+                .cornerRadius(ToggleView.indicatorHeight/2)
                 .offset(x: -offset / CGFloat(items.count))
-        }.frame(width: UIScreen.main.bounds.width, height: 47)
+        }.frame(width: UIScreen.main.bounds.width, height: ToggleView.height)
+        .padding(.top, ToggleView.statusBarHeight())
         .background(Color.primaryColor)
+    }
+    
+    static func statusBarHeight() -> CGFloat{
+        var statusBarHeight: CGFloat
+        if #available(iOS 13.0, *) {
+            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+            statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        } else {
+            statusBarHeight = UIApplication.shared.statusBarFrame.height
+        }
+        return statusBarHeight
     }
 }
 

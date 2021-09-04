@@ -11,7 +11,11 @@ import Combine
 @main
 struct MusicApp: App {
     init() {
-        UINavigationBar.appearance().backgroundColor = Color.primaryUIColor
+        let navigationBarAppearance = UINavigationBarAppearance()
+        navigationBarAppearance.backgroundColor = Color.primaryUIColor
+        UINavigationBar.appearance().standardAppearance = navigationBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
+        UINavigationBar.appearance().compactAppearance = navigationBarAppearance
         UINavigationBar.appearance().tintColor = UIColor.label
     }
     @EnvironmentObject var authManager: AuthManager
