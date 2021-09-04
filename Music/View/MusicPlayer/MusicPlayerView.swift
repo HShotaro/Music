@@ -10,6 +10,7 @@ import SwiftUI
 struct MusicPlayerView: View {
     static let height: CGFloat = 80
     @EnvironmentObject var playerManager: MusicPlayerManager
+    @State var showPlaylistModelView = false
     @State var image: UIImage = UIImage(systemName: "photo") ?? UIImage()
     @State var offset: CGFloat = 0
     var animation: Namespace.ID
@@ -41,6 +42,7 @@ struct MusicPlayerView: View {
                         Image(systemName: playerManager.onPlaying ? "pause" : "play.fill")
                             .font(.title3)
                             .foregroundColor(.primary)
+                            .padding(10)
                             .matchedGeometryEffect(id: "play_track", in: animation)
                     }
                     
@@ -50,6 +52,7 @@ struct MusicPlayerView: View {
                         Image(systemName: "forward.fill")
                             .font(.title3)
                             .foregroundColor(.primary)
+                            .padding(10)
                             .matchedGeometryEffect(id: "forward_track", in: animation)
                     }
                 }
@@ -74,6 +77,7 @@ struct MusicPlayerView: View {
                         Image(systemName: "backward.fill")
                             .font(.title3)
                             .foregroundColor(.primary)
+                            .padding(10)
                     })
                     .frame(width: 50, height: 50)
                     .disabled(playerManager.isFirstTrack)
@@ -83,6 +87,7 @@ struct MusicPlayerView: View {
                         Image(systemName: playerManager.onPlaying ? "pause" : "play.fill")
                             .font(.title3)
                             .foregroundColor(.primary)
+                            .padding(10)
                             .matchedGeometryEffect(id: "play_track", in: animation)
                     })
                     .frame(width: 50, height: 50)
@@ -92,9 +97,25 @@ struct MusicPlayerView: View {
                         Image(systemName: "forward.fill")
                             .font(.title3)
                             .foregroundColor(.primary)
+                            .padding(10)
                             .matchedGeometryEffect(id: "forward_track", in: animation)
                     })
                     .frame(width: 50, height: 50)
+                }
+                Button {
+                    self.showPlaylistModelView = true
+                } label: {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.title3)
+                        .foregroundColor(.primary)
+                        .padding(10)
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(25)
+                }
+                .sheet(isPresented: $showPlaylistModelView) {
+                    if let trackID = playerManager.currentTrack?.id {
+                        PlaylistModalView(showModalView: $showPlaylistModelView, trackID: trackID)
+                    }
                 }
             }
         }
