@@ -72,8 +72,15 @@ struct LibraryAlbumListView: View {
                         }.padding(.all, 15)
                     }.onChange(of: didSelectLibraryTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
-                            withAnimation {
+                            if isPushActive {
+                                withAnimation {
+                                    self.isPushActive = false
+                                }
                                 proxy.scrollTo(model.albumList.first?.id)
+                            } else {
+                                withAnimation {
+                                    proxy.scrollTo(model.albumList.first?.id)
+                                }
                             }
                             self.didSelectLibraryTabTwice = false
                         }
@@ -85,7 +92,8 @@ struct LibraryAlbumListView: View {
                 viewModel.onTabChanged()
             }
         })
-    }}
+    }
+}
 
 struct LibraryAlbumView_Previews: PreviewProvider {
     @State static var anyView: AnyView? = nil

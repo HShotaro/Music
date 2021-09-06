@@ -112,8 +112,15 @@ struct SearchView: View {
                         Spacer(minLength: playerManager.currentTrack != nil ? MusicPlayerView.height : 0)
                     }.onChange(of: didSelectSearchTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
-                            withAnimation {
+                            if isPushActive {
+                                withAnimation {
+                                    self.isPushActive = false
+                                }
                                 proxy.scrollTo(SearchView.topID)
+                            } else {
+                                withAnimation {
+                                    proxy.scrollTo(SearchView.topID)
+                                }
                             }
                             self.didSelectSearchTabTwice = false
                         }

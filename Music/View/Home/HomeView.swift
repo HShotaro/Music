@@ -88,8 +88,15 @@ struct HomeView: View {
                             .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
                         }.onChange(of: didSelectHomeTabTwice, perform: { scrollTopTop in
                             if scrollTopTop {
-                                withAnimation {
+                                if isPushActive {
+                                    withAnimation {
+                                        self.isPushActive = false
+                                    }
                                     proxy.scrollTo(HomeView.topID)
+                                } else {
+                                    withAnimation {
+                                        proxy.scrollTo(HomeView.topID)
+                                    }
                                 }
                                 self.didSelectHomeTabTwice = false
                             }

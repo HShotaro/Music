@@ -58,8 +58,15 @@ struct LibraryPlaylistsView: View {
                         }.padding(.all, 15)
                     }.onChange(of: didSelectLibraryTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
-                            withAnimation {
+                            if isPushActive {
+                                withAnimation {
+                                    self.isPushActive = false
+                                }
                                 proxy.scrollTo(model.playlists.first?.id)
+                            } else {
+                                withAnimation {
+                                    proxy.scrollTo(model.playlists.first?.id)
+                                }
                             }
                             self.didSelectLibraryTabTwice = false
                         }
