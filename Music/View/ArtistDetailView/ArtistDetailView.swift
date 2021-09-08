@@ -10,7 +10,6 @@ import SwiftUI
 struct ArtistDetailView: View {
     @StateObject private var viewModel = ArtistDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
-    @State var longPressedTrack: AudioTrackModel?
     @State var showAlertOnLongPress = false
     @State var showPlaylistModelView = false
     
@@ -55,15 +54,7 @@ struct ArtistDetailView: View {
                                     titleName: track.name,
                                     subTitleName: track.artist.name
                                 )
-                                .onTapGesture {
-                                    withAnimation {
-                                        playerManager.showMusicPlayer(tracks: [track])
-                                    }
-                                }
-                                .onLongPressGesture(minimumDuration: 1.8, perform: {
-                                    self.longPressedTrack = track
-                                    self.showAlertOnLongPress = true
-                                })
+                                .allowsHitTesting(false)
                                 .background(Color(UIColor.systemBackground))
                                 .onTapGesture {
                                     withAnimation {
@@ -71,24 +62,23 @@ struct ArtistDetailView: View {
                                     }
                                 }
                                 .onLongPressGesture(minimumDuration: 1.8, perform: {
-                                    self.longPressedTrack = track
+                                    self.viewModel.longPressedTrack = track
                                     self.showAlertOnLongPress = true
                                 })
-                                .alert(isPresented: $showAlertOnLongPress) {
-                                    Alert(title: Text("\(longPressedTrack!.name)をプレイリストに追加しますか？"),
-                                                 primaryButton: Alert.Button.default(Text("はい"), action: {
-                                                    self.showPlaylistModelView = true
-                                                 }),
-                                                 secondaryButton: Alert.Button.cancel(Text("いいえ"))
-                                    )
-                                }.sheet(isPresented: $showPlaylistModelView) {
-                                    PlaylistModalView(showModalView: $showPlaylistModelView, trackID: longPressedTrack!.id)
-                                }
                             } else {
                                 Image_PlayerButton_View(imageURL: model.tracks.first?.album.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }
+                    }.alert(isPresented: $showAlertOnLongPress) {
+                        Alert(title: Text("\(viewModel.longPressedTrack!.name)をプレイリストに追加しますか？"),
+                                     primaryButton: Alert.Button.default(Text("はい"), action: {
+                                        self.showPlaylistModelView = true
+                                     }),
+                                     secondaryButton: Alert.Button.cancel(Text("いいえ"))
+                        )
+                    }.sheet(isPresented: $showPlaylistModelView) {
+                        PlaylistModalView(showModalView: $showPlaylistModelView, trackID: viewModel.longPressedTrack!.id)
                     }
                     if playerManager.currentTrack != nil {
                         Spacer(minLength: MusicPlayerView.height)

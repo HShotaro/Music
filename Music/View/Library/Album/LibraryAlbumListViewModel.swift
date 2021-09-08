@@ -14,6 +14,8 @@ class LibraryAlbumListViewModel: ObservableObject {
     private var cancellable: AnyCancellable?
     private let repository: LibraryAlbumListRepository
     
+    var longPressedAlbum: AlbumModel?
+    
     init(repository: LibraryAlbumListRepository = LibraryAlbumListDataRepository()) {
         self.repository = repository
     }

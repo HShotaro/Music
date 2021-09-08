@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ToggleView: View {
+struct SelectorView: View {
     static let height: CGFloat = textHeight + indicatorHeight
     static let textHeight: CGFloat = 44
     static let indicatorHeight: CGFloat = 3
@@ -22,7 +22,7 @@ struct ToggleView: View {
                         .foregroundColor(Color(.label))
                         .fontWeight(selectedIndex == items.firstIndex(of: item) ? .bold : .regular)
                         .multilineTextAlignment(.center)
-                        .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.textHeight)
+                        .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: SelectorView.textHeight)
                         .background(
                             Color.primaryColor
                                 .onTapGesture {
@@ -35,24 +35,19 @@ struct ToggleView: View {
                 }
             }
             Color(.label)
-                .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: ToggleView.indicatorHeight)
-                .cornerRadius(ToggleView.indicatorHeight/2)
+                .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: SelectorView.indicatorHeight)
+                .cornerRadius(SelectorView.indicatorHeight/2)
                 .offset(x: -offset / CGFloat(items.count))
         }
-        .padding(.top, ToggleView.statusBarHeight())
+        .padding(.top, SelectorView.statusBarHeight())
         .background(Color.primaryColor)
         .edgesIgnoringSafeArea(.top)
-        .frame(width: UIScreen.main.bounds.width, height: ToggleView.height)
+        .frame(width: UIScreen.main.bounds.width, height: SelectorView.height)
     }
     
     static func statusBarHeight() -> CGFloat{
-        var statusBarHeight: CGFloat
-        if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-            statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-        } else {
-            statusBarHeight = UIApplication.shared.statusBarFrame.height
-        }
+        let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        let statusBarHeight: CGFloat = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         return statusBarHeight
     }
 }
@@ -61,6 +56,6 @@ struct ToggleView_Previews: PreviewProvider {
     @State static var selectedIndex = 0
     @State static var offset = CGFloat(0)
     static var previews: some View {
-        ToggleView(selectedIndex: $selectedIndex, offset: $offset, items: ["Playlist", "Album"])
+        SelectorView(selectedIndex: $selectedIndex, offset: $offset, items: ["Playlist", "Album"])
     }
 }

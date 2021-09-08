@@ -9,7 +9,6 @@ import SwiftUI
 
 struct LibraryAlbumListView: View {
     @StateObject private var viewModel = LibraryAlbumListViewModel()
-    @State var longPressedAlbum: AlbumModel?
     @State var showAlert = false
     @Binding var currentTabIndex: Int
     @Binding var destinationView: AnyView?
@@ -56,20 +55,19 @@ struct LibraryAlbumListView: View {
                                         isPushActive = true
                                     }
                                     .onLongPressGesture(minimumDuration: 1.8, perform: {
-                                        self.longPressedAlbum = album
+                                        self.viewModel.longPressedAlbum = album
                                         self.showAlert = true
                                     })
                                     .id(album.id)
-                                    .alert(isPresented: $showAlert) {
-                                        Alert(title: Text("\(longPressedAlbum!.name)をライブラリから削除しますか？"),
-                                              primaryButton: Alert.Button.destructive(Text("はい"), action: {
-                                            viewModel.deleteAlbumFromLibrary(album: longPressedAlbum!)
-                                        }),
-                                              secondaryButton: Alert.Button.cancel(Text("いいえ"))
-                                        )
-                                    }
                                 }
                         }.padding(.all, 15)
+                    }.alert(isPresented: $showAlert) {
+                        Alert(title: Text("\(viewModel.longPressedAlbum!.name)をライブラリから削除しますか？"),
+                              primaryButton: Alert.Button.destructive(Text("はい"), action: {
+                                viewModel.deleteAlbumFromLibrary(album: viewModel.longPressedAlbum!)
+                        }),
+                              secondaryButton: Alert.Button.cancel(Text("いいえ"))
+                        )
                     }.onChange(of: didSelectLibraryTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
                             if isPushActive {

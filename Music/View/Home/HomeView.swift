@@ -13,9 +13,9 @@ struct HomeView: View {
     // HomeViewのinit()の中で@StateObjectを初期化してしまうと@StateObjectのメリットを捨ててしまうことになるのでやめるべきである。
     @StateObject private var viewModel = HomeViewModel()
     
-    //@Stateの二つの変数destinationViewとisPushActiveを連続で変えた場合、bodyは一回のみ呼ばれる。また、destinationViewをviewModelで持とうとすると、bodyが更新されずページ遷移に失敗する。
+    //NavigationLink(destination: destinationView, isActive: $isPushActive)の引数destinationはisPushActiveがtrueになる直前にbodyを更新して値を代入する必要がある。
     @State var destinationView: AnyView? = nil
-    // プッシュ遷移後に、ポップするとfalseに戻る
+    // プッシュ遷移したらtrue、ポップしたらfalse
     @State var isPushActive = false
     
     @Binding var didSelectHomeTabTwice: Bool

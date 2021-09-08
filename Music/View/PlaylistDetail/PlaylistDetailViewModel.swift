@@ -15,6 +15,8 @@ class PlaylistDetailViewModel: ObservableObject {
     private var cancellable: AnyCancellable?
     private let repository: PlaylistDetailRepository
     
+    var longPressedTrack: AudioTrackModel?
+    
     init(repository: PlaylistDetailRepository = PlaylistDetailDataRepository()) {
         self.repository = repository
     }

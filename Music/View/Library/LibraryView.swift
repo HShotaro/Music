@@ -26,7 +26,7 @@ struct LibraryView: View {
                 NavigationLink(destination: destinationView, isActive: $isPushActive) {
                     EmptyView()
                 }.hidden()
-                ToggleView(selectedIndex: $selectedIndex, offset: $offset, items: Tab.allCases.map { $0.rawValue })
+                SelectorView(selectedIndex: $selectedIndex, offset: $offset, items: Tab.allCases.map { $0.rawValue })
                 GeometryReader { geometry in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(alignment: .top, spacing: 0) {

@@ -51,10 +51,9 @@ struct MusicPlayerView: View {
                     } label: {
                         Image(systemName: "forward.fill")
                             .font(.title3)
-                            .foregroundColor(.primary)
                             .padding(10)
                             .matchedGeometryEffect(id: "forward_track", in: animation)
-                    }
+                    }.buttonStyle(MusicPlayerButtonStyle())
                 }
             }
             .padding(.horizontal)
@@ -76,11 +75,11 @@ struct MusicPlayerView: View {
                     }, label: {
                         Image(systemName: "backward.fill")
                             .font(.title3)
-                            .foregroundColor(.primary)
                             .padding(10)
                     })
                     .frame(width: 50, height: 50)
                     .disabled(playerManager.isFirstTrack)
+                    .buttonStyle(MusicPlayerButtonStyle())
                     Button(action: {
                         playerManager.playButtonSelected()
                     }, label: {
@@ -96,22 +95,22 @@ struct MusicPlayerView: View {
                     }, label: {
                         Image(systemName: "forward.fill")
                             .font(.title3)
-                            .foregroundColor(.primary)
                             .padding(10)
                             .matchedGeometryEffect(id: "forward_track", in: animation)
                     })
                     .frame(width: 50, height: 50)
+                    .buttonStyle(MusicPlayerButtonStyle())
                 }
                 Button {
                     self.showPlaylistModelView = true
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                         .font(.title3)
-                        .foregroundColor(.primary)
                         .padding(10)
                         .frame(width: 50, height: 50)
                         .cornerRadius(25)
                 }
+                .buttonStyle(MusicPlayerButtonStyle())
                 .sheet(isPresented: $showPlaylistModelView) {
                     if let trackID = playerManager.currentTrack?.id {
                         PlaylistModalView(showModalView: $showPlaylistModelView, trackID: trackID)

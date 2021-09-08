@@ -38,7 +38,11 @@ struct PlaylistDetailModel : Hashable, Equatable {
         imageURL = URL(string: rawModel.images.first?.url ?? "")
         description = rawModel.description
         shareURL = URL(string: rawModel.external_urls["spotify"] ?? "")
-        tracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0.track) }.filter{ $0.previewURL != nil }
+        let rawTracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0.track) }.filter{ $0.previewURL != nil }
+        var set = Set<AudioTrackModel>()
+        // set.insert(_ newMember: Element) -> (inserted: Bool, memberAfterInsert: Element)
+        // newMemberがsetに既に入っている場合はinsertedがfalse、まだ入っていない場合はinsertedにtrueが返される。これによって、tracksの重複がない配列を取得できる。
+        tracks = rawTracks.filter { set.insert($0).inserted }
     }
     
     init(

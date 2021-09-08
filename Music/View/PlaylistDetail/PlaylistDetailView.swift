@@ -11,9 +11,7 @@ import Combine
 struct PlaylistDetailView: View {
     @StateObject private var viewModel = PlaylistDetailViewModel()
     @EnvironmentObject var playerManager: MusicPlayerManager
-    // Listの中の要素(AudioTrackModel)はButtonのアクション・onTapGesture・onLongPressGestureなどで取得できるが、alert modifier、sheet modifierの中で使用してしまうと上手く取得できない(Listの中のランダムな要素を取得してしまう)。
-    // そのため、alertやsheetでListの中の要素を使用する場合は、longPressedTrackのように一旦モデルを保持してから使用するようにした。
-    @State var longPressedTrack: AudioTrackModel?
+    // onTapGesture・onLongPressGestureの場合は、modifierが付与されたViewに対するイベントがトリガーとなる。対してalertやsheetは特定のViewに依存しないmodifierで引数のisPresentedがトリガーとなる。
     @State var showAlertOnLongPress = false
     @State var showPlaylistModelView = false
     let playlistID: String
@@ -58,15 +56,7 @@ struct PlaylistDetailView: View {
                                     titleName: track.name,
                                     subTitleName: track.artist.name
                                 )
-                                .onTapGesture {
-                                    withAnimation {
-                                        playerManager.showMusicPlayer(tracks: [track])
-                                    }
-                                }
-                                .onLongPressGesture(minimumDuration: 1.8, perform: {
-                                    self.longPressedTrack = track
-                                    self.showAlertOnLongPress = true
-                                })
+                                .allowsHitTesting(false)
                                 .background(Color(UIColor.systemBackground))
                                 .onTapGesture {
                                     withAnimation {
@@ -74,19 +64,18 @@ struct PlaylistDetailView: View {
                                     }
                                 }
                                 .onLongPressGesture(minimumDuration: 1.8, perform: {
-                                    self.longPressedTrack = track
+                                    self.viewModel.longPressedTrack = track
                                     self.showAlertOnLongPress = true
                                 })
-                                .alert(isPresented: $showAlertOnLongPress) {
-                                    alertOnLongPress()
-                                }.sheet(isPresented: $showPlaylistModelView) {
-                                    PlaylistModalView(showModalView: $showPlaylistModelView, trackID: longPressedTrack!.id)
-                                }
                             } else {
                                 Image_PlayerButton_View(imageURL: model.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }
+                    }.alert(isPresented: $showAlertOnLongPress) {
+                        alertOnLongPress()
+                    }.sheet(isPresented: $showPlaylistModelView) {
+                        PlaylistModalView(showModalView: $showPlaylistModelView, trackID: viewModel.longPressedTrack!.id)
                     }
                     if playerManager.currentTrack != nil {
                         Spacer(minLength: MusicPlayerView.height)
@@ -102,14 +91,14 @@ struct PlaylistDetailView: View {
     
     private func alertOnLongPress() -> Alert {
         if isOwner {
-            return Alert(title: Text("\(longPressedTrack!.name)をプレイリストから削除しますか？"),
+            return Alert(title: Text("\(viewModel.longPressedTrack!.name)をプレイリストから削除しますか？"),
                          primaryButton: Alert.Button.destructive(Text("はい"), action: {
-                            viewModel.removeTrackFromPlaylist(playlistID: playlistID, trackID: longPressedTrack!.id)
+                            viewModel.removeTrackFromPlaylist(playlistID: playlistID, trackID: viewModel.longPressedTrack!.id)
                          }),
                          secondaryButton: Alert.Button.cancel(Text("いいえ"))
             )
         } else {
-            return Alert(title: Text("\(longPressedTrack!.name)をプレイリストに追加しますか？"),
+            return Alert(title: Text("\(viewModel.longPressedTrack!.name)をプレイリストに追加しますか？"),
                          primaryButton: Alert.Button.default(Text("はい"), action: {
                             self.showPlaylistModelView = true
                          }),
