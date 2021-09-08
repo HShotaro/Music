@@ -54,6 +54,7 @@ struct MusicPlayerView: View {
                             .padding(10)
                             .matchedGeometryEffect(id: "forward_track", in: animation)
                     }.buttonStyle(MusicPlayerButtonStyle())
+                    .disabled(playerManager.isPreparing)
                 }
             }
             .padding(.horizontal)
@@ -78,7 +79,7 @@ struct MusicPlayerView: View {
                             .padding(10)
                     })
                     .frame(width: 50, height: 50)
-                    .disabled(playerManager.isFirstTrack)
+                    .disabled(playerManager.isFirstTrack || playerManager.isPreparing)
                     .buttonStyle(MusicPlayerButtonStyle())
                     Button(action: {
                         playerManager.playButtonSelected()
@@ -100,6 +101,7 @@ struct MusicPlayerView: View {
                     })
                     .frame(width: 50, height: 50)
                     .buttonStyle(MusicPlayerButtonStyle())
+                    .disabled(playerManager.isPreparing)
                 }
                 Button {
                     self.showPlaylistModelView = true

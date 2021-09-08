@@ -36,8 +36,12 @@ class MusicPlayerManager: ObservableObject {
             startPlayback()
             return
         }
+        self.isPreparing = true
         queuePlayer?.advanceToNextItem()
         updateCurrentTrack()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.isPreparing = false
+        }
     }
     
     private func updateCurrentTrack() {
@@ -55,6 +59,7 @@ class MusicPlayerManager: ObservableObject {
     @Published var currentTrack: AudioTrackModel?
     @Published var onPlaying = false
     @Published var expanding = false
+    @Published var isPreparing = false
     
     var audioTracks = [AudioTrackModel]() {
         didSet {
@@ -104,6 +109,7 @@ class MusicPlayerManager: ObservableObject {
             guard let prevUrl = audioTracks[index-1].previewURL,
                   let currentUrl = audioTracks[index].previewURL
             else { return }
+            self.isPreparing = true
             let prevItem = AVPlayerItem(url: prevUrl)
             queuePlayer?.insert(prevItem, after: queuePlayer?.currentItem)
             queuePlayer?.insert(AVPlayerItem(url: currentUrl), after: prevItem)
@@ -111,6 +117,9 @@ class MusicPlayerManager: ObservableObject {
                 queuePlayer?.remove(currentItem)
             }
             self.updateCurrentTrack()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.isPreparing = false
+            }
         }
     }
     
@@ -140,8 +149,12 @@ class MusicPlayerManager: ObservableObject {
             startPlayback()
             return
         }
+        self.isPreparing = true
         queuePlayer?.advanceToNextItem()
         updateCurrentTrack()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            self?.isPreparing = false
+        }
     }
     
     func willSignOut() {
