@@ -29,16 +29,27 @@ class MusicPlayerManager: ObservableObject {
     
     
     @objc private func itemDidPlayToEnd() {
-        if queuePlayer != nil, let currentTrack = currentTrack {
-            guard let index = (audioTracks.firstIndex { $0.id == currentTrack.id}),
-                  index + 1 < audioTracks.count else {
-                startPlayback()
-                return
-            }
-            queuePlayer?.advanceToNextItem()
-            self.currentTrack = audioTracks[index+1]
+        guard queuePlayer != nil else { return }
+        // 最後の曲の場合に呼ばれる
+        guard let index = (audioTracks.firstIndex { $0.id == _currentTrackStrage?.id}),
+              index + 1 < audioTracks.count else {
+            startPlayback()
+            return
         }
-        
+        queuePlayer?.advanceToNextItem()
+        updateCurrentTrack()
+    }
+    
+    private func updateCurrentTrack() {
+        self.currentTrack = _currentTrackStrage
+    }
+    
+    private var _currentTrackStrage: AudioTrackModel? {
+        get {
+            guard let queuePlayer = queuePlayer else { return nil }
+            guard let currentAssetUrl = (queuePlayer.currentItem?.asset as? AVURLAsset)?.url else { return nil }
+            return audioTracks.first { $0.previewURL == currentAssetUrl }
+        }
     }
     
     @Published var currentTrack: AudioTrackModel?
@@ -85,8 +96,8 @@ class MusicPlayerManager: ObservableObject {
     }
     
     func backButtonSelected() {
-        if let currentItem = queuePlayer?.currentItem, !isFirstTrack {
-            guard let index = (audioTracks.firstIndex { $0.id == currentTrack?.id}),
+        if !isFirstTrack {
+            guard let index = (audioTracks.firstIndex { $0.id == _currentTrackStrage?.id}),
                   index-1 >= 0 else {
                 return
             }
@@ -94,10 +105,12 @@ class MusicPlayerManager: ObservableObject {
                   let currentUrl = audioTracks[index].previewURL
             else { return }
             let prevItem = AVPlayerItem(url: prevUrl)
-            queuePlayer?.insert(prevItem, after: currentItem)
+            queuePlayer?.insert(prevItem, after: queuePlayer?.currentItem)
             queuePlayer?.insert(AVPlayerItem(url: currentUrl), after: prevItem)
-            queuePlayer?.remove(currentItem)
-            self.currentTrack = audioTracks[index-1]
+            if let currentItem = queuePlayer?.currentItem {
+                queuePlayer?.remove(currentItem)
+            }
+            self.updateCurrentTrack()
         }
     }
     
@@ -120,22 +133,22 @@ class MusicPlayerManager: ObservableObject {
     }
     
     func nextButtonSelected() {
-        if queuePlayer != nil, let currentTrack = currentTrack {
-            guard let index = (audioTracks.firstIndex { $0.id == currentTrack.id}),
-                  index + 1 < audioTracks.count else {
-                startPlayback()
-                return
-            }
-            queuePlayer?.advanceToNextItem()
-            self.currentTrack = audioTracks[index+1]
+        guard queuePlayer != nil else { return }
+        // 最後の曲の場合に呼ばれる
+        guard let index = (audioTracks.firstIndex { $0.id == _currentTrackStrage?.id}),
+              index + 1 < audioTracks.count else {
+            startPlayback()
+            return
         }
+        queuePlayer?.advanceToNextItem()
+        updateCurrentTrack()
     }
     
     func willSignOut() {
+        queuePlayer = nil
         currentTrack = nil
         onPlaying = false
         expanding = false
-        queuePlayer = nil
         audioTracks = []
     }
 }
