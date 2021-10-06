@@ -27,6 +27,7 @@ struct Image_PlayerButton_View: View {
                     .background(Color.green)
                     .cornerRadius(30)
             }
+            .cornerRadius(30)
             .padding([.bottom, .trailing])
             .padding(.top, 90.0)
         }

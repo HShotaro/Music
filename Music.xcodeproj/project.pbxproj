@@ -492,14 +492,14 @@
 			path = Library;
 			sourceTree = "<group>";
 		};
-		96751E6B26E29840006A1E02 /* PlaylistModel */ = {
+		96751E6B26E29840006A1E02 /* PlaylistModal */ = {
 			isa = PBXGroup;
 			children = (
 				96751E6926E27AA3006A1E02 /* PlaylistModalView.swift */,
 				96751E6C26E2985A006A1E02 /* PlaylistModalViewModel.swift */,
 				96751E6E26E2986C006A1E02 /* PlaylistModalRepository.swift */,
 			);
-			path = PlaylistModel;
+			path = PlaylistModal;
 			sourceTree = "<group>";
 		};
 		96758A5F26DB2A820007BE7D /* MusicPlayer */ = {
@@ -557,7 +557,7 @@
 				96751E4E26E21271006A1E02 /* Mypage */,
 				960A94E826E10AE000BCC683 /* AlbumDetail */,
 				96DB207726D614280004FA9A /* PlaylistDetail */,
-				96751E6B26E29840006A1E02 /* PlaylistModel */,
+				96751E6B26E29840006A1E02 /* PlaylistModal */,
 				965FE1FA26E15B44008FF5E6 /* ArtistDetailView */,
 				96758A5F26DB2A820007BE7D /* MusicPlayer */,
 				96DB206226D53FFC0004FA9A /* Other */,

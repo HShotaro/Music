@@ -67,7 +67,7 @@ struct AlbumDetailView: View {
                     .padding(.top, 8)
                 }
             case let .loaded(model), let .addedAlbumToLibrary(model):
-                Text("").hidden()
+                EmptyView()
                     .alert(isPresented: $showSucceedToAddAlbumAlert, content: {
                         Alert(title: Text("ライブラリに\(album.name)を追加しました"), dismissButton: Alert.Button.default(Text("閉じる")))
                     })
@@ -84,7 +84,7 @@ struct AlbumDetailView: View {
                                     subTitleName: track.artist.name
                                 )
                                 .allowsHitTesting(false)
-                                .background(Color(UIColor.systemBackground))
+                                .background(Color(UIColor.secondarySystemGroupedBackground))
                                 .onTapGesture {
                                     withAnimation {
                                         playerManager.showMusicPlayer(tracks: [track])

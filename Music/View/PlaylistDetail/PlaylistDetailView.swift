@@ -57,7 +57,7 @@ struct PlaylistDetailView: View {
                                     subTitleName: track.artist.name
                                 )
                                 .allowsHitTesting(false)
-                                .background(Color(UIColor.systemBackground))
+                                .background(Color(UIColor.secondarySystemGroupedBackground))
                                 .onTapGesture {
                                     withAnimation {
                                         playerManager.showMusicPlayer(tracks: [track])
