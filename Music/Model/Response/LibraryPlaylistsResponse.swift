@@ -8,14 +8,14 @@
 import Foundation
 
 struct LibraryPlaylistsResponse: Codable {
-    let items: [Playlist]
+    let items: [PlayListModel]
 }
 
 struct LibraryPlaylistsModel: Equatable {
     let playlists: [PlayListModel]
     
     init(rawModel: LibraryPlaylistsResponse) {
-        playlists = rawModel.items.map { PlayListModel(rawModel: $0) }
+        playlists = rawModel.items
     }
     
     init(

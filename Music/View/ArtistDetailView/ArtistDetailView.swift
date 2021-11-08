@@ -66,7 +66,7 @@ struct ArtistDetailView: View {
                                     self.showAlertOnLongPress = true
                                 })
                             } else {
-                                Image_PlayerButton_View(imageURL: model.tracks.first?.album.imageURL, tracks: model.tracks)
+                                Image_PlayerButton_View(imageURL: model.tracks.first?.album?.imageURL, tracks: model.tracks)
                                     .buttonStyle(StaticBackgroundButtonStyle())
                             }
                         }

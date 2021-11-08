@@ -8,71 +8,46 @@
 import Foundation
 
 struct AlbumsResponse: Codable {
-    let items: [Album]
+    let items: [AlbumModel]
 }
 
-struct Album: Codable {
-    let album_type: String?
-    let available_markets: [String]?
+struct AlbumModel : Codable, Hashable {
+    let type: String?
+    private let availableMarkets: [String]?
     let id: String
-    var images: [APIImage]?
+    private let images: [APIImage]?
+    var imageURL: URL? {
+        return URL(string: images?.first?.url ?? "")
+    }
     let name: String
-    let release_date: String?
-    let total_tracks: Int?
-    let artists: [Artist]?
-}
-
-struct AlbumModel : Hashable {
-    let id: String
-    let name: String
-    let type: String
-    let releaseDate: String
-    let imageURL: URL?
-    let totalTracks: Int
-    let artist: ArtistModel
-    
-    init(rawModel: Album) {
-        id = rawModel.id
-        name = rawModel.name
-        type = rawModel.album_type ?? ""
-        releaseDate = String.formattedDate(string: rawModel.release_date ?? "")
-        imageURL = URL(string: rawModel.images?.first?.url ?? "")
-        totalTracks = rawModel.total_tracks ?? 0
-        if let rawArtist = rawModel.artists?.first {
-            artist = ArtistModel(rawModel: rawArtist)
+    private let release_date: String?
+    var releaseDate: String {
+        return String.formattedDate(string: release_date ?? "")
+    }
+    let totalTracks: Int?
+    private let artists: [ArtistModel]?
+    var artist: ArtistModel {
+        if let artist = artists?.first {
+            return artist
         } else {
-            artist = ArtistModel.mock(Int(id) ?? 0)
+            return ArtistModel.mock(Int(id) ?? 0)
         }
     }
     
-    init(
-        id: String,
-        name: String,
-        type: String,
-        releaseDate: String,
-        imageURL: URL?,
-        totalTracks: Int,
-        artist: ArtistModel
-    ) {
-        self.id = id
-        self.name = name
-        self.type = type
-        self.releaseDate = releaseDate
-        self.imageURL = imageURL
-        self.totalTracks = totalTracks
-        self.artist = artist
+    private enum CodingKeys: String, CodingKey {
+        case type = "album_type"
+        case availableMarkets = "available_markets"
+        case id
+        case images
+        case name
+        case release_date = "release_date"
+        case totalTracks = "total_tracks"
+        case artists
     }
     
     static func mock(_ id: Int) -> AlbumModel {
         return AlbumModel(
-                id: "\(id)",
-                name: "Album Name" + "\(id)",
-                type: "Album Type",
-                releaseDate: "2021/8/29",
-                imageURL: URL(string: "https://via.placeholder.com/200x200"),
-                totalTracks: id + 3,
-            artist: ArtistModel.mock(id)
-        )
+            type: "Album Type", availableMarkets: nil, id: "\(id)", images: [APIImage(url: "https://via.placeholder.com/200x200")], name: "Album Name" + "\(id)", release_date: "2021/8/29", totalTracks: id + 3, artists: [ArtistModel.mock(id)])
     }
     
     static func == (lhs: AlbumModel, rhs: AlbumModel) -> Bool {

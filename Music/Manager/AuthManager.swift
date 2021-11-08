@@ -169,11 +169,11 @@ class AuthManager: ObservableObject {
     }
     
     private func cacheToken(result: AuthResponse) {
-        UserDefaults.standard.setValue(result.access_token, forKey: "access_token")
-        if let refresh_token = result.refresh_token {
+        UserDefaults.standard.setValue(result.accessToken, forKey: "access_token")
+        if let refresh_token = result.refreshToken {
             UserDefaults.standard.setValue(refresh_token, forKey: "refresh_token")
         }
-        UserDefaults.standard.setValue(Date().addingTimeInterval(_:TimeInterval(result.expires_in)), forKey: "expirationDate")
+        UserDefaults.standard.setValue(Date().addingTimeInterval(_:TimeInterval(result.expiresIn)), forKey: "expirationDate")
     }
     
     public func signOut() {

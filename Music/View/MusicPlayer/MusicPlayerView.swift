@@ -122,7 +122,7 @@ struct MusicPlayerView: View {
         }
         .onChange(of: playerManager.currentTrack, perform: { _ in
             DispatchQueue.global().async {
-                if let url = playerManager.currentTrack?.album.imageURL {
+                if let url = playerManager.currentTrack?.album?.imageURL {
                     downloadImageAsync(url: url) { image in
                         self.image = image ?? UIImage()
                     }

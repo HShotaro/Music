@@ -12,15 +12,20 @@ struct LibraryAlbumResponse: Codable {
 }
 
 struct SavedAlbum: Codable {
-    let album: Album
-    let added_at: String?
+    let album: AlbumModel
+    let addedAt: String?
+    
+    private enum CodingKeys: String, CodingKey {
+        case album
+        case addedAt = "added_at"
+    }
 }
 
 struct LibraryAlbumlistModel: Equatable {
     let albumList: [AlbumModel]
     
     init(rawModel: LibraryAlbumResponse) {
-        albumList = rawModel.items.map { AlbumModel(rawModel: $0.album) }
+        albumList = rawModel.items.map { $0.album }
     }
     
     init(

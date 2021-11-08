@@ -8,14 +8,14 @@
 import Foundation
 
 struct ArtistTopTracksDataResponse: Codable {
-    let tracks: [AudioTrack]
+    let tracks: [AudioTrackModel]
 }
 
 struct ArtistDetailModel : Equatable {
     let tracks: [AudioTrackModel]
     
     init(rawModel: ArtistTopTracksDataResponse) {
-        tracks = rawModel.tracks.map { AudioTrackModel(rawModel: $0) }.filter{ $0.previewURL != nil }
+        tracks = rawModel.tracks.filter{ $0.previewURL != nil }
     }
     
     init(

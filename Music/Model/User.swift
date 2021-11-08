@@ -8,19 +8,36 @@
 import Foundation
 
 struct User: Codable {
-    let display_name: String
-    let external_urls: [String: String]
+    let displayName: String
+    let externalUrls: [String: String]
     let id: String
+    
+    private enum CodingKeys: String, CodingKey {
+        case displayName = "display_name"
+        case externalUrls = "external_urls"
+        case id
+    }
 }
 
 
 struct UserProfile: Codable {
     let country: String;
-    let display_name: String
+    let displayName: String
     let email: String
-    let explicit_content: [String: Bool]
-    let external_urls: [String: String]
+    let explicitContent: [String: Bool]
+    let externalUrls: [String: String]
     let id: String
     let product: String
     let images: [APIImage]
+    
+    private enum CodingKeys: String, CodingKey {
+        case country
+        case displayName = "display_name"
+        case email
+        case explicitContent = "explicit_content"
+        case externalUrls = "external_urls"
+        case id
+        case product
+        case images
+    }
 }

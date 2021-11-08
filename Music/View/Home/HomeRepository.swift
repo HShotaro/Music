@@ -41,7 +41,7 @@ fileprivate extension APIManager {
                     }
                     do {
                         let result = try JSONDecoder().decode(NewReleasesResponse.self, from: element.data)
-                        let model = result.albums.items.map { AlbumModel(rawModel: $0) }.filter { $0.imageURL != nil }
+                        let model = result.albums.items.filter { $0.imageURL != nil }
                         return model
                     }
                     catch {
@@ -69,7 +69,7 @@ fileprivate extension APIManager {
                     }
                     do {
                         let result = try JSONDecoder().decode(FeaturedPlaylistsResponse.self, from: element.data)
-                        let model = result.playlists.items.map { PlayListModel(rawModel: $0) }
+                        let model = result.playlists.items
                         return model
                     }
                     catch {

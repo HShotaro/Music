@@ -37,19 +37,19 @@ enum SearchResultType: Equatable {
 }
 
 struct SearchAlbumResponse: Codable {
-    let items: [Album]
+    let items: [AlbumModel]
 }
 
 struct SearchArtistsResponse: Codable {
-    let items: [Artist]
+    let items: [ArtistModel]
 }
 
 struct SearchPlaylistsResponse: Codable {
-    let items: [Playlist]
+    let items: [PlayListModel]
 }
 
 struct SearchTracksResponse: Codable {
-    let items: [AudioTrack]
+    let items: [AudioTrackModel]
 }
 
 struct SearchResultsModel : Equatable {
@@ -59,10 +59,10 @@ struct SearchResultsModel : Equatable {
     let tracks: [AudioTrackModel]
     
     init(rawModel: SearchResultsResponse) {
-        albums = rawModel.albums.items.map { AlbumModel(rawModel: $0) }
-        artists = rawModel.artists.items.map { ArtistModel(rawModel: $0) }
-        playlists = rawModel.playlists.items.map { PlayListModel(rawModel: $0) }
-        tracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0) }.filter{ $0.previewURL != nil }
+        albums = rawModel.albums.items
+        artists = rawModel.artists.items
+        playlists = rawModel.playlists.items
+        tracks = rawModel.tracks.items.filter{ $0.previewURL != nil }
     }
     
     init(

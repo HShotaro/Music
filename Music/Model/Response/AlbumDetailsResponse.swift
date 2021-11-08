@@ -8,19 +8,31 @@
 import Foundation
 
 struct AlbumDetailResponse: Codable {
-    let album_type: String
-    let artists: [Artist]
-    let available_markets: [String]
-    let external_urls: [String: String]
+    let albumType: String
+    let artists: [ArtistModel]
+    let availableMarkets: [String]
+    let externalUrls: [String: String]
     let id: String
     let images: [APIImage]
     let label: String
     let name: String
     let tracks: TracksResponse
+    
+    private enum CodingKeys: String, CodingKey {
+        case albumType = "album_type"
+        case artists
+        case availableMarkets = "available_markets"
+        case externalUrls = "external_urls"
+        case id
+        case images
+        case label
+        case name
+        case tracks
+    }
 }
 
 struct TracksResponse: Codable {
-    let items: [AudioTrack]
+    let items: [AudioTrackModel]
 }
 
 struct AlbumDetailModel : Hashable, Equatable {
@@ -35,13 +47,13 @@ struct AlbumDetailModel : Hashable, Equatable {
         id = rawModel.id
         name = rawModel.name
         imageURL = URL(string: rawModel.images.first?.url ?? "")
-        shareURL = URL(string: rawModel.external_urls["spotify"] ?? "")
-        if let rawArtist = rawModel.artists.first {
-            artist = ArtistModel(rawModel: rawArtist)
+        shareURL = URL(string: rawModel.externalUrls["spotify"] ?? "")
+        if let artist = rawModel.artists.first {
+            self.artist = artist
         } else {
             artist = ArtistModel.mock(Int(id) ?? 0)
         }
-        tracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0) }.filter{ $0.previewURL != nil }
+        tracks = rawModel.tracks.items.filter{ $0.previewURL != nil }
     }
     
     init(

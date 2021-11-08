@@ -8,45 +8,34 @@
 import Foundation
 
 struct PlaylistResponse: Codable {
-    let items: [Playlist]
+    let items: [PlayListModel]
 }
 
-struct Playlist: Codable {
-    let description: String?
-    let external_urls: [String: String]?
+struct PlayListModel: Codable, Hashable {
+    private let description: String?
+    private let externalUrls: [String: String]?
     let id: String
-    let images: [APIImage]?
+    private let images: [APIImage]?
     let name: String
     let owner: User?
-}
-
-struct PlayListModel: Hashable {
-    let id: String
-    let name: String
-    let creatorName: String
-    let imageURL: URL?
-    
-    init(rawModel: Playlist) {
-        id = rawModel.id
-        name = rawModel.name
-        creatorName = rawModel.owner?.display_name ?? ""
-        imageURL = URL(string: rawModel.images?.first?.url ?? "")
+    var creatorName: String {
+        return owner?.displayName ?? ""
+    }
+    var imageURL: URL? {
+        return URL(string: images?.first?.url ?? "")
     }
     
-    init(id: String, name: String, creatorName: String, imageURL: URL?) {
-        self.id = id
-        self.name = name
-        self.creatorName = creatorName
-        self.imageURL = imageURL
+    private enum CodingKeys: String, CodingKey {
+        case description
+        case externalUrls = "external_urls"
+        case id
+        case images
+        case name
+        case owner
     }
     
     static func mock(_ id: Int) -> PlayListModel {
-        return PlayListModel(
-            id: "\(id)",
-            name: "Playlist Name" + "\(id)",
-            creatorName: "Creator Name",
-            imageURL: URL(string: "https://via.placeholder.com/200x200")
-        )
+        PlayListModel(description: nil, externalUrls: nil, id: "\(id)", images: [APIImage(url: "https://via.placeholder.com/200x200")], name: "Playlist Name" + "\(id)", owner: User(displayName: "Creator Name", externalUrls: [:], id: ""))
     }
     
     static func == (lhs: PlayListModel, rhs: PlayListModel) -> Bool {

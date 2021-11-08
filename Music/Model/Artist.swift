@@ -7,45 +7,29 @@
 
 import Foundation
 
-struct Artist: Codable {
+struct ArtistModel: Codable, Hashable {
     let id: String
     let name: String
     let type: String?
-    let external_urls: [String: String]?
-    let images: [APIImage]?
-}
-
-struct ArtistModel : Hashable {
-    let id: String
-    let name: String
-    let type: String
-    let shareURL: URL?
-    let imageURL: URL?
-    
-    init(rawModel: Artist) {
-        id = rawModel.id
-        name = rawModel.name
-        type = rawModel.type ?? ""
-        shareURL = URL(string: rawModel.external_urls?["spotify"] ?? "")
-        imageURL = URL(string: rawModel.images?.first?.url ?? "")
+    private let externalUrls: [String: String]?
+    private let images: [APIImage]?
+    var shareURL: URL? {
+        return URL(string: externalUrls?["spotify"] ?? "")
+    }
+    var imageURL: URL? {
+        return URL(string: images?.first?.url ?? "")
     }
     
-    init(id: String, name: String, type: String, shareURL: URL?, imageURL: URL?) {
-        self.id = id
-        self.name = name
-        self.type = type
-        self.shareURL = shareURL
-        self.imageURL = imageURL
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case type
+        case externalUrls = "external_urls"
+        case images
     }
     
     static func mock(_ id: Int) -> ArtistModel {
-        return ArtistModel(
-            id: "\(id)",
-            name: "Artist Name" + "\(id)",
-            type: "Artist Type",
-            shareURL: URL(string: "https://via.placeholder.com/200x200"),
-            imageURL: URL(string: "https://via.placeholder.com/200x200")
-        )
+        return ArtistModel(id: "\(id)", name: "Artist Name" + "\(id)", type: "Artist Type", externalUrls: ["spotify":"https://via.placeholder.com/200x200"], images: [APIImage(url: "https://via.placeholder.com/200x200")])
     }
     
     static func == (lhs: ArtistModel, rhs: ArtistModel) -> Bool {

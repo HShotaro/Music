@@ -7,68 +7,56 @@
 
 import Foundation
 
-struct AudioTrack: Codable, Equatable {
-    var album: Album?
-    let artists: [Artist]?
-    let available_markets: [String]?
-    let disc_number: Int?
-    let duration_ms: Int?
-    let explicit: Bool?
-    let external_urls: [String: String]?
+struct AudioTrackModel : Codable, Equatable, Hashable, Identifiable {
     let id: String
     let name: String
-    let popularity: Int?
-    let preview_url: String?
-    
-    static func == (lhs: AudioTrack, rhs: AudioTrack) -> Bool {
-        return lhs.id == rhs.id
+    private let artists: [ArtistModel]?
+    var artist: ArtistModel {
+        if let artist = artists?.first {
+            return artist
+        } else {
+            return ArtistModel.mock(Int(id) ?? 0)
+        }
     }
-}
-
-struct AudioTrackModel : Hashable, Identifiable {
-    let id: String
-    let name: String
-    let artist: ArtistModel
-    let album: AlbumModel
-    let previewURL: URL?
-    
-    init(rawModel: AudioTrack) {
-        id = rawModel.id
-        name = rawModel.name
-        if let rawArtist = rawModel.artists?.first {
-            artist = ArtistModel(rawModel: rawArtist)
-        } else {
-            artist = ArtistModel.mock(Int(id) ?? 0)
-        }
-        if let rawAlbum = rawModel.album {
-            album = AlbumModel(rawModel: rawAlbum)
-        } else {
-            album = AlbumModel.mock(Int(id) ?? 0)
-        }
-        previewURL = URL(string: rawModel.preview_url ?? "")
+    let album: AlbumModel?
+    let availableMarkets: [String]?
+    private let discNumber: Int?
+    private let durationMs: Int?
+    private let explicit: Bool?
+    private let popularity: Int?
+    private let externalUrls: [String: String]?
+    private let preview_url: String?
+    var previewURL: URL? {
+        return URL(string: preview_url ?? "")
     }
     
-    init(
-        id: String,
-        name: String,
-        artist: ArtistModel,
-        album: AlbumModel,
-        previewURL: URL?
-    ) {
-        self.id = id
-        self.name = name
-        self.artist = artist
-        self.album = album
-        self.previewURL = previewURL
+    private enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case album
+        case artists
+        case availableMarkets = "available_markets"
+        case externalUrls = "external_urls"
+        case discNumber = "disc_number"
+        case durationMs = "duration_ms"
+        case explicit
+        case popularity
+        case preview_url
     }
     
     static func mock(_ id: Int) -> AudioTrackModel {
         return AudioTrackModel(
-                id: "\(id)",
-                name: "AudioTrack Name" + "\(id)",
-                artist: ArtistModel.mock(id),
-                album: AlbumModel.mock(id),
-                previewURL: URL(string: "https://via.placeholder.com/200x200")
+            id: "\(id)",
+            name: "AudioTrack Name" + "\(id)",
+            artists: [ArtistModel.mock(id)],
+            album: AlbumModel.mock(id),
+            availableMarkets: nil,
+            discNumber: nil,
+            durationMs: nil,
+            explicit: nil,
+            popularity: nil,
+            externalUrls: nil,
+            preview_url: "https://via.placeholder.com/200x200"
         )
     }
     
@@ -84,11 +72,17 @@ struct AudioTrackModel : Hashable, Identifiable {
 extension AudioTrackModel {
     func exchangeAlbum(album: AlbumModel) -> AudioTrackModel {
         return AudioTrackModel(
-            id: self.id,
-            name: self.name,
-            artist: self.artist,
+            id: id,
+            name: name,
+            artists: [artist],
             album: album,
-            previewURL: self.previewURL
+            availableMarkets: availableMarkets,
+            discNumber: discNumber,
+            durationMs: durationMs,
+            explicit: explicit,
+            popularity: popularity,
+            externalUrls: externalUrls,
+            preview_url: preview_url
         )
     }
 }

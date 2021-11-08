@@ -9,11 +9,20 @@ import Foundation
 
 struct PlaylistDetailsResponse: Codable {
     let description: String
-    let external_urls: [String: String]
+    let externalUrls: [String: String]
     let id: String
     let images: [APIImage]
     let name: String
     let tracks: PlayListTracksResponse
+    
+    private enum CodingKeys: String, CodingKey {
+        case description
+        case externalUrls = "external_urls"
+        case id
+        case images
+        case name
+        case tracks
+    }
 }
 
 struct PlayListTracksResponse: Codable {
@@ -21,7 +30,7 @@ struct PlayListTracksResponse: Codable {
 }
 
 struct PlaylistItem: Codable {
-    let track: AudioTrack
+    let track: AudioTrackModel
 }
 
 struct PlaylistDetailModel : Hashable, Equatable {
@@ -37,8 +46,14 @@ struct PlaylistDetailModel : Hashable, Equatable {
         name = rawModel.name
         imageURL = URL(string: rawModel.images.first?.url ?? "")
         description = rawModel.description
-        shareURL = URL(string: rawModel.external_urls["spotify"] ?? "")
-        let rawTracks = rawModel.tracks.items.map { AudioTrackModel(rawModel: $0.track) }.filter{ $0.previewURL != nil }
+        shareURL = URL(string: rawModel.externalUrls["spotify"] ?? "")
+        let rawTracks = rawModel.tracks.items.compactMap { item -> AudioTrackModel? in
+            if item.track.previewURL != nil {
+                return item.track
+            } else {
+                return nil
+            }
+        }
         var set = Set<AudioTrackModel>()
         // set.insert(_ newMember: Element) -> (inserted: Bool, memberAfterInsert: Element)
         // newMemberがsetに既に入っている場合はinsertedがfalse、まだ入っていない場合はinsertedにtrueが返される。これによって、tracksの重複がない配列を取得できる。
