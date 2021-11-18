@@ -111,7 +111,8 @@ struct HomeView: View {
                 Image(systemName: "gear")
             }))
             .navigationTitle("Home")
-        }.onAppear {
+        }.navigationViewStyle(StackNavigationViewStyle())
+        .onAppear {
             viewModel.onAppear()
         }
     }

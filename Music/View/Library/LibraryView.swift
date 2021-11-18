@@ -64,7 +64,7 @@ struct LibraryView: View {
                 .navigationBarHidden(true)
                 Spacer(minLength: playerManager.currentTrack != nil ? MusicPlayerView.height : 0)
             }
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
