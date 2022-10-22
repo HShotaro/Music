@@ -10,6 +10,7 @@ import SwiftUI
 struct PlaylistModalView: View {
     @StateObject var viewModel = PlaylistModalViewModel()
     @Binding var showModalView: Bool
+    @State var path: [SMPageDestination] = []
     enum Stateful: Equatable {
         case idle
         case loading
@@ -36,7 +37,7 @@ struct PlaylistModalView: View {
     }
     let trackID: String
     var body: some View {
-        SMNavigationView(navigationTitle: "追加するプレイリストを選んでください") {
+        SMNavigationView(navigationTitle: "追加するプレイリストを選んでください", path: $path) {
             VStack {
                 switch viewModel.model {
                 case .idle:

@@ -10,15 +10,14 @@ import Combine
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
-    @State var destinationView: AnyView? = nil
-    @State var isPushActive = false
+    @State var path: [SMPageDestination] = []
     
     @Binding var didSelectHomeTabTwice: Bool
     static let topID = "HomeView_TopID"
     
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
-        SMNavigationView(navigationTitle: "Home") {
+        SMNavigationView(navigationTitle: "Home", path: $path) {
             VStack {
                 switch viewModel.model {
                 case .idle:
@@ -45,68 +44,93 @@ struct HomeView: View {
                         .padding(.top, 8)
                     }
                 case let .loaded(model):
-                    NavigationLink(destination: destinationView, isActive: $isPushActive) {
-                        EmptyView()
-                    }.hidden()
-                    ScrollViewReader { proxy in
-                        ScrollView(.vertical) {
-                            Section(header: LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground)).id(HomeView.topID)) {
-                                ScrollView(.horizontal) {
-                                    HStack(spacing: 10) {
-                                        ForEach(model.albums, id: \.self.id) { album in
-                                            Button {
-                                                destinationView = AnyView(AlbumDetailView(album: album))
-                                                isPushActive = true
-                                            } label: {
-                                                GridItem_Title_SubTitle_Image_View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
-                                            }.frame(width: 120, height: 180)
+                    GeometryReader { geometry in
+                        ScrollViewReader { proxy in
+                            ScrollView(.vertical) {
+                                Section(header: LazyPinnedView(title: "NewReleasedAlbums", color: Color(.systemBackground)).id(HomeView.topID)) {
+                                    ScrollView(.horizontal) {
+                                        HStack(spacing: 10) {
+                                            ForEach(model.albums, id: \.self.id) { album in
+                                                if #available(iOS 16.0, *) {
+                                                    Button {
+                                                        path.append(.albumDetail(album: album))
+                                                    } label: {
+                                                        GridItem_Title_SubTitle_Image_View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
+                                                    }.frame(width: 120, height: 180)
+                                                } else {
+                                                    NavigationLink {
+                                                        AlbumDetailView(album: album)
+                                                    } label: {
+                                                        GridItem_Title_SubTitle_Image_View(titleName: album.name, subTitleName: album.artist.name, imageURL: album.imageURL)
+                                                            .frame(width: 120, height: 180)
+                                                    }
+                                                }
+                                            }
                                         }
-                                    }
-                                }.frame(width: UIScreen.main.bounds.width, height: 180)
-                            }
-                            LazyVGrid(columns: HomeView.columns, spacing: 10) {
-                                Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
-                                    ForEach(model.playlists, id: \.self.id) { playlist in
-                                        Button {
-                                            destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id, isOwner: false))
-                                            isPushActive = true
-                                        } label: {
-                                            GridItem_Title_SubTitle_Image_View(
-                                                titleName: playlist.name,
-                                                subTitleName: playlist.creatorName,
-                                                imageURL: playlist.imageURL
-                                            )
-                                        }
-                                    }
+                                    }.frame(width: geometry.size.width, height: 180)
                                 }
-                            }.font(.largeTitle)
-                                .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
-                        }.onChange(of: didSelectHomeTabTwice, perform: { scrollTopTop in
-                            if scrollTopTop {
-                                if isPushActive {
-                                    withAnimation {
-                                        self.isPushActive = false
+                                LazyVGrid(columns: HomeView.columns, spacing: 10) {
+                                    Section(header: LazyPinnedView(title: "FeaturedPlaylist", color: Color(.systemBackground))) {
+                                        ForEach(model.playlists, id: \.self.id) { playlist in
+                                            if #available(iOS 16.0, *) {
+                                                Button {
+                                                    path.append(.playlistDetail(playlistID: playlist.id, isOwner: false))
+                                                } label: {
+                                                    GridItem_Title_SubTitle_Image_View(
+                                                        titleName: playlist.name,
+                                                        subTitleName: playlist.creatorName,
+                                                        imageURL: playlist.imageURL
+                                                    )
+                                                }
+                                            } else {
+                                                NavigationLink {
+                                                    PlaylistDetailView(playlistID: playlist.id, isOwner: false)
+                                                } label: {
+                                                    GridItem_Title_SubTitle_Image_View(
+                                                        titleName: playlist.name,
+                                                        subTitleName: playlist.creatorName,
+                                                        imageURL: playlist.imageURL
+                                                    )
+                                                }
+                                            }
+                                        }
                                     }
-                                    proxy.scrollTo(HomeView.topID)
-                                } else {
-                                    withAnimation {
+                                }.font(.largeTitle)
+                                    .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
+                            }.onChange(of: didSelectHomeTabTwice, perform: { scrollTopTop in
+                                if scrollTopTop {
+                                    if !path.isEmpty {
+                                        withAnimation {
+                                            path.removeAll()
+                                        }
                                         proxy.scrollTo(HomeView.topID)
+                                    } else {
+                                        withAnimation {
+                                            proxy.scrollTo(HomeView.topID)
+                                        }
                                     }
+                                    self.didSelectHomeTabTwice = false
                                 }
-                                self.didSelectHomeTabTwice = false
-                            }
-                        })
+                            })
+                        }
                     }
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing){
-                    Button(action: {
-                        destinationView = AnyView(MypageView())
-                        isPushActive = true
-                    }, label: {
-                        Image(systemName: "gear")
-                    })
+                    if #available(iOS 16.0, *) {
+                        Button(action: {
+                            path.append(.mypage)
+                        }, label: {
+                            Image(systemName: "gear")
+                        })
+                    } else {
+                        NavigationLink {
+                            MypageView()
+                        } label: {
+                            Image(systemName: "gear")
+                        }
+                    }
                 }
             }
         }

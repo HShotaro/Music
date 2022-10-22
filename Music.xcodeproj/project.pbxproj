@@ -88,6 +88,7 @@
 		96DB207926D6143A0004FA9A /* PlaylistDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB207826D6143A0004FA9A /* PlaylistDetailView.swift */; };
 		96DB207B26D61F6A0004FA9A /* HomeRepository+mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB207A26D61F6A0004FA9A /* HomeRepository+mock.swift */; };
 		CBD82EAA29038AB6005BB230 /* SMNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD82EA929038AB6005BB230 /* SMNavigationView.swift */; };
+		CBD82EAC2903BB62005BB230 /* SMPageDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD82EAB2903BB62005BB230 /* SMPageDestination.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,6 +196,7 @@
 		96DB207826D6143A0004FA9A /* PlaylistDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailView.swift; sourceTree = "<group>"; };
 		96DB207A26D61F6A0004FA9A /* HomeRepository+mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeRepository+mock.swift"; sourceTree = "<group>"; };
 		CBD82EA929038AB6005BB230 /* SMNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMNavigationView.swift; sourceTree = "<group>"; };
+		CBD82EAB2903BB62005BB230 /* SMPageDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMPageDestination.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -550,6 +552,7 @@
 				96DB206926D541410004FA9A /* Playlist.swift */,
 				96DB206B26D541620004FA9A /* APIImage.swift */,
 				96DB206D26D5416C0004FA9A /* User.swift */,
+				CBD82EAB2903BB62005BB230 /* SMPageDestination.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -839,6 +842,7 @@
 				96751E5426E22269006A1E02 /* LibraryPlaylistsViewModel.swift in Sources */,
 				96DB206626D5405B0004FA9A /* HomeRepository.swift in Sources */,
 				96DB206426D540410004FA9A /* HomeViewModel.swift in Sources */,
+				CBD82EAC2903BB62005BB230 /* SMPageDestination.swift in Sources */,
 				965FE1FC26E15BAC008FF5E6 /* ArtistDetailView.swift in Sources */,
 				9671872026DA9D9700EFFC2F /* PlaylistDetailViewModel.swift in Sources */,
 				96751E5C26E22337006A1E02 /* LibraryPlaylistsResponse.swift in Sources */,

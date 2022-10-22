@@ -10,8 +10,7 @@ import SwiftUI
 struct LibraryPlaylistsView: View {
     @StateObject private var viewModel = LibraryPlaylistsViewModel()
     @Binding var currentTabIndex: Int
-    @Binding var destinationView: AnyView?
-    @Binding var isPushActive: Bool
+    @Binding var path: [SMPageDestination]
     @Binding var didSelectLibraryTabTwice: Bool
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
@@ -45,22 +44,32 @@ struct LibraryPlaylistsView: View {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: LibraryPlaylistsView.columns, spacing: 10) {
                                 ForEach(model.playlists, id: \.self.id) { playlist in
-                                    GridItem_Title_SubTitle_Image_View(
-                                        titleName: playlist.name,
-                                        subTitleName: playlist.creatorName,
-                                        imageURL: playlist.imageURL
-                                    ).onTapGesture {
-                                        destinationView = AnyView(PlaylistDetailView(playlistID: playlist.id, isOwner: true))
-                                        isPushActive = true
-                                    }.id(playlist.id)
-                                    
+                                    if #available(iOS 16.0, *) {
+                                        GridItem_Title_SubTitle_Image_View(
+                                            titleName: playlist.name,
+                                            subTitleName: playlist.creatorName,
+                                            imageURL: playlist.imageURL
+                                        ).onTapGesture {
+                                            path.append(.playlistDetail(playlistID: playlist.id, isOwner: true))
+                                        }.id(playlist.id)
+                                    } else {
+                                        NavigationLink {
+                                            PlaylistDetailView(playlistID: playlist.id, isOwner: true)
+                                        } label: {
+                                            GridItem_Title_SubTitle_Image_View(
+                                                titleName: playlist.name,
+                                                subTitleName: playlist.creatorName,
+                                                imageURL: playlist.imageURL
+                                            ).id(playlist.id)
+                                        }
+                                    }
                                 }
                         }.padding(.all, 15)
                     }.onChange(of: didSelectLibraryTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
-                            if isPushActive {
+                            if !path.isEmpty {
                                 withAnimation {
-                                    self.isPushActive = false
+                                    path.removeAll()
                                 }
                                 proxy.scrollTo(model.playlists.first?.id)
                             } else {
@@ -83,11 +92,10 @@ struct LibraryPlaylistsView: View {
 }
 
 struct LibraryPlaylistsView_Previews: PreviewProvider {
-    @State static var anyView: AnyView? = nil
-    @State static var isPushActive = false
+    @State static var path: [SMPageDestination] = []
     @State static var currentTabIndex = 0
     @State static var scrollTopTop = false
     static var previews: some View {
-        LibraryPlaylistsView(currentTabIndex: $currentTabIndex, destinationView: $anyView, isPushActive: $isPushActive, didSelectLibraryTabTwice: $scrollTopTop)
+        LibraryPlaylistsView(currentTabIndex: $currentTabIndex, path: $path, didSelectLibraryTabTwice: $scrollTopTop)
     }
 }

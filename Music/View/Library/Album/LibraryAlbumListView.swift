@@ -11,8 +11,7 @@ struct LibraryAlbumListView: View {
     @StateObject private var viewModel = LibraryAlbumListViewModel()
     @State var showAlert = false
     @Binding var currentTabIndex: Int
-    @Binding var destinationView: AnyView?
-    @Binding var isPushActive: Bool
+    @Binding var path: [SMPageDestination]
     @Binding var didSelectLibraryTabTwice: Bool
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
@@ -46,19 +45,35 @@ struct LibraryAlbumListView: View {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: LibraryAlbumListView.columns, spacing: 10) {
                                 ForEach(model.albumList, id: \.self.id) { album in
-                                    GridItem_Title_SubTitle_Image_View(
-                                        titleName: album.name,
-                                        subTitleName: album.artist.name,
-                                        imageURL: album.imageURL
-                                    ).onTapGesture {
-                                        destinationView = AnyView(AlbumDetailView(album: album))
-                                        isPushActive = true
+                                    if #available(iOS 16.0, *) {
+                                        GridItem_Title_SubTitle_Image_View(
+                                            titleName: album.name,
+                                            subTitleName: album.artist.name,
+                                            imageURL: album.imageURL
+                                        ).onTapGesture {
+                                            path.append(.albumDetail(album: album))
+                                        }
+                                        .onLongPressGesture(minimumDuration: 1.8, perform: {
+                                            self.viewModel.longPressedAlbum = album
+                                            self.showAlert = true
+                                        })
+                                        .id(album.id)
+                                    } else {
+                                        NavigationLink {
+                                            AlbumDetailView(album: album)
+                                        } label: {
+                                            GridItem_Title_SubTitle_Image_View(
+                                                titleName: album.name,
+                                                subTitleName: album.artist.name,
+                                                imageURL: album.imageURL
+                                            )
+                                            .onLongPressGesture(minimumDuration: 1.8, perform: {
+                                                self.viewModel.longPressedAlbum = album
+                                                self.showAlert = true
+                                            })
+                                            .id(album.id)
+                                        }
                                     }
-                                    .onLongPressGesture(minimumDuration: 1.8, perform: {
-                                        self.viewModel.longPressedAlbum = album
-                                        self.showAlert = true
-                                    })
-                                    .id(album.id)
                                 }
                         }.padding(.all, 15)
                     }.alert(isPresented: $showAlert) {
@@ -70,9 +85,9 @@ struct LibraryAlbumListView: View {
                         )
                     }.onChange(of: didSelectLibraryTabTwice, perform: { scrollTopTop in
                         if scrollTopTop {
-                            if isPushActive {
+                            if !path.isEmpty {
                                 withAnimation {
-                                    self.isPushActive = false
+                                    path.removeAll()
                                 }
                                 proxy.scrollTo(model.albumList.first?.id)
                             } else {
@@ -94,11 +109,10 @@ struct LibraryAlbumListView: View {
 }
 
 struct LibraryAlbumView_Previews: PreviewProvider {
-    @State static var anyView: AnyView? = nil
-    @State static var isPushActive = false
+    @State static var path: [SMPageDestination] = []
     @State static var currentTabIndex = 1
     @State static var scrollTopTop = false
     static var previews: some View {
-        LibraryAlbumListView(currentTabIndex: $currentTabIndex, destinationView: $anyView, isPushActive: $isPushActive, didSelectLibraryTabTwice: $scrollTopTop)
+        LibraryAlbumListView(currentTabIndex: $currentTabIndex, path: $path, didSelectLibraryTabTwice: $scrollTopTop)
     }
 }

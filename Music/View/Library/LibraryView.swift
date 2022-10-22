@@ -9,8 +9,7 @@ import SwiftUI
 
 struct LibraryView: View {
     @EnvironmentObject var playerManager: MusicPlayerManager
-    @State var destinationView: AnyView? = nil
-    @State var isPushActive = false
+    @State var path: [SMPageDestination] = []
     @State private var selectedIndex: Int = 0
     @State private var offset: CGFloat = 0
     @Binding var didSelectLibraryTabTwice: Bool
@@ -21,11 +20,8 @@ struct LibraryView: View {
     }
     
     var body: some View {
-        SMNavigationView(navigationTitle: "Library", navigationBarHidden: true) {
+        SMNavigationView(navigationTitle: "Library", navigationBarHidden: true, path: $path) {
             VStack(spacing: 0) {
-                NavigationLink(destination: destinationView, isActive: $isPushActive) {
-                    EmptyView()
-                }.hidden()
                 SelectorView(selectedIndex: $selectedIndex, offset: $offset, items: Tab.allCases.map { $0.rawValue })
                 GeometryReader { geometry in
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -33,9 +29,9 @@ struct LibraryView: View {
                             ForEach(Tab.allCases, id: \.self) { tab in
                                 switch tab {
                                 case .playlist:
-                                    LibraryPlaylistsView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive, didSelectLibraryTabTwice: $didSelectLibraryTabTwice).frame(width: geometry.size.width, height: geometry.size.height)
+                                    LibraryPlaylistsView(currentTabIndex: $selectedIndex, path: $path, didSelectLibraryTabTwice: $didSelectLibraryTabTwice).frame(width: geometry.size.width, height: geometry.size.height)
                                 case .album:
-                                    LibraryAlbumListView(currentTabIndex: $selectedIndex, destinationView: $destinationView, isPushActive: $isPushActive, didSelectLibraryTabTwice: $didSelectLibraryTabTwice).frame(width: geometry.size.width, height: geometry.size.height)
+                                    LibraryAlbumListView(currentTabIndex: $selectedIndex, path: $path, didSelectLibraryTabTwice: $didSelectLibraryTabTwice).frame(width: geometry.size.width, height: geometry.size.height)
                                 }
                             }
                         }
