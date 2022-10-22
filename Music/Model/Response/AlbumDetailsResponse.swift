@@ -46,7 +46,7 @@ struct AlbumDetailModel : Hashable, Equatable {
     init(rawModel: AlbumDetailResponse) {
         id = rawModel.id
         name = rawModel.name
-        imageURL = URL(string: rawModel.images.first?.url ?? "")
+        imageURL = rawModel.images.first?.url
         shareURL = URL(string: rawModel.externalUrls["spotify"] ?? "")
         if let artist = rawModel.artists.first {
             self.artist = artist

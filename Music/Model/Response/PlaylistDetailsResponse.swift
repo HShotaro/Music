@@ -44,7 +44,7 @@ struct PlaylistDetailModel : Hashable, Equatable {
     init(rawModel: PlaylistDetailsResponse) {
         id = rawModel.id
         name = rawModel.name
-        imageURL = URL(string: rawModel.images.first?.url ?? "")
+        imageURL = rawModel.images.first?.url
         description = rawModel.description
         shareURL = URL(string: rawModel.externalUrls["spotify"] ?? "")
         let rawTracks = rawModel.tracks.items.compactMap { item -> AudioTrackModel? in

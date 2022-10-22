@@ -10,14 +10,7 @@ import Foundation
 struct AudioTrackModel : Codable, Equatable, Hashable, Identifiable {
     let id: String
     let name: String
-    private let artists: [ArtistModel]?
-    var artist: ArtistModel {
-        if let artist = artists?.first {
-            return artist
-        } else {
-            return ArtistModel.mock(Int(id) ?? 0)
-        }
-    }
+    let artist: ArtistModel
     let album: AlbumModel?
     let availableMarkets: [String]?
     private let discNumber: Int?
@@ -25,10 +18,7 @@ struct AudioTrackModel : Codable, Equatable, Hashable, Identifiable {
     private let explicit: Bool?
     private let popularity: Int?
     private let externalUrls: [String: String]?
-    private let preview_url: String?
-    var previewURL: URL? {
-        return URL(string: preview_url ?? "")
-    }
+    let previewURL: URL?
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -44,11 +34,69 @@ struct AudioTrackModel : Codable, Equatable, Hashable, Identifiable {
         case preview_url
     }
     
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        name = try container.decode(String.self, forKey: .name)
+        album = try? container.decode(AlbumModel.self, forKey: .album)
+        let artists = try? container.decode([ArtistModel].self, forKey: .artists)
+        artist = artists?.first ?? ArtistModel.mock(Int(id) ?? 0)
+        availableMarkets = try? container.decode([String].self, forKey: .availableMarkets)
+        externalUrls = try? container.decode([String: String].self, forKey: .externalUrls)
+        discNumber = try? container.decode(Int.self, forKey: .discNumber)
+        durationMs = try? container.decode(Int.self, forKey: .durationMs)
+        explicit = try? container.decode(Bool.self, forKey: .explicit)
+        popularity = try? container.decode(Int.self, forKey: .popularity)
+        let previewURLStr = try? container.decode(String.self, forKey: .preview_url)
+        previewURL = URL(string: previewURLStr ?? "")
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(name, forKey: .name)
+        try? container.encode(album, forKey: .album)
+        try container.encode([artist], forKey: .artists)
+        try? container.encode(availableMarkets, forKey: .availableMarkets)
+        try? container.encode(externalUrls, forKey: .externalUrls)
+        try? container.encode(discNumber, forKey: .discNumber)
+        try? container.encode(durationMs, forKey: .durationMs)
+        try? container.encode(explicit, forKey: .explicit)
+        try? container.encode(popularity, forKey: .popularity)
+        try? container.encode(previewURL?.absoluteString ?? "", forKey: .preview_url)
+    }
+    
+    init(
+        id: String,
+        name: String,
+        artist: ArtistModel,
+        album: AlbumModel?,
+        availableMarkets: [String]?,
+        discNumber: Int?,
+        durationMs: Int?,
+        explicit: Bool?,
+        popularity: Int?,
+        externalUrls: [String: String]?,
+        previewURL: URL?
+    ) {
+        self.id = id
+        self.name = name
+        self.artist = artist
+        self.album = album
+        self.availableMarkets = availableMarkets
+        self.discNumber = discNumber
+        self.durationMs = durationMs
+        self.explicit = explicit
+        self.popularity = popularity
+        self.externalUrls = externalUrls
+        self.previewURL = previewURL
+    }
+    
     static func mock(_ id: Int) -> AudioTrackModel {
         return AudioTrackModel(
             id: "\(id)",
             name: "AudioTrack Name" + "\(id)",
-            artists: [ArtistModel.mock(id)],
+            artist: ArtistModel.mock(id),
             album: AlbumModel.mock(id),
             availableMarkets: nil,
             discNumber: nil,
@@ -56,7 +104,7 @@ struct AudioTrackModel : Codable, Equatable, Hashable, Identifiable {
             explicit: nil,
             popularity: nil,
             externalUrls: nil,
-            preview_url: "https://via.placeholder.com/200x200"
+            previewURL: nil
         )
     }
     
@@ -71,10 +119,12 @@ struct AudioTrackModel : Codable, Equatable, Hashable, Identifiable {
 
 extension AudioTrackModel {
     func exchangeAlbum(album: AlbumModel) -> AudioTrackModel {
+        
+        
         return AudioTrackModel(
             id: id,
             name: name,
-            artists: [artist],
+            artist: artist,
             album: album,
             availableMarkets: availableMarkets,
             discNumber: discNumber,
@@ -82,7 +132,7 @@ extension AudioTrackModel {
             explicit: explicit,
             popularity: popularity,
             externalUrls: externalUrls,
-            preview_url: preview_url
+            previewURL: previewURL
         )
     }
 }
