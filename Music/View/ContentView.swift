@@ -9,8 +9,8 @@ import SwiftUI
 import Combine
 
 struct ContentView: View {
-    @EnvironmentObject var authManager: AuthManager
-    @EnvironmentObject var playerManager: MusicPlayerManager
+    @StateObject var authManager: AuthManager = AuthManager.shared
+    @StateObject var playerManager: MusicPlayerManager = MusicPlayerManager.shared
     
     enum Tab {
         case home
@@ -91,10 +91,14 @@ struct ContentView: View {
                 MusicPlayerView(animation: animation)
                     .opacity(playerManager.currentTrack != nil ? 1.0 : 0.0)
             }
+            .environmentObject(authManager)
+            .environmentObject(playerManager)
         } else {
             NavigationView {
                 WelcomeView()
                     .navigationBarHidden(true)
+                    .environmentObject(authManager)
+                    .environmentObject(playerManager)
             }
         }
     }
@@ -102,6 +106,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(AuthManager.shared)
+        ContentView()
     }
 }

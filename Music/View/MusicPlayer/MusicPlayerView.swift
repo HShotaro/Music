@@ -167,6 +167,5 @@ struct MusicPlayerView_Previews: PreviewProvider {
     @Namespace static var animation
     static var previews: some View {
         MusicPlayerView(animation: animation)
-            .environmentObject(MusicPlayerManager.shared)
     }
 }

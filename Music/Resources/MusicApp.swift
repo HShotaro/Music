@@ -23,13 +23,10 @@ struct MusicApp: App {
             UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
         }
     }
-    @EnvironmentObject var authManager: AuthManager
     
     var body: some Scene {
         WindowGroup {
-            ContentView(authManager: _authManager)
-                .environmentObject(AuthManager.shared)
-                .environmentObject(MusicPlayerManager.shared)
+            ContentView()
         }
     }
 }
