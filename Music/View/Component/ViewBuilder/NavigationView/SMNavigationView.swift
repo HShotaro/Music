@@ -24,12 +24,9 @@ struct SMNavigationView<Content: View>: View {
         if #available(iOS 16.0, *) {
             NavigationStack(path: path) {
                 content
-                    .toolbarBackground(
-                        Color.primaryColor,
-                        for: .navigationBar)
-                    .toolbarBackground(navigationBarHidden ? .hidden : .visible, for: .navigationBar)
-                    .toolbarColorScheme(.dark, for: .navigationBar)
+                    .navigationBarColor(Color.primaryUIColor)
                     .navigationTitle(navigationTitle)
+                    .toolbarBackground(navigationBarHidden ? .hidden : .visible, for: .navigationBar)
                     .toolbar(navigationBarHidden ? .hidden : .visible)
                     .navigationDestination(for: SMPageDestination.self) { page in
                         switch page {
@@ -50,6 +47,7 @@ struct SMNavigationView<Content: View>: View {
         } else {
             NavigationView {
                 content
+                    .navigationBarColor(Color.primaryUIColor)
                     .navigationTitle(navigationTitle)
                     .navigationBarHidden(navigationBarHidden)    
             }.navigationViewStyle(StackNavigationViewStyle())

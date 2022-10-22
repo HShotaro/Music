@@ -89,6 +89,7 @@
 		96DB207B26D61F6A0004FA9A /* HomeRepository+mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DB207A26D61F6A0004FA9A /* HomeRepository+mock.swift */; };
 		CBD82EAA29038AB6005BB230 /* SMNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD82EA929038AB6005BB230 /* SMNavigationView.swift */; };
 		CBD82EAC2903BB62005BB230 /* SMPageDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD82EAB2903BB62005BB230 /* SMPageDestination.swift */; };
+		CBD82EB12903D712005BB230 /* SMNavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBD82EB02903D712005BB230 /* SMNavigationBarModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -197,6 +198,7 @@
 		96DB207A26D61F6A0004FA9A /* HomeRepository+mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeRepository+mock.swift"; sourceTree = "<group>"; };
 		CBD82EA929038AB6005BB230 /* SMNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMNavigationView.swift; sourceTree = "<group>"; };
 		CBD82EAB2903BB62005BB230 /* SMPageDestination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMPageDestination.swift; sourceTree = "<group>"; };
+		CBD82EB02903D712005BB230 /* SMNavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMNavigationBarModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +251,7 @@
 			children = (
 				96DB204626D50A5A0004FA9A /* Extension */,
 				96DB204526D50A4D0004FA9A /* Manager */,
+				CBD82EAD2903D698005BB230 /* ViewModifier */,
 				96DB204426D50A460004FA9A /* Model */,
 				96DB204226D50A380004FA9A /* View */,
 				96DB204126D50A180004FA9A /* Resources */,
@@ -487,7 +490,7 @@
 		967F03E826D7F1B800297A0A /* Component */ = {
 			isa = PBXGroup;
 			children = (
-				CBD82EA829038A90005BB230 /* NavigationView */,
+				CBD82EAF2903D6C1005BB230 /* ViewBuilder */,
 				965FE1EF26E14808008FF5E6 /* Style */,
 				9671872A26DAB2CE00EFFC2F /* Other */,
 				9671871126DA924B00EFFC2F /* ListItem */,
@@ -676,6 +679,22 @@
 				CBD82EA929038AB6005BB230 /* SMNavigationView.swift */,
 			);
 			path = NavigationView;
+			sourceTree = "<group>";
+		};
+		CBD82EAD2903D698005BB230 /* ViewModifier */ = {
+			isa = PBXGroup;
+			children = (
+				CBD82EB02903D712005BB230 /* SMNavigationBarModifier.swift */,
+			);
+			path = ViewModifier;
+			sourceTree = "<group>";
+		};
+		CBD82EAF2903D6C1005BB230 /* ViewBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				CBD82EA829038A90005BB230 /* NavigationView */,
+			);
+			path = ViewBuilder;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -873,6 +892,7 @@
 				9661E1BA26DF875300929963 /* BlurView.swift in Sources */,
 				960A94F026E11B4700BCC683 /* AlbumDetailRepository.swift in Sources */,
 				965FE1FE26E15BBE008FF5E6 /* ArtistDetailViewModel.swift in Sources */,
+				CBD82EB12903D712005BB230 /* SMNavigationBarModifier.swift in Sources */,
 				960A94F826E125B900BCC683 /* AlbumDetailRepository+mock.swift in Sources */,
 				96751E5026E2128A006A1E02 /* MypageView.swift in Sources */,
 				962FF67226D6212400031A88 /* DummyError.swift in Sources */,
