@@ -49,8 +49,13 @@ struct SelectorView: View {
     }
     
     static func statusBarHeight() -> CGFloat{
-        let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        let statusBarHeight: CGFloat = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        let statusBarHeight: CGFloat = UIApplication.shared.connectedScenes
+            .filter {$0.activationState == .foregroundActive }
+            .map {$0 as? UIWindowScene }
+            .compactMap { $0 }
+            .first?.windows
+            .filter({ $0.isKeyWindow }).first?
+            .windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         return statusBarHeight
     }
 }
