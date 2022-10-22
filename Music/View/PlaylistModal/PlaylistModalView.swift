@@ -36,7 +36,7 @@ struct PlaylistModalView: View {
     }
     let trackID: String
     var body: some View {
-        NavigationView {
+        SMNavigationView(navigationTitle: "追加するプレイリストを選んでください") {
             VStack {
                 switch viewModel.model {
                 case .idle:
@@ -71,7 +71,7 @@ struct PlaylistModalView: View {
                 case .addedTrackToPlaylist:
                     EmptyView()
                 }
-            }.navigationTitle("追加するプレイリストを選んでください")
+            }
             .navigationBarTitleDisplayMode(.inline)
             .onChange(of: viewModel.model) { model in
                 guard case .addedTrackToPlaylist = model else { return }

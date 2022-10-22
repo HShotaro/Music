@@ -120,20 +120,22 @@ struct AlbumDetailView: View {
             guard case .addedAlbumToLibrary = model else { return }
             self.showSucceedToAddAlbumAlert = true
         })
-        .navigationBarItems(trailing:
-                                Button(action: {
-                                    self.showConfirmToAddAlbumAlert = true
-                                }, label: {
-                                    Image(systemName: "square.and.arrow.up")
-                                }).alert(isPresented: $showConfirmToAddAlbumAlert) {
-                                    Alert(title: Text("\(album.name)をライブラリに追加しますか？"),
-                                          primaryButton: Alert.Button.default(Text("はい"), action: {
-                                            viewModel.addAlbumToLibrary(album: album)
-                                          }),
-                                          secondaryButton: Alert.Button.cancel(Text("いいえ"))
-                                    )
-                                }
-        )
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing){
+                Button(action: {
+                    self.showConfirmToAddAlbumAlert = true
+                }, label: {
+                    Image(systemName: "square.and.arrow.up")
+                }).alert(isPresented: $showConfirmToAddAlbumAlert) {
+                    Alert(title: Text("\(album.name)をライブラリに追加しますか？"),
+                          primaryButton: Alert.Button.default(Text("はい"), action: {
+                            viewModel.addAlbumToLibrary(album: album)
+                          }),
+                          secondaryButton: Alert.Button.cancel(Text("いいえ"))
+                    )
+                }
+            }
+        }
         .navigationTitle(viewModel.titleName)
         .navigationBarTitleDisplayMode(.inline)
     }

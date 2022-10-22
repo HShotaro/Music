@@ -16,7 +16,7 @@ struct SearchView: View {
     @Binding var didSelectSearchTabTwice: Bool
     static let topID = "SearchView_TopID"
     var body: some View {
-        NavigationView {
+        SMNavigationView(navigationTitle: "Search") {
             VStack(alignment: .leading, spacing: 0) {
                 NavigationLink(destination: destinationView, isActive: $isPushActive) {
                     EmptyView()
@@ -127,8 +127,7 @@ struct SearchView: View {
                     })
                 }
             }
-            .navigationTitle("Search")
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
     }
 }
 

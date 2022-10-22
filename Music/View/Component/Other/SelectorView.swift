@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct SelectorView: View {
-    static let height: CGFloat = textHeight + indicatorHeight
+    static let height: CGFloat = textHeight + indicatorHeight + dividerHeight
     static let textHeight: CGFloat = 44
     static let indicatorHeight: CGFloat = 3
+    static let dividerHeight: CGFloat = 1
     @Binding var selectedIndex: Int
     @Binding var offset: CGFloat
     let items: [String]
@@ -19,7 +20,7 @@ struct SelectorView: View {
             HStack(spacing: 0) {
                 ForEach(items, id: \.self) { item in
                     Text(item)
-                        .foregroundColor(Color(.label))
+                        .foregroundColor(Color(.white))
                         .fontWeight(selectedIndex == items.firstIndex(of: item) ? .bold : .regular)
                         .multilineTextAlignment(.center)
                         .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: SelectorView.textHeight)
@@ -34,10 +35,12 @@ struct SelectorView: View {
                         )
                 }
             }
-            Color(.label)
+            Color(.white)
                 .frame(width: UIScreen.main.bounds.width / CGFloat(items.count), height: SelectorView.indicatorHeight)
                 .cornerRadius(SelectorView.indicatorHeight/2)
                 .offset(x: -offset / CGFloat(items.count))
+            Divider()
+                .frame(height: SelectorView.dividerHeight)
         }
         .padding(.top, SelectorView.statusBarHeight())
         .background(Color.primaryColor)

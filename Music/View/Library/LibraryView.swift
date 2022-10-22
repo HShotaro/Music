@@ -21,7 +21,7 @@ struct LibraryView: View {
     }
     
     var body: some View {
-        NavigationView {
+        SMNavigationView(navigationTitle: "Library", navigationBarHidden: true) {
             VStack(spacing: 0) {
                 NavigationLink(destination: destinationView, isActive: $isPushActive) {
                     EmptyView()
@@ -60,11 +60,9 @@ struct LibraryView: View {
                                 })
                     )
                 }
-                .navigationTitle("Library")
-                .navigationBarHidden(true)
                 Spacer(minLength: playerManager.currentTrack != nil ? MusicPlayerView.height : 0)
             }
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
     }
 }
 

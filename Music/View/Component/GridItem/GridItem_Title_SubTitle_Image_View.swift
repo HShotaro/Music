@@ -24,6 +24,7 @@ struct GridItem_Title_SubTitle_Image_View: View {
                 .padding(.bottom, 1.0)
                 .font(.system(size: 14, weight: .regular, design: .default))
                 .foregroundColor(Color(.label))
+                .frame(height: 35)
                 
             Text(subTitleName)
                 .lineLimit(1)

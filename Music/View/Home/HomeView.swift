@@ -9,13 +9,8 @@ import SwiftUI
 import Combine
 
 struct HomeView: View {
-    // @StateObjectはbodyが最初に更新される直前に初期化され、onDisappear()のタイミングでdeinitされる。
-    // HomeViewのinit()の中で@StateObjectを初期化してしまうと@StateObjectのメリットを捨ててしまうことになるのでやめるべきである。
     @StateObject private var viewModel = HomeViewModel()
-    
-    //NavigationLink(destination: destinationView, isActive: $isPushActive)の引数destinationはisPushActiveがtrueになる直前にbodyを更新して値を代入する必要がある。
     @State var destinationView: AnyView? = nil
-    // プッシュ遷移したらtrue、ポップしたらfalse
     @State var isPushActive = false
     
     @Binding var didSelectHomeTabTwice: Bool
@@ -23,7 +18,7 @@ struct HomeView: View {
     
     static let columns: [GridItem] = Array(repeating: GridItem(.flexible(), spacing: 10, alignment: .center), count: 2)
     var body: some View {
-        NavigationView {
+        SMNavigationView(navigationTitle: "Home") {
             VStack {
                 switch viewModel.model {
                 case .idle:
@@ -85,7 +80,7 @@ struct HomeView: View {
                                     }
                                 }
                             }.font(.largeTitle)
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
+                                .padding(EdgeInsets(top: 15, leading: 15, bottom: 15 + MusicPlayerView.height, trailing: 15))
                         }.onChange(of: didSelectHomeTabTwice, perform: { scrollTopTop in
                             if scrollTopTop {
                                 if isPushActive {
@@ -104,14 +99,17 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationBarItems(trailing: Button(action: {
-                destinationView = AnyView(MypageView())
-                isPushActive = true
-            }, label: {
-                Image(systemName: "gear")
-            }))
-            .navigationTitle("Home")
-        }.navigationViewStyle(StackNavigationViewStyle())
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing){
+                    Button(action: {
+                        destinationView = AnyView(MypageView())
+                        isPushActive = true
+                    }, label: {
+                        Image(systemName: "gear")
+                    })
+                }
+            }
+        }
         .onAppear {
             viewModel.onAppear()
         }
